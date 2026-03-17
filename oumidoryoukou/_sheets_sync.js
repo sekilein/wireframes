@@ -15,10 +15,9 @@
     Object.keys(widMap).forEach(function (wid) {
       var el = document.querySelector('[data-wid="' + wid + '"]');
       if (!el) return;
-      /* data-wid を持つ子要素がある場合はスキップ（子要素が個別に更新される） */
-      if (el.querySelector('[data-wid]')) return;
-      /* <a> や <button> を含む要素もスキップ（リンク構造を壊さない） */
-      if (el.querySelector('a, button')) return;
+      /* 子要素（<br>・<span>・<strong>・<a>等）が1つでもあればスキップ
+         textContent で上書きすると改行・色・リンクが壊れるため */
+      if (el.children.length > 0) return;
       var newText = widMap[wid];
       if (el.textContent.trim() === newText.trim()) return;
       el.textContent = newText;
