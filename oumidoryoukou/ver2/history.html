@@ -7,110 +7,62 @@
 <script src="_firebase_comments.js"></script>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>[WF ver2] 125年ヒストリー｜近江度量衡</title>
+<title>[WF ver2] 126年ヒストリー｜近江度量衡</title>
 <link href="style.css" rel="stylesheet"/>
 <style>
   .breadcrumb{padding:10px 0;border-bottom:1px solid #e8e8e8;}
   .breadcrumb .inner{max-width:1100px;margin:0 auto;padding:0 40px;font-size:11px;color:#aaa;letter-spacing:.06em;}
   .breadcrumb span{margin:0 6px;}
-  .page-nav{background:#f5f5f5;border-bottom:1px solid #e0e0e0;}
-  .page-nav .inner{max-width:1100px;margin:0 auto;padding:0 40px;display:flex;}
-  .page-nav a{display:block;padding:13px 20px;font-size:12px;color:#666;border-right:1px solid #e0e0e0;letter-spacing:.06em;}
-  .page-nav a:hover,.page-nav a.active{background:#fff;color:#111;}
-  .page-header{background:#f4f4f4;border-bottom:1px solid #e0e0e0;padding:72px 40px;}
+  .page-header{background:#111;padding:96px 40px;}
   .page-header .inner{max-width:1100px;margin:0 auto;}
-  .page-header__meta{font-size:11px;letter-spacing:.22em;color:#aaa;margin-bottom:12px;}
-  .page-header__title{font-size:40px;font-weight:700;line-height:1.3;color:#111;}
-  .page-header__lead{font-size:15px;color:#666;margin-top:16px;max-width:560px;line-height:1.8;}
-  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
-  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;}
-  .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#ddd;border:1px solid #ddd;}
-  .four-col .item{background:#fff;}
-  .cat-card{border:1px solid #e0e0e0;}
-  .cat-card__img{aspect-ratio:16/9;}
-  .cat-card__body{padding:24px;}
-  .cat-card__title{font-size:18px;font-weight:700;}
-  .cat-card__desc{font-size:13px;color:#666;margin-top:8px;line-height:1.7;}
-  .cat-card__link{display:inline-block;margin-top:14px;font-size:12px;border-bottom:1px solid #222;}
-  .info-table{width:100%;border-collapse:collapse;}
-  .info-table th{background:#f4f4f4;width:200px;padding:14px 20px;font-size:13px;font-weight:600;border-bottom:1px solid #e0e0e0;text-align:left;vertical-align:top;}
-  .info-table td{padding:14px 20px;font-size:13px;border-bottom:1px solid #e0e0e0;line-height:1.7;}
-  .feature-list{list-style:none;border:1px solid #e0e0e0;}
-  .feature-list li{padding:14px 20px;border-bottom:1px solid #e0e0e0;font-size:13px;display:flex;align-items:baseline;gap:12px;}
-  .feature-list li:last-child{border-bottom:none;}
-  .feature-list li::before{content:'—';color:#aaa;flex-shrink:0;}
-  .stat-band{background:#f0f0f0;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:56px 40px;}
-  .stat-band .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;}
-  .stat-num{text-align:center;}
-  .stat-num .big{font-size:52px;font-weight:700;line-height:1;color:#111;}
-  .stat-num .lbl{font-size:11px;color:#888;margin-top:6px;letter-spacing:.08em;}
-  .stat-divider{width:1px;height:72px;background:#ccc;flex-shrink:0;}
-  .stat-text{flex:1;}
-  .stat-text h2{font-size:22px;font-weight:700;color:#111;line-height:1.5;}
-  .stat-text p{font-size:13px;color:#555;margin-top:10px;line-height:1.7;}
+  .page-header__meta{font-size:11px;letter-spacing:.22em;color:#555;margin-bottom:12px;}
+  .page-header__title{font-size:52px;font-weight:700;line-height:1.2;color:#fff;}
+  .page-header__lead{font-size:15px;color:#888;margin-top:20px;max-width:560px;line-height:1.9;}
+
+  .num-band{background:#f4f4f4;border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;padding:60px 0;}
+  .num-band .inner{max-width:1100px;margin:0 auto;padding:0 40px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#ddd;border:1px solid #ddd;}
+  .num-item{background:#fff;padding:36px 28px;text-align:center;}
+  .num-item .big{font-size:56px;font-weight:700;line-height:1;letter-spacing:-.02em;color:#111;}
+  .num-item .unit{font-size:16px;font-weight:400;}
+  .num-item .lbl{font-size:11px;color:#999;margin-top:8px;letter-spacing:.08em;line-height:1.5;}
+
+  .era-section{border-top:3px solid #111;margin-bottom:80px;}
+  .era-header{display:flex;align-items:baseline;gap:24px;padding:28px 0 20px;}
+  .era-label{font-size:10px;letter-spacing:.22em;color:#aaa;}
+  .era-title{font-size:32px;font-weight:700;color:#111;}
+  .era-years{font-size:13px;color:#aaa;margin-left:auto;}
+
   .timeline-v{list-style:none;border-left:2px solid #ddd;margin-left:12px;}
-  .timeline-v li{position:relative;padding:0 0 40px 32px;}
-  .timeline-v li::before{content:'';position:absolute;left:-6px;top:6px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #aaa;}
+  .timeline-v li{position:relative;padding:0 0 48px 36px;}
+  .timeline-v li::before{content:'';position:absolute;left:-7px;top:5px;width:12px;height:12px;border-radius:50%;background:#fff;border:2px solid #aaa;}
+  .timeline-v li.highlight::before{background:#111;border-color:#111;}
   .timeline-v li:last-child{padding-bottom:0;}
   .timeline-v__year{font-size:11px;letter-spacing:.1em;color:#aaa;margin-bottom:6px;}
-  .timeline-v__title{font-size:15px;font-weight:700;color:#111;line-height:1.5;}
-  .timeline-v__body{font-size:13px;color:#666;margin-top:6px;line-height:1.7;}
-  .process-row{display:flex;align-items:stretch;gap:0;}
-  .process-step{flex:1;text-align:center;padding:28px 16px;border:1px solid #e0e0e0;background:#fff;position:relative;}
-  .process-step+.process-step{border-left:none;}
-  .process-step::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-size:16px;color:#ccc;z-index:1;}
-  .process-step:last-child::after{display:none;}
-  .process-step__num{font-size:10px;color:#aaa;letter-spacing:.1em;}
-  .process-step__title{font-size:14px;font-weight:700;margin-top:6px;}
-  .process-step__desc{font-size:11px;color:#888;margin-top:6px;line-height:1.6;}
-  .value-block{border:1px solid #e0e0e0;padding:28px;}
-  .value-block__num{font-size:32px;font-weight:700;color:#e0e0e0;line-height:1;}
-  .value-block__title{font-size:16px;font-weight:700;margin-top:8px;}
-  .value-block__body{font-size:13px;color:#666;margin-top:8px;line-height:1.7;}
-  .tag{display:inline-block;border:1px solid #ccc;font-size:10px;padding:2px 8px;color:#888;letter-spacing:.08em;margin-right:6px;}
-  .news-list{list-style:none;}
-  .news-item{display:flex;align-items:baseline;gap:24px;padding:18px 0;border-bottom:1px solid #e8e8e8;}
-  .news-item:first-child{border-top:1px solid #e8e8e8;}
-  .news-item__date{font-size:12px;color:#aaa;flex-shrink:0;letter-spacing:.06em;}
-  .news-item__cat{font-size:10px;border:1px solid #ddd;padding:2px 8px;flex-shrink:0;color:#888;}
-  .news-item__title{font-size:14px;}
-  .contact-grid{display:grid;grid-template-columns:1fr 380px;gap:60px;}
-  .contact-info{background:#f7f7f7;padding:32px;border:1px solid #e0e0e0;}
-  .contact-info h3{font-size:14px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e0e0e0;}
-  .contact-info p{font-size:13px;color:#555;line-height:1.8;}
-  .policy-section h2{font-size:18px;font-weight:700;margin:40px 0 16px;padding-bottom:8px;border-bottom:1px solid #e0e0e0;}
-  .policy-section p,.policy-section li{font-size:13px;color:#555;line-height:1.9;margin-bottom:10px;}
-  .policy-section ul{padding-left:20px;}
-  /* 採用ページ固有 */
-  .recruit-fv{min-height:560px;background:#111;display:flex;align-items:center;position:relative;overflow:hidden;}
-  .recruit-fv__bg{position:absolute;inset:0;}
-  .recruit-fv__overlay{position:absolute;inset:0;background:rgba(0,0,0,.65);}
-  .recruit-fv__content{position:relative;z-index:1;color:#fff;max-width:1100px;margin:0 auto;padding:80px 40px;}
-  .recruit-fv__eyebrow{font-size:11px;letter-spacing:.2em;color:#888;margin-bottom:20px;}
-  .recruit-fv__title{font-size:44px;font-weight:700;line-height:1.4;letter-spacing:.02em;}
-  .recruit-fv__sub{font-size:15px;color:#bbb;margin-top:20px;line-height:1.8;max-width:520px;}
-  .recruit-fv__cta{display:flex;gap:16px;margin-top:36px;}
-  .num-card{background:#f7f7f7;border:1px solid #e0e0e0;padding:32px 24px;}
-  .num-card__num{font-size:48px;font-weight:700;line-height:1;letter-spacing:-.02em;}
-  .num-card__unit{font-size:16px;font-weight:400;}
-  .num-card__label{font-size:12px;color:#888;margin-top:8px;}
-  .welfare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e0e0e0;border:1px solid #e0e0e0;}
-  .welfare-item{background:#fff;padding:28px;}
-  .welfare-item__title{font-size:15px;font-weight:700;margin-bottom:8px;}
-  .welfare-item__body{font-size:13px;color:#666;line-height:1.7;}
-  .interview-card{border:1px solid #e0e0e0;display:flex;flex-direction:column;}
-  .interview-card__img{aspect-ratio:1;}
-  .interview-card__body{padding:20px;flex:1;}
-  .interview-card__dept{font-size:10px;color:#aaa;letter-spacing:.1em;margin-bottom:6px;}
-  .interview-card__name{font-size:16px;font-weight:700;}
-  .interview-card__quote{font-size:13px;color:#666;margin-top:10px;line-height:1.7;border-left:3px solid #e0e0e0;padding-left:12px;}
-  .interview-card__link{display:block;margin-top:14px;font-size:12px;border-bottom:1px solid #222;width:fit-content;}
-  .entry-lp{background:#fff;}
-  .entry-lp-fv{min-height:480px;background:#111;display:flex;align-items:center;position:relative;}
-  .entry-lp-fv__content{position:relative;z-index:1;color:#fff;max-width:1100px;margin:0 auto;padding:80px 40px;}
-  .req-table{width:100%;border-collapse:collapse;}
-  .req-table th{background:#f4f4f4;padding:12px 20px;font-size:13px;font-weight:600;border-bottom:1px solid #e0e0e0;text-align:left;width:180px;}
-  .req-table td{padding:12px 20px;font-size:13px;border-bottom:1px solid #e0e0e0;line-height:1.7;}
+  .timeline-v__title{font-size:16px;font-weight:700;color:#111;line-height:1.5;}
+  .timeline-v__body{font-size:13px;color:#666;margin-top:8px;line-height:1.8;}
+  .timeline-v__tag{display:inline-block;border:1px solid #ddd;font-size:10px;padding:2px 8px;color:#aaa;letter-spacing:.08em;margin-top:8px;margin-right:4px;}
+
+  .ph{background:#f0f0f0;display:flex;align-items:center;justify-content:center;color:#bbb;font-size:11px;letter-spacing:.06em;}
+
+  .quote-band{background:#f7f7f7;border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;padding:64px 0;margin:80px 0;}
+  .quote-band .inner{max-width:1100px;margin:0 auto;padding:0 40px;}
+  .quote-band blockquote{font-size:22px;font-weight:700;line-height:1.8;color:#111;border-left:4px solid #111;padding-left:28px;max-width:760px;}
+  .quote-band .attr{font-size:12px;color:#aaa;margin-top:16px;padding-left:32px;}
+
+  .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin:32px 0;}
+  .photo-grid .ph{aspect-ratio:4/3;}
+
+  .era-nav{position:sticky;top:0;z-index:100;background:#fff;border-bottom:1px solid #e0e0e0;}
+  .era-nav .inner{max-width:1100px;margin:0 auto;padding:0 40px;display:flex;gap:0;overflow-x:auto;}
+  .era-nav a{display:block;padding:14px 20px;font-size:11px;color:#888;border-right:1px solid #e0e0e0;letter-spacing:.08em;white-space:nowrap;text-decoration:none;}
+  .era-nav a:hover{background:#f7f7f7;color:#111;}
+  .era-nav__note{font-size:10px;color:#bbb;padding:14px 0;margin-left:auto;white-space:nowrap;display:flex;align-items:center;}
+
+  .bottom-cta{background:#111;padding:80px 0;}
+  .bottom-cta .inner{max-width:1100px;margin:0 auto;padding:0 40px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+  .bottom-cta h2{font-size:28px;font-weight:700;color:#fff;line-height:1.5;}
+  .bottom-cta p{font-size:14px;color:#777;margin-top:10px;line-height:1.8;}
+  .bottom-cta .btns{display:flex;gap:16px;flex-shrink:0;}
 </style>
 </head>
 <body>
@@ -119,7 +71,7 @@
     <div class="logo">近江度量衡株式会社<span>OMISCALE CO.,LTD. — Founded 1900</span></div>
     <nav class="site-nav">
       <a href="company.html">会社案内</a>
-      <a href="history.html">125年ヒストリー</a>
+      <a href="history.html" class="active">126年ヒストリー</a>
       <a href="products.html">製品・技術</a>
       <a href="service.html">サービス案内</a>
       <a href="delivery.html">納入実績</a>
@@ -129,82 +81,372 @@
   </div>
 </header>
 
-<nav class="breadcrumb"><div class="inner"><a href="top.html">HOME</a><span>›</span>125年ヒストリー</div></nav>
+<nav class="breadcrumb"><div class="inner"><a href="top.html">HOME</a><span>›</span>126年ヒストリー</div></nav>
+
 <div class="page-header">
   <div class="inner">
-    <p class="page-header__meta">125 YEARS HISTORY</p>
-    <h1 class="page-header__title">125年のあゆみ</h1>
-    <p class="page-header__lead">1900年の創業から現在まで、時代とともに進化してきた近江度量衡の歩み。</p>
+    <p class="page-header__meta">126 YEARS HISTORY</p>
+    <h1 class="page-header__title">明治から<br/>令和へ。</h1>
+    <p class="page-header__lead">1900年（明治33年）、滋賀・草津に産声を上げた小さな計量器工房は、126年の歳月をかけて国内外2,000施設以上に「正確に測る」を届ける企業へと成長した。時代が変わっても、「はかる」という仕事への誠実さだけは変わらない。</p>
   </div>
 </div>
-<section class="section">
-  <div class="container">
-    <div style="display:grid;grid-template-columns:280px 1fr;gap:80px;align-items:start;">
-      <div style="position:sticky;top:80px;">
-        <p class="section-meta">Timeline</p>
-        <h2 class="section-title" style="font-size:28px;line-height:1.6;">明治から<br/>令和へ。<br/>はかり続けた125年。</h2>
-        <p style="font-size:13px;color:#888;margin-top:16px;line-height:1.7;">スクロールしながら、近江度量衡の歩みをご覧ください。</p>
-        <p style="font-size:10px;color:#aaa;margin-top:20px;border:1px solid #e0e0e0;padding:8px 12px;">※ 本番実装: GSAP / ScrollTrigger でスクロール演出予定</p>
-      </div>
-      <div>
-        <ul class="timeline-v">
-          <li>
-            <div class="timeline-v__year">1900年（明治33年）</div>
-            <div class="timeline-v__title">創業</div>
-            <div class="timeline-v__body">滋賀県にて計量器の製造・販売を開始。農産物の取引計量を支える地域の職人集団として出発。</div>
-            <div style="margin-top:16px;"><div class="ph" style="aspect-ratio:16/9;"><span>1900年頃のイメージ写真 or 図版</span></div></div>
-          </li><li>
-            <div class="timeline-v__year">1920年（大正期）</div>
-            <div class="timeline-v__title">計量機器の供給範囲を拡大</div>
-            <div class="timeline-v__body">近畿・東海エリアの農協・産地向けに販売網を広げる。</div>
-            
-          </li><li>
-            <div class="timeline-v__year">1950年（昭和中期）</div>
-            <div class="timeline-v__title">農業機械化の波に乗り選果機需要が急拡大</div>
-            <div class="timeline-v__body">高度経済成長期、農協向け選果・計量システムの供給体制を確立。全国展開開始。</div>
-            <div style="margin-top:16px;"><div class="ph" style="aspect-ratio:16/9;"><span>1950年頃のイメージ写真 or 図版</span></div></div>
-          </li><li>
-            <div class="timeline-v__year">1970年（昭和後期）</div>
-            <div class="timeline-v__title">工業計量分野へ参入</div>
-            <div class="timeline-v__body">鉄鋼・化学・食品産業向け計量システムの設計・製造を開始。</div>
-            
-          </li><li>
-            <div class="timeline-v__year">1980年（昭和後期）</div>
-            <div class="timeline-v__title">穀類計量システムの本格展開</div>
-            <div class="timeline-v__body">米麦カントリーエレベーターへの計量システム導入が本格化。累計1,000施設突破。</div>
-            
-          </li><li>
-            <div class="timeline-v__year">2000年（平成12年）</div>
-            <div class="timeline-v__title">ISO 9001 認証取得</div>
-            <div class="timeline-v__body">品質保証体制を国際規格で整備。全数検査・精度管理の仕組みを標準化。</div>
-            <div style="margin-top:16px;"><div class="ph" style="aspect-ratio:16/9;"><span>2000年頃のイメージ写真 or 図版</span></div></div>
-          </li><li>
-            <div class="timeline-v__year">2010年（平成22年）</div>
-            <div class="timeline-v__title">海外展開開始（上海）</div>
-            <div class="timeline-v__body">アジア農産物産業の成長とともに海外進出。上海拠点を設立。</div>
-            
-          </li><li>
-            <div class="timeline-v__year">2015年（平成27年）</div>
-            <div class="timeline-v__title">韓国・タイに拠点設立</div>
-            <div class="timeline-v__body">海外3拠点体制が完成。一品一様のノウハウをアジア全域へ。</div>
-            
-          </li><li>
-            <div class="timeline-v__year">2025年（令和7年）</div>
-            <div class="timeline-v__title">創業125周年</div>
-            <div class="timeline-v__body">国内9拠点・海外3拠点・累計2,000施設への納入実績。Webリニューアルプロジェクト進行中。</div>
-            <div style="margin-top:16px;"><div class="ph" style="aspect-ratio:16/9;"><span>2025年頃のイメージ写真 or 図版</span></div></div>
-          </li>
-        </ul>
-      </div>
+
+<!-- 数字バンド -->
+<div class="num-band">
+  <div class="inner">
+    <div class="num-item">
+      <div class="big">126<span class="unit">年</span></div>
+      <div class="lbl">創業からの歴史<br/>1900年〜2026年</div>
+    </div>
+    <div class="num-item">
+      <div class="big">2,000<span class="unit">+</span></div>
+      <div class="lbl">累計納入施設数<br/>国内・海外含む</div>
+    </div>
+    <div class="num-item">
+      <div class="big">9<span class="unit">拠点</span></div>
+      <div class="lbl">国内営業・サービス網<br/>全国をカバー</div>
+    </div>
+    <div class="num-item">
+      <div class="big">3<span class="unit">カ国</span></div>
+      <div class="lbl">海外展開<br/>上海・韓国・タイ</div>
     </div>
   </div>
+</div>
+
+<!-- 年代ナビ -->
+<nav class="era-nav">
+  <div class="inner">
+    <a href="#meiji">明治・大正</a>
+    <a href="#showa-early">昭和前期</a>
+    <a href="#showa-mid">昭和中期</a>
+    <a href="#showa-late">昭和後期</a>
+    <a href="#heisei">平成</a>
+    <a href="#reiwa">令和</a>
+    <span class="era-nav__note">※ 本番実装: スクロール連動ハイライト予定</span>
+  </div>
+</nav>
+
+<section class="section">
+  <div class="container">
+
+    <!-- ======== 明治・大正 ======== -->
+    <div class="era-section" id="meiji">
+      <div class="era-header">
+        <span class="era-label">ERA 01</span>
+        <h2 class="era-title">明治・大正</h2>
+        <span class="era-years">1900 — 1925</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:40px;">
+        <div>
+          <p style="font-size:14px;color:#555;line-height:2.0;">明治33年、農産物の取引計量を支えるため初代が滋賀県草津に工房を構えた。当時の計量器は職人の手仕事そのもの。精度への執念と地域への誠実さが、近江度量衡の原点となった。</p>
+        </div>
+        <div class="ph" style="aspect-ratio:16/9;"><span>明治期の工房・創業者写真（イメージ）</span></div>
+      </div>
+      <ul class="timeline-v">
+        <li class="highlight">
+          <div class="timeline-v__year">1900年（明治33年）</div>
+          <div class="timeline-v__title">創業 ― 草津に計量器工房を開設</div>
+          <div class="timeline-v__body">滋賀県草津にて初代が計量器の製造・販売を開始。農産物取引の公正な計量を支えることを使命として出発。棒秤・台秤を主力に地域農家・商店へ供給。</div>
+          <span class="timeline-v__tag">創業</span><span class="timeline-v__tag">農産物計量</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1905年（明治38年）</div>
+          <div class="timeline-v__title">近江一円の農協・米穀商へ販売範囲拡大</div>
+          <div class="timeline-v__body">草津・守山・野洲・近江八幡の農協組合と取引を開始。計量器の定期検査・修理サービスも合わせて展開し、信頼を積み重ねる。</div>
+        </li>
+        <li>
+          <div class="timeline-v__year">1910年（明治43年）</div>
+          <div class="timeline-v__title">法人化 ― 近江度量衡株式会社を設立</div>
+          <div class="timeline-v__body">事業拡大にともない法人格を取得。職人工房から組織的な会社経営へ移行。当時の従業員数は約15名。</div>
+          <span class="timeline-v__tag">法人設立</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1920年（大正9年）</div>
+          <div class="timeline-v__title">近畿・東海エリアへ販路拡大</div>
+          <div class="timeline-v__body">大阪・名古屋の穀物取引所向けに高精度台秤を納入。大正期の産業発展に合わせ、販売エリアを滋賀県外へ本格的に広げる。</div>
+        </li>
+        <li>
+          <div class="timeline-v__year">1923年（大正12年）</div>
+          <div class="timeline-v__title">関東大震災後の復興需要に対応</div>
+          <div class="timeline-v__body">震災後の物資流通正常化に向け、関東の食料品卸・市場向けに計量器を緊急供給。信頼性の高さが全国に知られるきっかけとなる。</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ======== 昭和前期 ======== -->
+    <div class="era-section" id="showa-early">
+      <div class="era-header">
+        <span class="era-label">ERA 02</span>
+        <h2 class="era-title">昭和前期</h2>
+        <span class="era-years">1926 — 1944</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:40px;">
+        <div class="ph" style="aspect-ratio:16/9;"><span>昭和初期の工場・製品写真（イメージ）</span></div>
+        <div>
+          <p style="font-size:14px;color:#555;line-height:2.0;">昭和の産業化とともに計量の需要は農業から工業へと広がった。近江度量衡は時代の要請を敏感に察知し、農業計量で培った精度技術を工業分野へ応用する準備を着々と進めた。</p>
+        </div>
+      </div>
+      <ul class="timeline-v">
+        <li>
+          <div class="timeline-v__year">1930年（昭和5年）</div>
+          <div class="timeline-v__title">二代目に経営承継 ― 製品ラインナップ拡充</div>
+          <div class="timeline-v__body">初代から二代目へ承継。台秤に加え、吊り秤・分銅・検定器具の製造も開始。製品の多様化で中小工場・卸業者への供給基盤を固める。</div>
+        </li>
+        <li>
+          <div class="timeline-v__year">1935年（昭和10年）</div>
+          <div class="timeline-v__title">工業用計量器の試作開始</div>
+          <div class="timeline-v__body">鉄鋼・繊維産業向けの大型計量器（トラックスケール前身）の試作を開始。農業計量で蓄積した精度ノウハウを産業向けへ転用する取り組みの端緒。</div>
+          <span class="timeline-v__tag">工業計量</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1940年（昭和15年）</div>
+          <div class="timeline-v__title">軍需・食料供給計量への対応</div>
+          <div class="timeline-v__body">戦時体制下、食料配給・軍需物資管理のための計量器を国内流通機関へ供給。品質と精度を絶対的使命とする企業文化がこの時期に根付く。</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ======== 昭和中期 ======== -->
+    <div class="era-section" id="showa-mid">
+      <div class="era-header">
+        <span class="era-label">ERA 03</span>
+        <h2 class="era-title">昭和中期</h2>
+        <span class="era-years">1945 — 1969</span>
+      </div>
+      <ul class="timeline-v">
+        <li class="highlight">
+          <div class="timeline-v__year">1947年（昭和22年）</div>
+          <div class="timeline-v__title">戦後復興期 ― 農業計量の需要が急増</div>
+          <div class="timeline-v__body">食料増産・農地改革にともない農協向け計量器の需要が爆発的に拡大。全国農業協同組合連合会との取引が本格化。戦後復興を「はかる」で支えた。</div>
+          <span class="timeline-v__tag">戦後復興</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1950年（昭和25年）</div>
+          <div class="timeline-v__title">計量法制定 ― 国家検定対応機器の製造を開始</div>
+          <div class="timeline-v__body">計量法の施行により、国家検定基準に適合した計量器製造が必須に。いち早く検定合格ラインを確立し、業界標準の設定に関与。</div>
+          <span class="timeline-v__tag">計量法対応</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1955年（昭和30年）</div>
+          <div class="timeline-v__title">選果機・計量コンベア事業参入</div>
+          <div class="timeline-v__body">高度経済成長期の農業機械化需要を捉え、選果・計量ラインシステムを開発。農協の大型施設に初のシステム納入を実現。</div>
+          <span class="timeline-v__tag">農産物計量システム</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1960年（昭和35年）</div>
+          <div class="timeline-v__title">東京・大阪に営業所開設</div>
+          <div class="timeline-v__body">高度経済成長に合わせて首都圏・関西圏の大型農産物市場・食品加工業者へのアクセスを強化。全国展開の布石を打つ。</div>
+        </li>
+        <li>
+          <div class="timeline-v__year">1965年（昭和40年）</div>
+          <div class="timeline-v__title">コンピューター計量制御の研究開始</div>
+          <div class="timeline-v__body">アナログ計量からデジタル・電子制御への移行を見据え、大学機関と共同研究を開始。計量×IT融合の先駆的取り組みとして業界で注目される。</div>
+          <span class="timeline-v__tag">デジタル化</span>
+        </li>
+      </ul>
+      <div class="photo-grid">
+        <div class="ph"><span>1960年代 農協選果施設の写真（イメージ）</span></div>
+        <div class="ph"><span>当時の計量ライン図面（イメージ）</span></div>
+        <div class="ph"><span>製品カタログ 昭和版（イメージ）</span></div>
+      </div>
+    </div>
+
+    <!-- 証言① -->
+    <div class="quote-band">
+      <div class="inner">
+        <blockquote>「計量とは、人と人の信頼を結ぶ仕事だ。<br/>一グラムのずれも、嘘をつくことと同じだと教わった。」</blockquote>
+        <p class="attr">― 元社員・証言（昭和40年代入社・〇〇氏 談）※ 本番用インタビュー原稿と差し替え予定</p>
+      </div>
+    </div>
+
+    <!-- ======== 昭和後期 ======== -->
+    <div class="era-section" id="showa-late">
+      <div class="era-header">
+        <span class="era-label">ERA 04</span>
+        <h2 class="era-title">昭和後期</h2>
+        <span class="era-years">1970 — 1988</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:40px;">
+        <div>
+          <p style="font-size:14px;color:#555;line-height:2.0;">石油ショック・産業構造の転換を経て、近江度量衡の事業領域は農業から工業・物流へと広がった。カントリーエレベーター向け穀類計量システムと、工業用計量システムの二本柱が確立されたのもこの時代だ。</p>
+        </div>
+        <div class="ph" style="aspect-ratio:16/9;"><span>1970年代 工業計量システム設置風景（イメージ）</span></div>
+      </div>
+      <ul class="timeline-v">
+        <li class="highlight">
+          <div class="timeline-v__year">1970年（昭和45年）</div>
+          <div class="timeline-v__title">工業計量システム事業部を新設</div>
+          <div class="timeline-v__body">鉄鋼・化学・食品産業向けに計量システムの設計・製造・据付を一貫提供する体制を整備。農業計量で磨いた精度技術を工業規模で展開。</div>
+          <span class="timeline-v__tag">工業計量</span><span class="timeline-v__tag">事業多角化</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1975年（昭和50年）</div>
+          <div class="timeline-v__title">穀類カントリーエレベーター向け計量システムを本格展開</div>
+          <div class="timeline-v__body">食糧庁管轄の穀物備蓄施設（カントリーエレベーター）への計量システム納入が本格化。累計100施設を突破し、業界シェアトップクラスに。</div>
+          <span class="timeline-v__tag">穀類計量</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1980年（昭和55年）</div>
+          <div class="timeline-v__title">マイコン制御計量システムの製品化</div>
+          <div class="timeline-v__body">マイクロプロセッサを搭載した計量制御システムを開発・製品化。自動計量・データ記録・印字まで一体化した次世代機として農協・食品工場に普及。</div>
+          <span class="timeline-v__tag">電子化</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">1983年（昭和58年）</div>
+          <div class="timeline-v__title">三代目に承継 ― 積極的な設備投資へ</div>
+          <div class="timeline-v__body">三代目社長が就任。研究開発部門を強化し、CAD導入・自動化ラインへの設備投資を推進。「一品一様」の設計思想を組織的に体系化。</div>
+        </li>
+        <li>
+          <div class="timeline-v__year">1987年（昭和62年）</div>
+          <div class="timeline-v__title">北海道・九州に営業所を開設</div>
+          <div class="timeline-v__body">日本有数の農業産地である北海道（帯広）・九州（福岡）に営業所を開設。産地密着のサービス体制を全国に広げる。</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- ======== 平成 ======== -->
+    <div class="era-section" id="heisei">
+      <div class="era-header">
+        <span class="era-label">ERA 05</span>
+        <h2 class="era-title">平成</h2>
+        <span class="era-years">1989 — 2018</span>
+      </div>
+      <ul class="timeline-v">
+        <li>
+          <div class="timeline-v__year">1992年（平成4年）</div>
+          <div class="timeline-v__title">計量システムのネットワーク化対応</div>
+          <div class="timeline-v__body">複数計量ポイントのデータをリアルタイムで集中管理するネットワーク計量システムを開発。大規模食品工場・物流センター向けに展開開始。</div>
+        </li>
+        <li>
+          <div class="timeline-v__year">1995年（平成7年）</div>
+          <div class="timeline-v__title">阪神・淡路大震災後の復旧支援</div>
+          <div class="timeline-v__body">被災した農協・食品流通施設の計量設備復旧を優先対応。社会インフラとしての計量システムの重要性を改めて認識し、BCP（事業継続計画）の整備を開始。</div>
+          <span class="timeline-v__tag">社会貢献</span>
+        </li>
+        <li class="highlight">
+          <div class="timeline-v__year">2000年（平成12年）</div>
+          <div class="timeline-v__title">創業100周年 ― ISO 9001 認証取得</div>
+          <div class="timeline-v__body">創業100周年の節目にISO 9001を取得。品質保証体制を国際規格で整備し、全数検査・精度管理の仕組みを標準化。「検定合格率100%」を誓約。</div>
+          <span class="timeline-v__tag">100周年</span><span class="timeline-v__tag">ISO 9001</span>
+          <div style="margin-top:16px;"><div class="ph" style="aspect-ratio:16/9;"><span>創業100周年式典写真（イメージ）</span></div></div>
+        </li>
+        <li>
+          <div class="timeline-v__year">2003年（平成15年）</div>
+          <div class="timeline-v__title">食品安全・トレーサビリティ計量システムを開発</div>
+          <div class="timeline-v__body">BSE問題・食品偽装事件を背景に、産地・品種・計量データを連携させたトレーサビリティ対応計量システムを開発。農産物の安心・安全を「はかる」新事業。</div>
+          <span class="timeline-v__tag">食の安全</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">2007年（平成19年）</div>
+          <div class="timeline-v__title">カントリーエレベーター累計1,000施設突破</div>
+          <div class="timeline-v__body">全国のカントリーエレベーターへの計量システム納入が累計1,000施設を突破。国内穀類計量分野でのトップシェアを確立。</div>
+          <span class="timeline-v__tag">マイルストーン</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">2010年（平成22年）</div>
+          <div class="timeline-v__title">アジア展開開始 ― 上海拠点設立</div>
+          <div class="timeline-v__body">中国・アジアの農産物産業の急成長とともに海外進出を決断。上海に現地法人を設立し、日本の「一品一様」ノウハウをアジアへ。</div>
+          <span class="timeline-v__tag">海外展開</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">2013年（平成25年）</div>
+          <div class="timeline-v__title">韓国・ソウルに拠点設立</div>
+          <div class="timeline-v__body">韓国の農産物流通近代化プロジェクトに参画。ソウル近郊の農協向け大型選果・計量システムを受注・納入。</div>
+        </li>
+        <li>
+          <div class="timeline-v__year">2015年（平成27年）</div>
+          <div class="timeline-v__title">タイ・バンコクに拠点設立 ― 海外3拠点体制が完成</div>
+          <div class="timeline-v__body">東南アジアの農産物輸出拡大需要に応え、タイに拠点を設立。上海・ソウル・バンコクの3拠点体制でアジア全域をカバー。</div>
+          <span class="timeline-v__tag">海外3拠点</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">2018年（平成30年）</div>
+          <div class="timeline-v__title">IoT・クラウド計量管理システムの開発着手</div>
+          <div class="timeline-v__body">計量データのクラウド収集・AIによる異常検知・リモートメンテナンス対応の次世代計量管理プラットフォームの開発を開始。</div>
+          <span class="timeline-v__tag">DX</span><span class="timeline-v__tag">IoT</span>
+        </li>
+      </ul>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px;margin:32px 0;">
+        <div class="ph" style="aspect-ratio:16/9;"><span>海外拠点 現地での設置風景（イメージ）</span></div>
+        <div class="ph" style="aspect-ratio:16/9;"><span>ISO認証取得・品質保証体制の資料（イメージ）</span></div>
+      </div>
+    </div>
+
+    <!-- 証言② -->
+    <div class="quote-band">
+      <div class="inner">
+        <blockquote>「一品一様というのは、ただ特注を作るということではない。<br/>お客様の現場を理解し、最適な精度で答えることだ。」</blockquote>
+        <p class="attr">― 現役エンジニア・〇〇氏 談（〇〇年入社）※ 本番用インタビュー原稿と差し替え予定</p>
+      </div>
+    </div>
+
+    <!-- ======== 令和 ======== -->
+    <div class="era-section" id="reiwa">
+      <div class="era-header">
+        <span class="era-label">ERA 06</span>
+        <h2 class="era-title">令和</h2>
+        <span class="era-years">2019 — present</span>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;margin-bottom:40px;">
+        <div>
+          <p style="font-size:14px;color:#555;line-height:2.0;">コロナ禍・カーボンニュートラル・スマート農業など社会の変化は加速する。近江度量衡は126年の蓄積を土台に、次の時代の「はかる」を定義しようとしている。</p>
+        </div>
+        <div class="ph" style="aspect-ratio:16/9;"><span>令和期の最新設備・スマート農業対応システム（イメージ）</span></div>
+      </div>
+      <ul class="timeline-v">
+        <li>
+          <div class="timeline-v__year">2020年（令和2年）</div>
+          <div class="timeline-v__title">コロナ禍でのリモートメンテナンス体制を整備</div>
+          <div class="timeline-v__body">パンデミックによる訪問困難な状況下で、遠隔診断・オンラインサポートシステムを急速整備。「動かし続ける」メンテナンスへの信頼をさらに高めた。</div>
+          <span class="timeline-v__tag">リモート対応</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">2022年（令和4年）</div>
+          <div class="timeline-v__title">スマート農業連携計量システムを発売</div>
+          <div class="timeline-v__body">農業IoTセンサー・ドローンデータと連携した計量管理クラウドを商品化。産地の生産管理・出荷管理のDXを計量の視点からサポート。</div>
+          <span class="timeline-v__tag">スマート農業</span><span class="timeline-v__tag">DX</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">2023年（令和5年）</div>
+          <div class="timeline-v__title">累計納入施設2,000突破</div>
+          <div class="timeline-v__body">国内外合計の納入施設数が2,000施設を突破。農産物・穀類・工業の三分野での実績が積み重なった歴史的節目。</div>
+          <span class="timeline-v__tag">マイルストーン</span>
+        </li>
+        <li>
+          <div class="timeline-v__year">2024年（令和6年）</div>
+          <div class="timeline-v__title">カーボンニュートラル対応 ― 省エネ計量ラインを開発</div>
+          <div class="timeline-v__body">モーター・制御基板の省電力化と、計量データによるエネルギー使用量の可視化機能を実装。食品工場のGHG削減目標達成を計量から支援。</div>
+          <span class="timeline-v__tag">CN対応</span>
+        </li>
+        <li class="highlight">
+          <div class="timeline-v__year">2025年（令和7年）</div>
+          <div class="timeline-v__title">創業126周年 ― 北海道営業所を拡充移転</div>
+          <div class="timeline-v__body">3月に創業126周年を達成。6月には北海道営業所を拡充移転し、北海道産地への対応力をさらに強化。Webリニューアルプロジェクト始動。</div>
+          <span class="timeline-v__tag">126周年</span>
+          <div style="margin-top:16px;"><div class="ph" style="aspect-ratio:16/9;"><span>126周年記念式典・北海道営業所写真（イメージ）</span></div></div>
+        </li>
+        <li class="highlight">
+          <div class="timeline-v__year">2026年（令和8年）</div>
+          <div class="timeline-v__title">新ブランドビジョンを発表 ― Webサイトリニューアル</div>
+          <div class="timeline-v__body">「いきる」をはかり、豊かな世界へ。新たなブランドステートメントのもと、Webサイトをリニューアル。次の100年に向けた採用・広報体制を強化する。</div>
+          <span class="timeline-v__tag">ブランドリニューアル</span>
+        </li>
+      </ul>
+    </div>
+
+  </div>
 </section>
-<div style="background:#f4f4f4;border-top:1px solid #e0e0e0;padding:60px 0;">
-  <div class="container" style="display:flex;align-items:center;justify-content:space-between;">
-    <div><h2 style="font-size:22px;font-weight:700;">次の125年へ</h2><p style="font-size:14px;color:#666;margin-top:8px;">近江度量衡は、これからも「測る」で世界を豊かにし続けます。</p></div>
-    <div style="display:flex;gap:16px;">
-      <a class="btn btn--dark" href="company.html">会社案内 →</a>
-      <a class="btn btn--outline" href="recruit.html">採用情報 →</a>
+
+<!-- ボトムCTA -->
+<div class="bottom-cta">
+  <div class="inner">
+    <div>
+      <h2>次の100年へ。<br/>ともに歩む人を募集中。</h2>
+      <p>126年の技術と誇りを受け継ぎ、更なる進化を担う仲間を求めています。</p>
+    </div>
+    <div class="btns">
+      <a class="btn btn--white" href="company.html">会社案内 →</a>
+      <a class="btn" style="background:transparent;border:1px solid #555;color:#888;" href="recruit.html">採用情報 →</a>
     </div>
   </div>
 </div>
@@ -218,7 +460,7 @@
       </div>
       <div class="footer-nav"><h4>COMPANY</h4><ul>
         <li><a href="company.html">会社案内</a></li>
-        <li><a href="history.html">125年ヒストリー</a></li>
+        <li><a href="history.html">126年ヒストリー</a></li>
         <li><a href="news.html">新着情報</a></li>
       </ul></div>
       <div class="footer-nav"><h4>PRODUCTS</h4><ul>
