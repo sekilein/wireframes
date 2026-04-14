@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>[WF ver2] 新卒採用｜近江度量衡</title>
+<link href="style.css" rel="stylesheet"/>
+<style>
+  .breadcrumb{padding:10px 0;border-bottom:1px solid #e8e8e8;}
+  .breadcrumb .inner{max-width:1100px;margin:0 auto;padding:0 40px;font-size:11px;color:#aaa;letter-spacing:.06em;}
+  .breadcrumb span{margin:0 6px;}
+  .page-nav{background:#f5f5f5;border-bottom:1px solid #e0e0e0;}
+  .page-nav .inner{max-width:1100px;margin:0 auto;padding:0 40px;display:flex;}
+  .page-nav a{display:block;padding:13px 20px;font-size:12px;color:#666;border-right:1px solid #e0e0e0;letter-spacing:.06em;}
+  .page-nav a:hover,.page-nav a.active{background:#fff;color:#111;}
+  .page-header{background:#f4f4f4;border-bottom:1px solid #e0e0e0;padding:72px 40px;}
+  .page-header .inner{max-width:1100px;margin:0 auto;}
+  .page-header__meta{font-size:11px;letter-spacing:.22em;color:#aaa;margin-bottom:12px;}
+  .page-header__title{font-size:40px;font-weight:700;line-height:1.3;color:#111;}
+  .page-header__lead{font-size:15px;color:#666;margin-top:16px;max-width:560px;line-height:1.8;}
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+  .three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;}
+  .four-col{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:#ddd;border:1px solid #ddd;}
+  .four-col .item{background:#fff;}
+  .cat-card{border:1px solid #e0e0e0;}
+  .cat-card__img{aspect-ratio:16/9;}
+  .cat-card__body{padding:24px;}
+  .cat-card__title{font-size:18px;font-weight:700;}
+  .cat-card__desc{font-size:13px;color:#666;margin-top:8px;line-height:1.7;}
+  .cat-card__link{display:inline-block;margin-top:14px;font-size:12px;border-bottom:1px solid #222;}
+  .info-table{width:100%;border-collapse:collapse;}
+  .info-table th{background:#f4f4f4;width:200px;padding:14px 20px;font-size:13px;font-weight:600;border-bottom:1px solid #e0e0e0;text-align:left;vertical-align:top;}
+  .info-table td{padding:14px 20px;font-size:13px;border-bottom:1px solid #e0e0e0;line-height:1.7;}
+  .feature-list{list-style:none;border:1px solid #e0e0e0;}
+  .feature-list li{padding:14px 20px;border-bottom:1px solid #e0e0e0;font-size:13px;display:flex;align-items:baseline;gap:12px;}
+  .feature-list li:last-child{border-bottom:none;}
+  .feature-list li::before{content:'—';color:#aaa;flex-shrink:0;}
+  .stat-band{background:#f0f0f0;border-top:1px solid #ddd;border-bottom:1px solid #ddd;padding:56px 40px;}
+  .stat-band .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+  .stat-num{text-align:center;}
+  .stat-num .big{font-size:52px;font-weight:700;line-height:1;color:#111;}
+  .stat-num .lbl{font-size:11px;color:#888;margin-top:6px;letter-spacing:.08em;}
+  .stat-divider{width:1px;height:72px;background:#ccc;flex-shrink:0;}
+  .stat-text{flex:1;}
+  .stat-text h2{font-size:22px;font-weight:700;color:#111;line-height:1.5;}
+  .stat-text p{font-size:13px;color:#555;margin-top:10px;line-height:1.7;}
+  .timeline-v{list-style:none;border-left:2px solid #ddd;margin-left:12px;}
+  .timeline-v li{position:relative;padding:0 0 40px 32px;}
+  .timeline-v li::before{content:'';position:absolute;left:-6px;top:6px;width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid #aaa;}
+  .timeline-v li:last-child{padding-bottom:0;}
+  .timeline-v__year{font-size:11px;letter-spacing:.1em;color:#aaa;margin-bottom:6px;}
+  .timeline-v__title{font-size:15px;font-weight:700;color:#111;line-height:1.5;}
+  .timeline-v__body{font-size:13px;color:#666;margin-top:6px;line-height:1.7;}
+  .process-row{display:flex;align-items:stretch;gap:0;}
+  .process-step{flex:1;text-align:center;padding:28px 16px;border:1px solid #e0e0e0;background:#fff;position:relative;}
+  .process-step+.process-step{border-left:none;}
+  .process-step::after{content:'→';position:absolute;right:-14px;top:50%;transform:translateY(-50%);font-size:16px;color:#ccc;z-index:1;}
+  .process-step:last-child::after{display:none;}
+  .process-step__num{font-size:10px;color:#aaa;letter-spacing:.1em;}
+  .process-step__title{font-size:14px;font-weight:700;margin-top:6px;}
+  .process-step__desc{font-size:11px;color:#888;margin-top:6px;line-height:1.6;}
+  .value-block{border:1px solid #e0e0e0;padding:28px;}
+  .value-block__num{font-size:32px;font-weight:700;color:#e0e0e0;line-height:1;}
+  .value-block__title{font-size:16px;font-weight:700;margin-top:8px;}
+  .value-block__body{font-size:13px;color:#666;margin-top:8px;line-height:1.7;}
+  .tag{display:inline-block;border:1px solid #ccc;font-size:10px;padding:2px 8px;color:#888;letter-spacing:.08em;margin-right:6px;}
+  .news-list{list-style:none;}
+  .news-item{display:flex;align-items:baseline;gap:24px;padding:18px 0;border-bottom:1px solid #e8e8e8;}
+  .news-item:first-child{border-top:1px solid #e8e8e8;}
+  .news-item__date{font-size:12px;color:#aaa;flex-shrink:0;letter-spacing:.06em;}
+  .news-item__cat{font-size:10px;border:1px solid #ddd;padding:2px 8px;flex-shrink:0;color:#888;}
+  .news-item__title{font-size:14px;}
+  .contact-grid{display:grid;grid-template-columns:1fr 380px;gap:60px;}
+  .contact-info{background:#f7f7f7;padding:32px;border:1px solid #e0e0e0;}
+  .contact-info h3{font-size:14px;font-weight:700;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid #e0e0e0;}
+  .contact-info p{font-size:13px;color:#555;line-height:1.8;}
+  .policy-section h2{font-size:18px;font-weight:700;margin:40px 0 16px;padding-bottom:8px;border-bottom:1px solid #e0e0e0;}
+  .policy-section p,.policy-section li{font-size:13px;color:#555;line-height:1.9;margin-bottom:10px;}
+  .policy-section ul{padding-left:20px;}
+  /* 採用ページ固有 */
+  .recruit-fv{min-height:560px;background:#111;display:flex;align-items:center;position:relative;overflow:hidden;}
+  .recruit-fv__bg{position:absolute;inset:0;}
+  .recruit-fv__overlay{position:absolute;inset:0;background:rgba(0,0,0,.65);}
+  .recruit-fv__content{position:relative;z-index:1;color:#fff;max-width:1100px;margin:0 auto;padding:80px 40px;}
+  .recruit-fv__eyebrow{font-size:11px;letter-spacing:.2em;color:#888;margin-bottom:20px;}
+  .recruit-fv__title{font-size:44px;font-weight:700;line-height:1.4;letter-spacing:.02em;}
+  .recruit-fv__sub{font-size:15px;color:#bbb;margin-top:20px;line-height:1.8;max-width:520px;}
+  .recruit-fv__cta{display:flex;gap:16px;margin-top:36px;}
+  .num-card{background:#f7f7f7;border:1px solid #e0e0e0;padding:32px 24px;}
+  .num-card__num{font-size:48px;font-weight:700;line-height:1;letter-spacing:-.02em;}
+  .num-card__unit{font-size:16px;font-weight:400;}
+  .num-card__label{font-size:12px;color:#888;margin-top:8px;}
+  .welfare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e0e0e0;border:1px solid #e0e0e0;}
+  .welfare-item{background:#fff;padding:28px;}
+  .welfare-item__title{font-size:15px;font-weight:700;margin-bottom:8px;}
+  .welfare-item__body{font-size:13px;color:#666;line-height:1.7;}
+  .interview-card{border:1px solid #e0e0e0;display:flex;flex-direction:column;}
+  .interview-card__img{aspect-ratio:1;}
+  .interview-card__body{padding:20px;flex:1;}
+  .interview-card__dept{font-size:10px;color:#aaa;letter-spacing:.1em;margin-bottom:6px;}
+  .interview-card__name{font-size:16px;font-weight:700;}
+  .interview-card__quote{font-size:13px;color:#666;margin-top:10px;line-height:1.7;border-left:3px solid #e0e0e0;padding-left:12px;}
+  .interview-card__link{display:block;margin-top:14px;font-size:12px;border-bottom:1px solid #222;width:fit-content;}
+  .entry-lp{background:#fff;}
+  .entry-lp-fv{min-height:480px;background:#111;display:flex;align-items:center;position:relative;}
+  .entry-lp-fv__content{position:relative;z-index:1;color:#fff;max-width:1100px;margin:0 auto;padding:80px 40px;}
+  .req-table{width:100%;border-collapse:collapse;}
+  .req-table th{background:#f4f4f4;padding:12px 20px;font-size:13px;font-weight:600;border-bottom:1px solid #e0e0e0;text-align:left;width:180px;}
+  .req-table td{padding:12px 20px;font-size:13px;border-bottom:1px solid #e0e0e0;line-height:1.7;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <div class="logo">近江度量衡 採用サイト<span><a href="top.html" style="color:#888;">← コーポレートサイトへ</a></span></div>
+    <nav class="site-nav">
+      <a href="recruit.html#vision">ビジョン</a>
+      <a href="recruit.html#numbers">データで見る</a>
+      <a href="recruit-interview.html">社員の声</a>
+      <a href="recruit.html#welfare">働く環境</a>
+      <a href="recruit-jobs.html">募集要項</a>
+    </nav>
+    <a class="btn btn--white btn--sm" href="recruit-entry-2027-graduate.html">エントリー →</a>
+  </div>
+</header>
+
+<nav class="breadcrumb"><div class="inner"><a href="top.html">HOME</a><span>›</span><a href="recruit.html">採用TOP</a><span>›</span><a href="recruit-jobs.html">募集要項</a><span>›</span>新卒採用</div></nav>
+<div class="page-header">
+  <div class="inner">
+    <p class="page-header__meta">NEW GRADUATE</p>
+    <h1 class="page-header__title">新卒採用</h1>
+    <p class="page-header__lead">未来を測る第一歩を、ここから。</p>
+  </div>
+</div>
+<section class="section">
+  <div class="container">
+    <p class="section-meta">Requirements</p>
+    <h2 class="section-title" style="font-size:22px;margin-bottom:28px;">募集要項</h2>
+    <table class="req-table">
+      <tr><th>募集職種</th><td>技術系総合職（設計・製造・保守・営業）</td></tr><tr><th>採用予定人数</th><td>〇〇名</td></tr><tr><th>応募資格</th><td>2027年3月卒業見込みの大学・大学院・短大・専門学校卒業予定の方（学部・学科不問）</td></tr><tr><th>勤務地</th><td>本社（滋賀）および各拠点（転勤あり）</td></tr><tr><th>給与</th><td>大学卒 〇〇万円 / 大学院卒 〇〇万円（月給）</td></tr><tr><th>諸手当</th><td>通勤手当・住宅手当・残業手当 等</td></tr><tr><th>休日・休暇</th><td>土日祝・年末年始・有給休暇 等（年間〇〇日）</td></tr><tr><th>社会保険</th><td>健康保険・厚生年金・雇用保険・労災保険</td></tr><tr><th>試用期間</th><td>3ヶ月（本採用と同条件）</td></tr>
+    </table>
+  </div>
+</section>
+<section class="section section--grey">
+  <div class="container">
+    <p class="section-meta">Selection Flow</p>
+    <h2 class="section-title" style="font-size:22px;margin-bottom:32px;">選考フロー</h2>
+    <div class="process-row">
+      <div class="process-step"><div class="process-step__num">STEP 1</div><div class="process-step__title">エントリー</div><div class="process-step__desc">専用フォームよりお申し込みください</div></div><div class="process-step"><div class="process-step__num">STEP 2</div><div class="process-step__title">書類選考</div><div class="process-step__desc">履歴書・ES を審査します</div></div><div class="process-step"><div class="process-step__num">STEP 3</div><div class="process-step__title">一次面接</div><div class="process-step__desc">オンライン面接（約45分）</div></div><div class="process-step"><div class="process-step__num">STEP 4</div><div class="process-step__title">適性検査</div><div class="process-step__desc">〇〇〇〇テスト実施</div></div><div class="process-step"><div class="process-step__num">STEP 5</div><div class="process-step__title">二次面接</div><div class="process-step__desc">対面（本社または各拠点）</div></div><div class="process-step"><div class="process-step__num">STEP 6</div><div class="process-step__title">内定</div><div class="process-step__desc">合否をご連絡します</div></div>
+    </div>
+  </div>
+</section>
+<section style="background:#f4f4f4;border-top:1px solid #e0e0e0;padding:80px 0;">
+  <div class="container" style="text-align:center;">
+    <h2 class="section-title" style="font-size:26px;margin-bottom:16px;">2027年度 新卒採用 エントリーを受付中です。</h2>
+    <p style="font-size:13px;color:#888;margin-bottom:32px;">エントリーは採用サイトの専用フォームより受け付けています。</p>
+    <a class="btn btn--dark" href="recruit-entry-2027-graduate.html" style="font-size:14px;">2027年度 新卒エントリーはこちら →</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="name">近江度量衡株式会社</div>
+        <div class="tagline">「いきる」をはかり、豊かな世界へ。<br/>Founded 1900</div>
+      </div>
+      <div class="footer-nav"><h4>COMPANY</h4><ul>
+        <li><a href="company.html">会社案内</a></li>
+        <li><a href="history.html">125年ヒストリー</a></li>
+        <li><a href="news.html">新着情報</a></li>
+      </ul></div>
+      <div class="footer-nav"><h4>PRODUCTS</h4><ul>
+        <li><a href="products.html">製品・技術紹介</a></li>
+        <li><a href="service.html">サービス案内</a></li>
+        <li><a href="delivery.html">納入実績</a></li>
+      </ul></div>
+      <div class="footer-nav"><h4>RECRUITMENT</h4><ul>
+        <li><a href="recruit.html">採用TOP</a></li>
+        <li><a href="recruit-jobs-graduate.html">新卒採用</a></li>
+        <li><a href="recruit-jobs-career.html">中途採用</a></li>
+        <li><a href="recruit-entry-2027-graduate.html">エントリー 2027</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 近江度量衡株式会社 All Rights Reserved.</span>
+      <a href="privacy.html" style="color:#555;">プライバシーポリシー</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
