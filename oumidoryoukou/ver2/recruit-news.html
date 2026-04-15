@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>[WF ver2] 採用ニュース｜近江度量衡</title>
+<link href="style.css" rel="stylesheet"/>
+<style>
+  .breadcrumb{padding:10px 0;border-bottom:1px solid #e8e8e8;}
+  .breadcrumb .inner{max-width:1100px;margin:0 auto;padding:0 40px;font-size:11px;color:#aaa;letter-spacing:.06em;}
+  .breadcrumb span{margin:0 6px;}
+  .page-header{background:#f4f4f4;border-bottom:1px solid #e0e0e0;padding:72px 40px;}
+  .page-header .inner{max-width:1100px;margin:0 auto;}
+  .page-header__meta{font-size:11px;letter-spacing:.22em;color:#aaa;margin-bottom:12px;}
+  .page-header__title{font-size:40px;font-weight:700;line-height:1.3;color:#111;}
+  .page-header__lead{font-size:15px;color:#666;margin-top:16px;max-width:560px;line-height:1.8;}
+  .news-list{list-style:none;}
+  .news-item{display:flex;align-items:baseline;gap:24px;padding:20px 0;border-bottom:1px solid #e8e8e8;}
+  .news-item:first-child{border-top:1px solid #e8e8e8;}
+  .news-item__date{font-size:12px;color:#aaa;flex-shrink:0;letter-spacing:.06em;min-width:80px;}
+  .news-item__cat{font-size:10px;border:1px solid #ddd;padding:2px 10px;flex-shrink:0;color:#888;letter-spacing:.06em;}
+  .news-item__cat--seminar{border-color:#9e1a1a;color:#9e1a1a;}
+  .news-item__cat--career{border-color:#456489;color:#456489;}
+  .news-item__cat--info{border-color:#888;color:#888;}
+  .news-item__title{font-size:14px;color:#111;line-height:1.6;}
+  .filter-bar{display:flex;gap:8px;align-items:center;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid #e8e8e8;}
+  .filter-bar span{font-size:12px;color:#888;margin-right:4px;}
+  .filter-btn{font-size:11px;padding:4px 14px;border:1px solid #ddd;color:#888;background:#fff;cursor:pointer;letter-spacing:.06em;}
+  .filter-btn.active,.filter-btn:hover{background:#111;color:#fff;border-color:#111;}
+  .note-box{background:#f7f7f7;border:1px solid #e0e0e0;padding:20px 24px;font-size:12px;color:#888;line-height:1.8;margin-top:40px;}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <div class="logo">近江度量衡 採用サイト<span><a href="top.html" style="color:#888;">← コーポレートサイトへ</a></span></div>
+    <nav class="site-nav">
+      <a href="recruit.html#vision">ビジョン</a>
+      <a href="recruit.html#numbers">データで見る</a>
+      <a href="recruit-interview.html">社員の声</a>
+      <a href="recruit.html#welfare">働く環境</a>
+      <a href="recruit-news.html" class="active">採用ニュース</a>
+      <a href="recruit-jobs.html">募集要項</a>
+    </nav>
+    <a class="btn btn--white btn--sm" href="recruit-entry-2027-graduate.html">エントリー →</a>
+  </div>
+</header>
+
+<nav class="breadcrumb"><div class="inner"><a href="recruit.html">採用TOP</a><span>›</span>採用ニュース</div></nav>
+
+<div class="page-header">
+  <div class="inner">
+    <p class="page-header__meta">RECRUIT NEWS</p>
+    <h1 class="page-header__title">採用ニュース</h1>
+    <p class="page-header__lead">セミナー・説明会の開催情報、中途採用の募集情報など、採用に関するお知らせをタイムリーに発信します。</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+
+    <div class="filter-bar">
+      <span>カテゴリ：</span>
+      <button class="filter-btn active">すべて</button>
+      <button class="filter-btn">セミナー・説明会</button>
+      <button class="filter-btn">中途採用</button>
+      <button class="filter-btn">新卒採用</button>
+      <button class="filter-btn">お知らせ</button>
+    </div>
+
+    <ul class="news-list">
+      <li class="news-item">
+        <span class="news-item__date">2026.04.10</span>
+        <span class="news-item__cat news-item__cat--seminar">セミナー</span>
+        <span class="news-item__title">【2027年度新卒】合同会社説明会への参加のご案内（5月開催）</span>
+      </li>
+      <li class="news-item">
+        <span class="news-item__date">2026.04.01</span>
+        <span class="news-item__cat news-item__cat--career">中途採用</span>
+        <span class="news-item__title">中途採用（機械設計エンジニア・営業職）の募集を開始しました</span>
+      </li>
+      <li class="news-item">
+        <span class="news-item__date">2026.03.15</span>
+        <span class="news-item__cat news-item__cat--seminar">セミナー</span>
+        <span class="news-item__title">【2027年度新卒】オンライン会社説明会を開催しました（参加者：〇〇名）</span>
+      </li>
+      <li class="news-item">
+        <span class="news-item__date">2026.03.01</span>
+        <span class="news-item__cat news-item__cat--info">お知らせ</span>
+        <span class="news-item__title">2027年度新卒採用エントリーの受付を開始しました</span>
+      </li>
+      <li class="news-item">
+        <span class="news-item__date">2026.02.10</span>
+        <span class="news-item__cat news-item__cat--seminar">セミナー</span>
+        <span class="news-item__title">京都大学工学部との連携インターンシップ参加者を募集します</span>
+      </li>
+      <li class="news-item">
+        <span class="news-item__date">2025.12.01</span>
+        <span class="news-item__cat news-item__cat--career">中途採用</span>
+        <span class="news-item__title">中途採用（システムエンジニア）の募集を終了しました</span>
+      </li>
+      <li class="news-item">
+        <span class="news-item__date">2025.10.15</span>
+        <span class="news-item__cat news-item__cat--seminar">セミナー</span>
+        <span class="news-item__title">【インターンシップ】2025年度冬季インターンシップ参加者を募集します</span>
+      </li>
+      <li class="news-item">
+        <span class="news-item__date">2025.09.01</span>
+        <span class="news-item__cat news-item__cat--info">お知らせ</span>
+        <span class="news-item__title">採用サイトをリニューアルしました</span>
+      </li>
+    </ul>
+
+    <div class="note-box">
+      <strong style="color:#555;">※ 運用メモ（ワイヤーフレーム用）</strong><br/>
+      このページはコーポレートサイトの「新着情報（/news/）」とは独立した採用専用ニュースです。<br/>
+      更新頻度：随時（セミナー開催・採用開始・締切など、タイムリーに発信）<br/>
+      外部大学連携キャンペーン情報・インターンシップ案内もここで発信。
+    </div>
+
+  </div>
+</section>
+
+<section style="background:#111;padding:0;">
+  <div style="max-width:1100px;margin:0 auto;padding:100px 40px;display:grid;grid-template-columns:1fr auto;gap:80px;align-items:center;">
+    <div>
+      <p style="font-size:11px;letter-spacing:.22em;color:#555;margin-bottom:24px;">ENTRY</p>
+      <h2 style="font-size:52px;font-weight:700;color:#fff;line-height:1.25;letter-spacing:.01em;margin-bottom:20px;">あなたの「測る」を<br/>見つけてください。</h2>
+      <p style="font-size:16px;color:#888;line-height:1.9;">新卒・中途、いずれも募集中です。<br/>126年の技術と誇りを、次の世代へ。</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:16px;min-width:240px;">
+      <a class="btn btn--white" href="recruit-jobs-graduate.html" style="display:block;text-align:center;padding:18px 32px;font-size:14px;font-weight:700;letter-spacing:.06em;">新卒採用 →</a>
+      <a href="recruit-jobs-career.html" style="display:block;text-align:center;padding:18px 32px;font-size:14px;font-weight:700;letter-spacing:.06em;border:1px solid #444;color:#ccc;text-decoration:none;">中途採用 →</a>
+      <a href="recruit-entry-2027-graduate.html" style="display:block;text-align:center;padding:18px 32px;font-size:14px;font-weight:700;letter-spacing:.06em;background:#9e1a1a;color:#fff;text-decoration:none;">エントリー 2027 →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="name">近江度量衡株式会社</div>
+        <div class="tagline">「いきる」をはかり、豊かな世界へ。<br/>Founded 1900</div>
+      </div>
+      <div class="footer-nav"><h4>COMPANY</h4><ul>
+        <li><a href="company.html">会社案内</a></li>
+        <li><a href="history.html">126年ヒストリー</a></li>
+        <li><a href="news.html">新着情報</a></li>
+      </ul></div>
+      <div class="footer-nav"><h4>PRODUCTS</h4><ul>
+        <li><a href="products.html">製品・技術紹介</a></li>
+        <li><a href="service.html">サービス案内</a></li>
+        <li><a href="delivery.html">納入実績</a></li>
+      </ul></div>
+      <div class="footer-nav"><h4>RECRUITMENT</h4><ul>
+        <li><a href="recruit.html">採用TOP</a></li>
+        <li><a href="recruit-news.html">採用ニュース</a></li>
+        <li><a href="recruit-jobs-graduate.html">新卒採用</a></li>
+        <li><a href="recruit-jobs-career.html">中途採用</a></li>
+        <li><a href="recruit-entry-2027-graduate.html">エントリー 2027</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 近江度量衡株式会社 All Rights Reserved.</span>
+      <a href="privacy.html" style="color:#555;">プライバシーポリシー</a>
+    </div>
+  </div>
+</footer>
+</body>
+</html>
