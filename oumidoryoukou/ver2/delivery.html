@@ -176,63 +176,144 @@
     </div>
   </div>
 </div>
-<section class="section">
-  <div class="container">
-    <div style="display:flex;gap:12px;margin-bottom:32px;align-items:center;">
-      <span style="font-size:12px;color:#888;margin-right:8px;">カテゴリ：</span>
-      <a class="btn btn--outline btn--sm" href="#">すべて</a><a class="btn btn--outline btn--sm" href="#">農産物用</a><a class="btn btn--outline btn--sm" href="#">穀類用</a><a class="btn btn--outline btn--sm" href="#">工業用</a><a class="btn btn--outline btn--sm" href="#">その他</a>
-    </div>
-    <div class="three-col">
-      <div class="cat-card">
-        <div class="ph" style="aspect-ratio:4/3;"><span>納入事例 写真 1</span></div>
-        <div class="cat-card__body">
-          <span class="tag">農産物用</span>
-          <div class="cat-card__title" style="font-size:15px;margin-top:10px;">〇〇農協 選果場</div>
-          <div class="cat-card__desc">選果・等級判定システムの更新。旧システムからの移行を段階的に実施。</div>
-        </div>
-      </div><div class="cat-card">
-        <div class="ph" style="aspect-ratio:4/3;"><span>納入事例 写真 2</span></div>
-        <div class="cat-card__body">
-          <span class="tag">穀類用</span>
-          <div class="cat-card__title" style="font-size:15px;margin-top:10px;">〇〇カントリーエレベーター</div>
-          <div class="cat-card__desc">米麦の受入・計量・袋詰め工程を一括刷新。処理能力を大幅に向上。</div>
-        </div>
-      </div><div class="cat-card">
-        <div class="ph" style="aspect-ratio:4/3;"><span>納入事例 写真 3</span></div>
-        <div class="cat-card__body">
-          <span class="tag">工業用</span>
-          <div class="cat-card__title" style="font-size:15px;margin-top:10px;">〇〇化学工業 製造ライン</div>
-          <div class="cat-card__desc">肥料製造ラインへの高精度計量システム導入。SCADA連携を実現。</div>
-        </div>
-      </div><div class="cat-card">
-        <div class="ph" style="aspect-ratio:4/3;"><span>納入事例 写真 4</span></div>
-        <div class="cat-card__body">
-          <span class="tag">農産物用</span>
-          <div class="cat-card__title" style="font-size:15px;margin-top:10px;">〇〇JA 集出荷施設</div>
-          <div class="cat-card__desc">野菜の重量・外観選別ラインをスクラッチ設計で構築。</div>
-        </div>
-      </div><div class="cat-card">
-        <div class="ph" style="aspect-ratio:4/3;"><span>納入事例 写真 5</span></div>
-        <div class="cat-card__body">
-          <span class="tag">穀類用</span>
-          <div class="cat-card__title" style="font-size:15px;margin-top:10px;">〇〇食糧 貯蔵施設</div>
-          <div class="cat-card__desc">大豆・麦の貯蔵・出荷計量システムの新規導入。</div>
-        </div>
-      </div><div class="cat-card">
-        <div class="ph" style="aspect-ratio:4/3;"><span>納入事例 写真 6</span></div>
-        <div class="cat-card__body">
-          <span class="tag">工業用</span>
-          <div class="cat-card__title" style="font-size:15px;margin-top:10px;">〇〇ガラス工業 製造拠点</div>
-          <div class="cat-card__desc">ガラス原料計量システムの設計・製造・据付。</div>
+<!-- ── 納入事例 深掘り 3案件 ─────────────────────── -->
+<style>
+  .case-section { border-top: 1px solid #e0e0e0; }
+  .case-section:nth-child(even) { background: #f7f7f7; }
+  .case-inner { max-width: 1100px; margin: 0 auto; padding: 96px 40px; }
+  .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+  .case-grid--rev { direction: rtl; }
+  .case-grid--rev > * { direction: ltr; }
+  .case-eyebrow { font-size: 10px; letter-spacing: .2em; color: #aaa; margin-bottom: 20px; }
+  .case-cat { display: inline-block; border: 1px solid #ccc; font-size: 10px; padding: 3px 12px; color: #777; letter-spacing: .1em; margin-bottom: 16px; }
+  .case-cat--agri { border-color: #5a8a3c; color: #5a8a3c; }
+  .case-cat--grain { border-color: #c8860a; color: #c8860a; }
+  .case-cat--ind   { border-color: #456489; color: #456489; }
+  .case-title { font-size: 32px; font-weight: 700; line-height: 1.3; color: #111; margin-bottom: 20px; }
+  .case-lead { font-size: 15px; color: #555; line-height: 1.9; margin-bottom: 36px; }
+  .case-table { width: 100%; border-collapse: collapse; margin-bottom: 32px; }
+  .case-table th { font-size: 11px; font-weight: 600; color: #888; letter-spacing: .08em; padding: 10px 0; border-bottom: 1px solid #e0e0e0; width: 110px; vertical-align: top; }
+  .case-table td { font-size: 13px; color: #333; padding: 10px 0; border-bottom: 1px solid #e0e0e0; line-height: 1.7; }
+  .case-points { list-style: none; border: 1px solid #e0e0e0; background: #fff; margin-bottom: 32px; }
+  .case-points li { display: flex; gap: 14px; padding: 14px 20px; border-bottom: 1px solid #e0e0e0; font-size: 13px; color: #444; line-height: 1.6; }
+  .case-points li:last-child { border-bottom: none; }
+  .case-points li::before { content: '✓'; color: #111; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .case-img-wrap { position: sticky; top: 40px; }
+  .case-img-main { aspect-ratio: 4/3; margin-bottom: 12px; }
+  .case-img-sub { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .case-img-sub .ph { aspect-ratio: 4/3; }
+  .case-num { font-size: 11px; color: #aaa; letter-spacing: .06em; margin-bottom: 12px; }
+</style>
+
+<!-- ── Case 01 農産物用 ── -->
+<div class="case-section">
+  <div class="case-inner">
+    <div class="case-grid">
+      <div class="case-img-wrap">
+        <div class="ph case-img-main"><span>納入事例写真<br/>〇〇農協 選果場<br/>メインビジュアル</span></div>
+        <div class="case-img-sub">
+          <div class="ph"><span>選果ライン全景</span></div>
+          <div class="ph"><span>等級判定モニター</span></div>
         </div>
       </div>
-    </div>
-    <div style="margin-top:40px;text-align:center;">
-      <p style="font-size:13px;color:#888;margin-bottom:16px;">※ 掲載事例は一部です。詳細な納入実績資料は別途ご請求ください。</p>
-      <a class="btn btn--outline" href="contact.html">資料請求・お問い合わせ</a>
+      <div>
+        <p class="case-eyebrow">CASE 01</p>
+        <span class="case-cat case-cat--agri">農産物用計量システム</span>
+        <h2 class="case-title">〇〇農協<br/>選果場システム更新</h2>
+        <p class="case-lead">老朽化した選果・等級判定システムを一新。旧システムからの段階的移行を無停止で実現し、稼働率を大幅に改善した事例です。</p>
+        <table class="case-table">
+          <tr><th>導入先</th><td>〇〇農業協同組合（滋賀県）</td></tr>
+          <tr><th>導入年</th><td>2023年（更新工事 2期施工）</td></tr>
+          <tr><th>システム規模</th><td>選果ライン3系統 / 日処理量 約〇〇トン</td></tr>
+          <tr><th>主な機器</th><td>重量選別機・光学等級判定ユニット・集計サーバー一式</td></tr>
+          <tr><th>施工期間</th><td>約〇ヶ月（繁忙期を避けた分割施工）</td></tr>
+        </table>
+        <p style="font-size:12px;font-weight:700;color:#111;margin-bottom:12px;letter-spacing:.06em;">解決したポイント</p>
+        <ul class="case-points">
+          <li>旧システムと並行稼働しながら段階的に切り替え、農繁期の停止ゼロを実現</li>
+          <li>光学センサーと重量計測の複合判定により等級精度を向上、格外ロスを削減</li>
+          <li>クラウド連携の集計システムで日報・出荷データの自動化を実現</li>
+        </ul>
+      </div>
     </div>
   </div>
-</section>
+</div>
+
+<!-- ── Case 02 穀類用 ── -->
+<div class="case-section">
+  <div class="case-inner">
+    <div class="case-grid case-grid--rev">
+      <div class="case-img-wrap">
+        <div class="ph case-img-main"><span>納入事例写真<br/>〇〇カントリーエレベーター<br/>メインビジュアル</span></div>
+        <div class="case-img-sub">
+          <div class="ph"><span>受入ホッパー</span></div>
+          <div class="ph"><span>袋詰め自動計量ライン</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="case-eyebrow">CASE 02</p>
+        <span class="case-cat case-cat--grain">穀類用計量システム</span>
+        <h2 class="case-title">〇〇カントリー<br/>エレベーター 全工程刷新</h2>
+        <p class="case-lead">米麦の受入・計量・乾燥・袋詰めまでの全工程を一括刷新。処理能力を大幅に向上させながら、人員配置の最適化にも貢献しました。</p>
+        <table class="case-table">
+          <tr><th>導入先</th><td>〇〇農産株式会社（宮城県）</td></tr>
+          <tr><th>導入年</th><td>2022年（新規建設に伴う機器一式）</td></tr>
+          <tr><th>システム規模</th><td>受入ピット4系統 / 乾燥機〇基 / 袋詰めライン2系統</td></tr>
+          <tr><th>主な機器</th><td>受入計量ホッパー・乾燥制御システム・自動袋詰め計量機一式</td></tr>
+          <tr><th>施工期間</th><td>約〇ヶ月</td></tr>
+        </table>
+        <p style="font-size:12px;font-weight:700;color:#111;margin-bottom:12px;letter-spacing:.06em;">解決したポイント</p>
+        <ul class="case-points">
+          <li>受入〜袋詰めまでを一気通貫でシステム化し、処理能力を従来比約〇割向上</li>
+          <li>乾燥機との連動制御で、品質管理を自動化・省人化</li>
+          <li>タッチパネル操作で熟練不要、新任オペレーターも即日稼働可能</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Case 03 工業用 ── -->
+<div class="case-section">
+  <div class="case-inner">
+    <div class="case-grid">
+      <div class="case-img-wrap">
+        <div class="ph case-img-main"><span>納入事例写真<br/>〇〇化学工業 製造ライン<br/>メインビジュアル</span></div>
+        <div class="case-img-sub">
+          <div class="ph"><span>制御盤・計装パネル</span></div>
+          <div class="ph"><span>SCADAモニタリング画面</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="case-eyebrow">CASE 03</p>
+        <span class="case-cat case-cat--ind">工業用計量システム</span>
+        <h2 class="case-title">〇〇化学工業<br/>肥料製造ライン 高精度化</h2>
+        <p class="case-lead">肥料製造ラインへの高精度計量システム導入。既存のSCADAシステムとの連携を実現し、製造精度とトレーサビリティを同時に強化した事例です。</p>
+        <table class="case-table">
+          <tr><th>導入先</th><td>〇〇化学工業株式会社（熊本県）</td></tr>
+          <tr><th>導入年</th><td>2024年</td></tr>
+          <tr><th>システム規模</th><td>計量ポイント〇箇所 / 24時間連続稼働</td></tr>
+          <tr><th>主な機器</th><td>ロードセル計量ユニット・PLC制御盤・SCADA連携インターフェース一式</td></tr>
+          <tr><th>施工期間</th><td>約〇ヶ月（定期修繕期間に合わせた施工）</td></tr>
+        </table>
+        <p style="font-size:12px;font-weight:700;color:#111;margin-bottom:12px;letter-spacing:.06em;">解決したポイント</p>
+        <ul class="case-points">
+          <li>既設SCADAとのOPC-UA通信連携で、計量データをリアルタイム可視化</li>
+          <li>高精度ロードセルの採用により、配合精度を大幅改善し製品品質を安定化</li>
+          <li>計量履歴の自動記録でトレーサビリティを確保、品質監査に対応</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<div style="background:#f4f4f4;border-top:1px solid #e0e0e0;padding:80px 40px;text-align:center;">
+  <p style="font-size:11px;letter-spacing:.2em;color:#aaa;margin-bottom:20px;">MORE CASES</p>
+  <h2 style="font-size:28px;font-weight:700;color:#111;margin-bottom:16px;">掲載以外の実績については<br/>お問い合わせください</h2>
+  <p style="font-size:14px;color:#777;line-height:1.8;margin-bottom:36px;">農産物・穀類・工業など2,000施設以上の納入実績をご用意しています。<br/>詳細な資料は別途ご請求いただけます。</p>
+  <a class="btn btn--outline" href="contact.html" style="padding:14px 48px;font-size:13px;letter-spacing:.1em;">資料請求・お問い合わせ</a>
+</div>
 
 <footer class="site-footer">
   <div class="inner">
