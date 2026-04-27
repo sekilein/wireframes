@@ -1,0 +1,1842 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<title>金山株式会社｜買取・解体・廃棄物処理・原状回復は岡山の金山株式会社へ (v6)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+1p:wght@400;500;700;900&family=Noto+Sans+JP:wght@700&family=Outfit:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ────────────────────────────────────────
+   RESET
+──────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+img{display:block;max-width:100%;height:auto;}/* height:autoで縦横比を保持。.img-wrap imgのheight:100%はより詳細なセレクタで上書き */
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
+
+/* ────────────────────────────────────────
+   DESIGN TOKENS
+   v4: 「ブレイクポイント(768px)に到達するまで画面幅ではみ出さない」よう、
+       固定px幅を %/min()/clamp() で可変化。フォントも clamp で流動化。
+   clamp計算式: clamp(最小, Figma値÷1440×100vw, 最大=Figma値)
+──────────────────────────────────────── */
+:root{
+  --orange:#fe5417;
+  --teal:#01adbe;
+  --yellow:#fff36a;
+  --cream:#fff7d1;
+  --lb:#ebfdff;
+  --gfrom:#8ac65d;
+  --gto:#219d01;
+  --design-w:1440px;   /* Figmaキャンバス幅 */
+  --content-w:1100px;  /* コンテンツ幅 */
+  /* padding はブラウザ可変: clamp(最小, Figma値÷1440×100vw, Figma値)
+     --pad-x: 170÷1440=11.81vw / --pad-y: 120÷1440=8.33vw */
+  --pad-x: clamp(20px, 11.81vw, 170px);
+  --pad-y: clamp(60px,  8.33vw, 120px);
+
+  /* 流動フォント（Figma PC値と想定SP最小の間を 100vw で補間）
+     式: clamp(SP最小, Figma値÷1440×100vw, PC最大)
+     ※ ブレイクポイント(768px)では min→max の中間値を取り、
+       768px 以下では各セクションの @media で個別に調整 */
+  --fs-hero-headline: clamp(32px, 4.44vw, 64px);   /* 64÷1440=4.44vw */
+  --fs-hero-tag:      clamp(18px, 2.22vw, 32px);   /* 32÷1440=2.22vw */
+  --fs-hero-sub:      clamp(14px, 1.25vw, 18px);
+  --fs-hero-bar:      clamp(18px, 2.22vw, 32px);
+  --fs-title-en:      clamp(36px, 4.44vw, 64px);
+  --fs-title-ja:      clamp(14px, 1.39vw, 20px);
+  --fs-h2:            clamp(24px, 2.64vw, 38px);   /* 38px系の見出し */
+  --fs-card-title:    clamp(18px, 1.67vw, 24px);
+  --fs-body:          clamp(14px, 1.11vw, 16px);
+  --fs-btn:           clamp(18px, 1.67vw, 24px);
+  --fs-tel:           clamp(32px, 3.33vw, 48px);
+}
+
+/* Z-INDEX MAP
+   ─────────────────────────
+   section bg             : section 自身の background
+   decoration / absolute  : 1
+   content                : 2
+   header                 : 100
+*/
+
+/* ────────────────────────────────────────
+   LAYOUT BASE
+   section は full-width 背景（linear-gradient overlay でテクスチャ透過を表現）
+   .wrap で max-width:1440px margin:auto + padding:170px
+   → どの画面幅でもコンテンツが左右に寄らない
+──────────────────────────────────────── */
+.section{position:relative;}
+.wrap{
+  max-width:var(--design-w);
+  margin:0 auto;
+  padding:var(--pad-y) var(--pad-x);
+  position:relative;
+  z-index:2;
+}
+
+/* ────────────────────────────────────────
+   SECTION TITLE
+──────────────────────────────────────── */
+.sec-title{display:flex;flex-direction:column;gap:8px;margin-bottom:50px;}
+.sec-title__en{
+  display:inline-block;
+  font-family:'Outfit',sans-serif;font-weight:700;
+  font-size:var(--fs-title-en);line-height:1;letter-spacing:2px;
+  transform:skewX(-7.11deg) scaleY(.99);
+}
+.sec-title__ja{
+  /* Figma: DelaSuko Gothic One R 20px、skew(-7.11deg) */
+  display:inline-block;
+  font-family:'Dela Gothic One',sans-serif;font-weight:400;
+  font-size:var(--fs-title-ja);line-height:1;
+  transform:skewX(-7.11deg) scaleY(.99);
+}
+
+/* ────────────────────────────────────────
+   IMAGE WRAPPER (縦横比を保持)
+──────────────────────────────────────── */
+.img-wrap{overflow:hidden;flex-shrink:0;}
+.img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* ────────────────────────────────────────
+   HEADER
+──────────────────────────────────────── */
+.header{
+  /* FV上では背景ぼかしなし。FVを抜けたら .is-scrolled が付与され blur が効く */
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 70px;
+  transition:backdrop-filter .3s ease, -webkit-backdrop-filter .3s ease;
+}
+.header.is-scrolled{
+  backdrop-filter:blur(42px);-webkit-backdrop-filter:blur(42px);
+}
+.header__logo{width:54px;height:34px;flex-shrink:0;position:relative;overflow:hidden;}
+.header__logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;}
+.header__right{display:flex;align-items:center;gap:40px;}
+.header__nav{display:flex;gap:20px;}
+.header__nav a{font-family:'M PLUS 1p',sans-serif;font-weight:700;font-size:16px;color:#fff;white-space:nowrap;}
+.header__cta{
+  /* Figma: w:180px, padding-l:28 py:14, drop-shadow 0 0 5px rgba(0,134,219,.1)
+     font は Noto Sans JP Bold 18px / 矢印は left:156 absolute */
+  display:flex;align-items:center;gap:8px;
+  width:180px;padding:14px 0 14px 28px;border-radius:4px;
+  background:linear-gradient(to right,var(--gfrom),var(--gto));
+  color:#fff;font-family:'Noto Sans JP','M PLUS 1p',sans-serif;font-weight:700;font-size:18px;white-space:nowrap;
+  filter:drop-shadow(0 0 5px rgba(0,134,219,.1));
+  position:relative;
+}
+.header__cta::after{
+  /* Figma: 矢印 12×8、left:156 / top:50% / rotate(90deg) */
+  content:'';position:absolute;right:16px;top:50%;transform:translateY(-50%);
+  border-left:6px solid #fff;
+  border-top:4px solid transparent;border-bottom:4px solid transparent;
+}
+/* ハンバーガーボタン（SP専用） */
+.header__hamburger{
+  display:none; /* PC非表示 */
+  flex-direction:column;justify-content:space-between;
+  width:24px;height:16px;
+  background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;
+}
+.header__hamburger span{
+  display:block;width:24px;height:2px;
+  background:#fff;border-radius:1px;
+}
+
+/* ────────────────────────────────────────
+   SP DRAWER（ハンバーガーメニュー展開後）
+   Figma: SP_展開後メニュー（18:6）
+   white全画面、z-index:200
+──────────────────────────────────────── */
+.sp-drawer{
+  display:none;
+  position:fixed;inset:0;z-index:200;
+  background:#fff;
+  overflow-y:auto;
+}
+.sp-drawer.is-open{display:block;}
+
+/* ×ボタン: Figma right≈20px top:17px */
+.sp-drawer__close{
+  position:absolute;right:20px;top:17px;
+  width:17px;height:17px;
+  background:none;border:none;cursor:pointer;padding:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.sp-drawer__close svg{width:17px;height:17px;}
+
+/* navリンク: Figma top:80px、中央揃え、gap:38px */
+.sp-drawer__nav{
+  padding-top:80px;
+  display:flex;flex-direction:column;align-items:center;gap:38px;
+}
+.sp-drawer__nav a{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:16px;color:#e45828;
+  white-space:nowrap;line-height:normal;
+}
+
+/* CTAボタン群: gap:16px、shadowは各ボタン個別（.fv-btnに付与済み） */
+.sp-drawer__ctas{
+  display:flex;flex-direction:column;gap:16px;align-items:center;
+  padding:38px 16px 40px;
+  margin:0 16px;
+}
+
+/* ────────────────────────────────────────
+   FV
+   高さ700px固定。bgは全体カバー。
+   コンテンツ: left:170px top:158px
+   orangeバー: position:absolute bottom:0 height:186px
+──────────────────────────────────────── */
+.fv{
+  position:relative;
+  /* Figma: 750px @1440 → 52.08vw。最小600px、最大750px */
+  min-height:600px;
+  height:clamp(600px, 52vw, 750px);
+  overflow:hidden;
+}
+/* 背景レイヤー */
+.fv__bg{position:absolute;inset:0;z-index:0;}
+.fv__bg-kitchen{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.fv__bg-overlay{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.3;}
+/* 人物 PNG: bottom を FV 下端に固定 + height は viewport ベースで指定。
+   - 画像下端 = FV 下端 (バー下 50px の隙間まで体下部が届く)
+   - 画像の上端は header 付近 (クリップ可)
+   - 画像 height が viewport に追従 → 比率を保ちつつ常に bar に「下付け」
+   object-position:left bottom で画像コンテンツを下寄せにする */
+.fv__bg-staff{
+  position:absolute;
+  /* staff2 の左下、レイヤー下に重なる（DOM 順で staff2 が後 → 前面） */
+  right: clamp(160px, 14vw, 200px);
+  bottom: 0;
+  width: clamp(320px, 27.8vw, 400px);
+  height: clamp(485px, 42vw, 605px);
+  object-fit: contain; object-position: left bottom;
+  z-index: 0;
+  pointer-events: none;
+}
+.fv__bg-staff2{
+  position:absolute;
+  /* セクション右端から少しはみ出させる（前面レイヤー） */
+  right: clamp(-60px, -3vw, -30px);
+  bottom: 0;
+  width: clamp(320px, 27.8vw, 400px);
+  height: clamp(485px, 42vw, 605px);
+  object-fit: contain; object-position: left bottom;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* コンテンツエリア: left/width を vw 基準に */
+.fv__content{
+  /* Figma 780/1440=54.17vw → ブラウザ幅に追従して縮む。
+     800px相当(54vw=432)未満では SP で再定義。最大780pxはサイドpaddingで自然に頭打ち */
+  position:absolute;
+  left:clamp(20px, 11.81vw, 170px); /* pad-x相当 */
+  top:clamp(80px, 11vw, 158px);
+  width:min(54.17vw, calc(100% - clamp(40px, 23.62vw, 340px)));
+  display:flex;flex-direction:column;gap:clamp(10px, 1.11vw, 16px);
+  z-index:2;
+}
+.fv__badge{
+  /* Figma: content幅(780px)いっぱいに広がる。p:10px、rounded:40px */
+  display:flex;align-items:center;justify-content:center;
+  background:rgba(255,255,255,.9);border-radius:40px;
+  padding:clamp(6px, .7vw, 10px);width:100%;
+  font-family:'M PLUS 1p',sans-serif;font-weight:900;
+  font-size:clamp(14px, 1.67vw, 24px);color:var(--orange);
+  position:relative;
+}
+.fv__badge-deco{
+  /* Figma: left:123.68px top:-29.15px、inner 49.515×47.285 + rotate -15.92° */
+  position:absolute;left:clamp(54px, 8.59vw, 124px);top:clamp(-22px, -2.02vw, -29px);
+  width:clamp(34px, 3.44vw, 50px);height:auto;aspect-ratio:49.515/47.285;
+  object-fit:contain;
+  transform:rotate(-15.92deg);transform-origin:center;
+  pointer-events:none;
+}
+.fv__tags{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.fv__tag{
+  /* Figma: bg #fe5417 / padding:10px全方向 / Dela Gothic One 32px white */
+  background:var(--orange);color:#fff;
+  font-family:'Dela Gothic One',sans-serif;font-weight:400;
+  font-size:var(--fs-hero-tag);
+  padding:clamp(6px, .7vw, 10px);line-height:1;
+}
+.fv__tag-suffix{
+  /* Figma: Dela Gothic One 38px #222 */
+  font-family:'Dela Gothic One',sans-serif;font-weight:400;
+  font-size:clamp(20px, 2.64vw, 38px);color:#222;line-height:1;
+}
+.fv__headline{
+  /* Figma: Dela Gothic One 64px #222、leading-none */
+  font-family:'Dela Gothic One',sans-serif;font-weight:400;
+  font-size:var(--fs-hero-headline);line-height:1;color:#222;
+}
+.fv__sub{
+  font-family:'M PLUS 1p',sans-serif;font-weight:500;
+  font-size:var(--fs-hero-sub);color:#000;line-height:1.6;
+}
+
+/* orangeバー: 中身を包括できるよう min-height + padding（固定高さNG） */
+.fv__bar{
+  /* #ff956f + kitchen写真 multiply ブレンド */
+  position:absolute;bottom:50px;left:0;right:0;
+  min-height:clamp(140px, 12.92vw, 186px);
+  padding:clamp(14px, 1.67vw, 24px) clamp(16px, 2.78vw, 40px);
+  background-color:#ff956f;
+  background-image:url('images/v6/b364b324-0ec4-4f7a-86d3-0022800a962f.jpg');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-blend-mode:multiply;
+  overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:clamp(10px, 1.11vw, 16px);
+  z-index:2;
+}
+.fv__bar-text{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-hero-bar);
+  color:#fff;text-align:center;line-height:1;
+}
+.fv__ctas{
+  /* Figma: container 全体に drop-shadow 0 0 5px rgba(0,0,0,.25) */
+  display:flex;gap:clamp(8px, 1.67vw, 24px);
+  align-items:stretch;justify-content:center;
+  width:100%;max-width:1100px;
+  filter:drop-shadow(0 0 5px rgba(0,0,0,.25));
+}
+
+/* CTAボタン共通: flex:1 1 0 で均等に横幅を分け合い、コンテナ縮小に相似追従
+   固定heightではなく min-height（中のテキストが折返した時に高さが伸びるため） */
+.fv-btn{
+  flex:1 1 0;
+  min-width:0;max-width:360px;
+  min-height:clamp(56px, 5vw, 72px);
+  /* 右 padding は矢印(right:14px + 幅7px)分を常に確保 */
+  padding:clamp(8px, 1vw, 12px) 30px clamp(8px, 1vw, 12px) clamp(10px, 1.5vw, 16px);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-btn);
+  line-height:1.2;
+  position:relative;
+}
+.fv-btn__arrow{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  border-left:7px solid var(--orange);
+  border-top:5px solid transparent;border-bottom:5px solid transparent;
+}
+.fv-btn--tel{background:#fff;color:var(--orange);}
+.fv-btn--tel .tel-num{
+  font-family:'Outfit',sans-serif;font-weight:900;
+  font-size:clamp(18px, 2.08vw, 30px);
+  white-space:nowrap;
+}
+.fv-btn--form{background:var(--yellow);color:var(--orange);letter-spacing:.48px;}
+.fv-btn--line{background:linear-gradient(to right,var(--gfrom),var(--gto));color:#fff;letter-spacing:.48px;}
+.fv-btn--line .fv-btn__arrow{border-left-color:#fff;}
+
+/* ────────────────────────────────────────
+   ONAYAMI
+   背景: #fff7d1 + cream texture opacity:18%
+   デコ人物・スタッフ写真はabsolute
+──────────────────────────────────────── */
+.onayami{
+  /* cream(#fff7d1) ベース、テクスチャを18%可視化 */
+  background:
+    linear-gradient(rgba(255,247,209,.82), rgba(255,247,209,.82)),
+    url('images/v6/5a448df0-74c7-4d38-a421-58a1e195af1c.jpg') center/cover no-repeat,
+    var(--cream);
+  padding-bottom:0; /* スタッフ分は wrap で調整 */
+}
+.onayami .wrap{padding-top:90px;padding-bottom:90px;}
+
+/* v6: 装飾は flex 兄弟要素で配置（DESIGN_RULES §1.4）
+   上段: [stressed] [quote+heading] [thinking]
+   下段: [staff-l]  [dots+resolve]  [staff-r] */
+
+/* heading 行: 中央寄せ（装飾は .wrap の絶対配置に分離） */
+.onayami__head-row{
+  display:flex;justify-content:center;
+  width:100%;margin-bottom:60px;
+}
+.onayami__head-main{
+  flex:0 1 auto;
+  position:relative;
+  display:flex;flex-direction:column;align-items:center;gap:30px;
+  padding-top:clamp(24px, 3vw, 48px);
+}
+.onayami__quote{
+  position:absolute;top:0;left:50%;transform:translateX(-50%);
+  width:min(646px, 100%);aspect-ratio:646/69;height:auto;
+  object-fit:contain;pointer-events:none;z-index:0;
+}
+.onayami__head-main > :not(.onayami__quote){position:relative;z-index:1;}
+.onayami__heading{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-h2);color:#222;text-align:center;
+  letter-spacing:.76px;line-height:1.4;
+}
+
+/* worry cards */
+.onayami__cards{display:flex;flex-direction:column;gap:30px;width:100%;}
+.onayami__row{display:flex;justify-content:space-between;gap:clamp(20px, 6.94vw, 100px);}
+.onayami__card{
+  flex:1;min-width:0;
+  background:#fff;border:1px solid var(--orange);border-radius:10px;
+  padding:clamp(16px, 2vw, 30px);
+  box-shadow:0 0 20px rgba(254,84,23,.2);
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:clamp(14px, 1.39vw, 20px);
+  color:#333;text-align:center;line-height:1.8;
+}
+
+/* resolve 行: 中央寄せ（装飾は .wrap の絶対配置に分離） */
+.onayami__resolve-row{
+  display:flex;justify-content:center;
+  width:100%;margin-top:60px;
+}
+.onayami__resolve{
+  flex:0 1 auto;
+  display:flex;flex-direction:column;align-items:center;gap:30px;
+}
+.onayami__dots{width:12px;height:49px;object-fit:contain;flex-shrink:0;}
+.onayami__resolve-text{
+  display:inline-block;
+  font-family:'M PLUS 1p',sans-serif;font-weight:900;
+  font-size:var(--fs-h2);color:var(--orange);text-align:center;
+  transform:skewX(-7.58deg) scaleY(.99);
+  white-space:normal;
+}
+
+/* 装飾画像: .wrap の四隅に絶対配置（4つのカードの角に重なる）
+   Figma PC_v2 (1440px) の座標を vw 換算 */
+.onayami__deco,.onayami__staff{
+  position:absolute;
+  object-fit:contain;pointer-events:none;
+  z-index:1;
+}
+.onayami__deco--stressed{
+  /* Figma: left=115, top=144, w=93, h=171 */
+  left:clamp(15px, 7.99vw, 115px);
+  top:clamp(60px, 10vw, 144px);
+  width:clamp(54px, 6.46vw, 93px);
+  aspect-ratio:93/171;height:auto;
+}
+.onayami__deco--thinking{
+  /* Figma: right側、w=117, h=272 / カード行の間に重なる位置 */
+  right:clamp(15px, 7.99vw, 115px);
+  top:clamp(120px, 21.5vw, 310px);
+  width:clamp(68px, 8.13vw, 117px);
+  aspect-ratio:117/272;height:auto;
+}
+.onayami__staff--l{
+  /* Figma: left=134, w=159, h=233 / 下付け */
+  left:clamp(20px, 9.31vw, 134px);
+  bottom:0;
+  width:clamp(100px, 11.04vw, 159px);
+  aspect-ratio:159/233;height:auto;
+}
+.onayami__staff--r{
+  /* Figma: right側 (1440-1136-136=168), w=136, h=256 / 下付け */
+  right:clamp(20px, 11.67vw, 168px);
+  bottom:0;
+  width:clamp(86px, 9.44vw, 136px);
+  aspect-ratio:136/256;height:auto;
+}
+
+/* ────────────────────────────────────────
+   FEATURE
+   背景: solid #01adbe + 右側波模様
+   カードは白、数字はカード内右下
+──────────────────────────────────────── */
+.feature{
+  /* teal ベース + 左側からのドット飛沫テクスチャ（v12） */
+  background:
+    url('images/v12/feature_bg.png') left center/auto 100% no-repeat,
+    var(--teal);
+}
+.feature .sec-title__en,.feature .sec-title__ja{color:#fff;}
+.feature__cards{display:flex;flex-direction:column;gap:clamp(20px, 3.47vw, 50px);}
+
+.feature-card{
+  background:#fff;
+  /* Figma: border-radius tl=30px br=30px (tr=0 bl=0) */
+  border-radius:30px 0 30px 0;
+  padding:clamp(20px, 2.78vw, 40px);
+  position:relative;
+  display:flex;flex-direction:column;gap:20px;
+}
+.feature-card__row{display:flex;gap:clamp(20px, 2.78vw, 40px);align-items:flex-start;position:relative;z-index:1;}
+
+/* 画像ラッパー: 可変幅 + aspect-ratio */
+.feature-card__img-wrap{
+  width:clamp(180px, 27vw, 300px);
+  aspect-ratio:300/200; /* 3:2 */
+  border-radius:20px;
+  overflow:hidden;flex-shrink:0;
+}
+.feature-card__img-wrap img{width:100%;height:100%;object-fit:cover;}
+
+.feature-card__body{flex:1;min-width:0;}
+.feature-card__title{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-card-title);color:var(--teal);line-height:1.8;letter-spacing:.48px;
+  margin-bottom:20px;
+}
+.feature-card__text{
+  font-family:'M PLUS 1p',sans-serif;font-weight:400;
+  font-size:var(--fs-body);color:#222;line-height:1.8;letter-spacing:.32px;
+}
+/* 数字: 新Figmaは solid #01adbe（不透明）、114px、skew付き、カード右下 24/21
+   z-index:0 で文字の下に配置 */
+.feature-card__num{
+  position:absolute;right:clamp(16px, 1.67vw, 24px);bottom:clamp(14px, 1.46vw, 21px);
+  font-family:'Outfit',sans-serif;font-weight:700;
+  font-size:clamp(64px, 7.92vw, 114px);line-height:1;letter-spacing:2px;
+  color:var(--teal);
+  transform:skewX(-7.11deg) scaleY(.99);
+  pointer-events:none;user-select:none;
+  z-index:0;
+}
+
+/* ────────────────────────────────────────
+   SERVICE
+   背景: #ebfdff + 水玉 opacity:10%
+   カード: 画像（上rounded）→ テキストカード -60px 重なり
+   右カード: margin-top:90px
+──────────────────────────────────────── */
+.service{
+  /* lb(#ebfdff) ベース、テクスチャを10%可視化 */
+  background:
+    linear-gradient(rgba(235,253,255,.9), rgba(235,253,255,.9)),
+    url('images/v6/2d0a3aa9-0d6e-4f7f-9204-83be7701ad18.png') center/cover no-repeat,
+    var(--lb);
+}
+.service .sec-title__en,.service .sec-title__ja{color:var(--teal);}
+
+.service__rows{display:flex;flex-direction:column;gap:clamp(40px, 4.17vw, 60px);}
+.service__row{
+  /* Figma: 各行下に 60px の余白（カード pb-[60px]、隣接行は -60px 重なり吸収不要） */
+  display:flex;gap:clamp(20px, 2.78vw, 40px);align-items:flex-start;
+  padding-bottom:60px;
+}
+
+.svc-card{
+  flex:1 1 0;min-width:0;
+  display:flex;flex-direction:column;align-items:center;
+}
+.svc-card:nth-child(2){margin-top:clamp(40px, 6.25vw, 90px);}
+
+/* 画像: Figma 547.71×392.868 (≒1.394:1)、上だけ rounded-60 */
+.svc-card__img-wrap{
+  width:100%;
+  aspect-ratio:548/393;
+  border-radius:clamp(30px, 4.17vw, 60px) clamp(30px, 4.17vw, 60px) 0 0;
+  overflow:hidden;
+  margin-bottom:-60px; /* テキストカードと60px重なる */
+  position:relative;z-index:0;
+}
+.svc-card__img-wrap img{width:100%;height:100%;object-fit:cover;}
+
+.svc-card__text{
+  background:#fff;border-radius:clamp(20px, 2.78vw, 40px);
+  padding:clamp(20px, 2.78vw, 40px);
+  width:calc(100% - clamp(20px, 4.17vw, 60px));
+  box-shadow:0 0 20px rgba(60,86,52,.1);
+  position:relative;z-index:1;
+}
+.svc-card__title{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-card-title);color:#e45828;text-align:center;line-height:1.4;
+  margin-bottom:10px;
+}
+.svc-card__body{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#333;line-height:1.8;
+}
+
+/* ────────────────────────────────────────
+   CASE
+   背景: #fff7d1 + cream texture opacity:18%
+   Before/After: 左260+260px, Info: 右530px
+──────────────────────────────────────── */
+.case{
+  /* cream ベース、テクスチャを18%可視化 */
+  background:
+    linear-gradient(rgba(255,247,209,.82), rgba(255,247,209,.82)),
+    url('images/v6/54139271-9633-4e0a-9799-b1f3413291f6.jpg') center/cover no-repeat,
+    var(--cream);
+}
+.case .sec-title__en,.case .sec-title__ja{color:var(--orange);}
+/* Figma: Case アイテム間 50px。SP では縮める */
+.case__list{display:flex;flex-direction:column;gap:clamp(30px, 3.47vw, 50px);}
+
+/* Before/After画像ペア: %比で縮小、SP で初めて縦積み */
+.case-item{display:flex;gap:clamp(20px, 3.47vw, 50px);align-items:flex-end;}
+.case-ba{
+  display:flex;flex-direction:row;
+  width:min(520px, 48%); /* 最大520px、48%で相似縮小 */
+  flex-shrink:0;
+}
+.case-ba__col{display:flex;flex-direction:column;flex:1 1 0;min-width:0;}
+.case-ba__label{
+  height:40px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.case-ba__label--before{background:#fff;}
+.case-ba__label--after{background:var(--orange);}
+.case-ba__label span{
+  display:inline-block;
+  font-family:'Outfit',sans-serif;font-weight:700;
+  font-size:var(--fs-card-title);line-height:1;
+  transform:skewX(-7.11deg) scaleY(.99);
+}
+.case-ba__label--before span{color:var(--orange);}
+.case-ba__label--after span{color:#fff;}
+/* 画像ラッパー: aspect-ratioで高さを決定 */
+.case-ba__img-wrap{flex:1;overflow:hidden;aspect-ratio:260/180;}
+.case-ba__img-wrap img{width:100%;height:100%;object-fit:cover;}
+
+/* info card */
+.case-card{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:16px;}
+.case-card__title{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-card-title);color:var(--orange);line-height:1.5;letter-spacing:.48px;
+}
+.case-card__divider{
+  height:1px;
+  background:repeating-linear-gradient(to right,#ddd 0,#ddd 4px,transparent 4px,transparent 8px);
+}
+.case-card__rows{display:flex;flex-direction:column;gap:10px;}
+.case-card__row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.case-card__lbl{
+  background:#fff;border:1px solid var(--orange);
+  padding:2px 10px;flex-shrink:0;
+  font-family:'M PLUS 1p',sans-serif;font-weight:400;
+  font-size:clamp(14px, 1.25vw, 18px);color:var(--orange);line-height:1.8;white-space:nowrap;
+}
+.case-card__val{
+  font-family:'M PLUS 1p',sans-serif;font-weight:400;
+  font-size:clamp(14px, 1.25vw, 18px);color:#333;line-height:1.8;letter-spacing:.36px;
+}
+
+/* ────────────────────────────────────────
+   FLOW
+   背景: #ebfdff + 水玉 opacity:10%
+   STEP: circle + icon + label / テキスト
+──────────────────────────────────────── */
+.flow{
+  /* lb ベース、水玉テクスチャを10%可視化 */
+  background:
+    linear-gradient(rgba(235,253,255,.9), rgba(235,253,255,.9)),
+    url('images/v6/bceaa6a5-65ae-4829-b113-01c3ee8a18e7.png') center/cover no-repeat,
+    var(--lb);
+}
+.flow .sec-title__en,.flow .sec-title__ja{color:var(--teal);}
+/* Figma: STEP 間に 32px の縦間隔（矢印を含むため余白少なめ） */
+.flow__list{display:flex;flex-direction:column;gap:clamp(20px, 2.22vw, 32px);}
+
+.flow-step{display:flex;gap:clamp(20px, 3.33vw, 48px);align-items:center;}
+
+/* ビジュアル部（円＋アイコン＋STEP番号）: %比で縮小 */
+.flow-step__vis{
+  width:min(300px, 30%);flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.flow-step__circle-wrap{
+  width:100%;aspect-ratio:300/200;position:relative;
+}
+/* circle: wrap(300×200)内で left:50 size:200×200 → % 化して幅縮小に追従 */
+.flow-step__circle{
+  /* Figma: size-[200px] ml-[50px] mt-[0] → 50/300=16.667%, 200/300=66.667%, 200/200=100% */
+  position:absolute;left:16.667%;top:0;
+  width:66.667%;height:100%;
+  object-fit:contain;
+}
+/* アイコン: wrap(300×200) を 100% とする % 指定で circle と一緒に縮む
+   ─────────────────────────────────────────────────
+   STEP01 phone  : 89,53,122,95   → 29.667%/26.5%/40.667%/47.5%
+   STEP02 search : 96,46,107,107  → 32%/23%/35.667%/53.5%
+   STEP03 pen    : 100,51,100.35,99 → 33.333%/25.5%/33.45%/49.5%
+   STEP04 worker : 110,41,80.73,107.56 → 36.667%/20.5%/26.91%/53.78%
+   STEP05 handsh : 86,62,128.72,75.88 → 28.667%/31%/42.907%/37.94%
+*/
+.flow-step__icon{
+  position:absolute;object-fit:contain;
+}
+/* STEP01 */
+.flow__list > .flow-step:nth-child(1) .flow-step__icon{
+  left:29.667%;top:26.5%;width:40.667%;height:47.5%;
+}
+/* STEP02 */
+.flow__list > .flow-step:nth-child(3) .flow-step__icon{
+  left:32%;top:23%;width:35.667%;height:53.5%;
+}
+/* STEP03 */
+.flow__list > .flow-step:nth-child(5) .flow-step__icon{
+  left:33.333%;top:25.5%;width:33.45%;height:49.5%;
+}
+/* STEP04 */
+.flow__list > .flow-step:nth-child(7) .flow-step__icon{
+  left:36.667%;top:20.5%;width:26.91%;height:53.78%;
+}
+/* STEP05 (横長) */
+.flow-step--last .flow-step__icon{
+  left:28.667%;top:31%;width:42.907%;height:37.94%;
+}
+.flow-step__label{
+  font-family:'Outfit',sans-serif;font-weight:900;
+  font-size:clamp(24px, 2.5vw, 36px);color:var(--teal);letter-spacing:2.88px;line-height:1;
+}
+.flow-step--last .flow-step__label{color:var(--orange);}
+
+.flow-step__text{flex:1 1 0;min-width:0;}
+.flow-step__title{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-card-title);color:#333;line-height:1;margin-bottom:24px;
+}
+.flow-step__body{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#333;line-height:1.8;letter-spacing:.32px;
+}
+
+.flow__arrow{
+  display:flex;justify-content:flex-start;
+  /* circle中央（wrap幅×.5+50）ぶんだけ左寄せで矢印を配置 */
+  padding-left:clamp(110px, 10.07vw, 145px);
+}
+.flow__arrow img{width:30px;height:24px;}
+
+/* ────────────────────────────────────────
+   FAQ
+   背景: #fff7d1 + cream texture opacity:18%
+   Q: オレンジ帯 / A: 白
+──────────────────────────────────────── */
+.faq{
+  /* cream ベース、テクスチャを18%可視化 */
+  background:
+    linear-gradient(rgba(255,247,209,.82), rgba(255,247,209,.82)),
+    url('images/v6/50811210-63f2-48e6-a0eb-8ed859cb805b.jpg') center/cover no-repeat,
+    var(--cream);
+}
+.faq .sec-title__en,.faq .sec-title__ja{color:var(--orange);}
+/* Figma: FAQ アイテム間は 20px、SP 16px */
+.faq__list{display:flex;flex-direction:column;gap:clamp(16px, 1.39vw, 20px);}
+
+.faq-item{
+  border-radius:10px;overflow:hidden;
+  box-shadow:0 0 20px rgba(60,86,52,.1);
+}
+.faq-item__q{
+  background:var(--orange);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(14px, 1.39vw, 20px) clamp(16px, 2.08vw, 30px);gap:clamp(12px, 1.67vw, 24px);
+  width:100%;border:none;cursor:pointer;
+  font-family:inherit;text-align:left;
+  color:inherit; /* buttonデフォルト色を無効化 */
+}
+.faq-item__q-left{display:flex;align-items:center;gap:clamp(12px, 1.67vw, 24px);flex:1;min-width:0;}
+.faq-badge{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  position:relative;overflow:hidden;
+}
+.faq-badge img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.faq-badge__letter{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;line-height:1;
+}
+.faq-badge--q .faq-badge__letter{color:var(--orange);}
+.faq-badge--a .faq-badge__letter{color:#fff;}
+.faq-item__question{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#fff;line-height:1.8;flex:1;min-width:0;
+}
+/* +アイコン（閉じた状態=＋、開いた状態=×） */
+.faq-item__icon{
+  width:16px;height:16px;flex-shrink:0;position:relative;
+  transition:transform .3s ease;
+}
+.faq-item__icon::before,
+.faq-item__icon::after{
+  content:'';position:absolute;left:50%;top:50%;
+  background:#fff;
+  transform:translate(-50%,-50%);
+}
+.faq-item__icon::before{width:16px;height:2px;}
+.faq-item__icon::after{width:2px;height:16px;}
+.faq-item.is-open .faq-item__icon{transform:rotate(45deg);}
+
+/* A: アコーディオンで開閉 */
+.faq-item__a{
+  background:#fff;
+  display:flex;align-items:center;gap:clamp(12px, 1.67vw, 24px);
+  padding:0 clamp(16px, 2.08vw, 30px);
+  max-height:0;overflow:hidden;
+  transition:max-height .35s ease, padding .35s ease;
+}
+.faq-item.is-open .faq-item__a{
+  max-height:600px;
+  padding:clamp(14px, 1.39vw, 20px) clamp(16px, 2.08vw, 30px);
+}
+.faq-item__answer{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#333;line-height:1.8;flex:1;min-width:0;
+}
+
+/* ────────────────────────────────────────
+   CONTACT
+   背景: #ff956f + mix-blend-multiply テクスチャ
+   カード: w:1100px 中央配置 py:80px rounded:40px
+   イラスト: カード基準で absolute → overflow:visible
+──────────────────────────────────────── */
+.contact{
+  /* #ff956f ベースにテクスチャを multiply ブレンド */
+  background-color:#ff956f;
+  background-image:url('images/v6/f47abd1f-db6f-403d-ab7a-b7ec4a163285.jpg');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  background-blend-mode:multiply;
+  position:relative;
+  min-height:clamp(560px, 47.2vw, 680px);
+  display:flex;align-items:center;justify-content:center;
+  padding:clamp(40px, 5.56vw, 80px) clamp(20px, 2.78vw, 40px);
+  overflow:hidden; /* 下側にはみ出すイラスト等をセクション内で切り落とし */
+}
+
+/* カードのラッパー: イラストがはみ出せるようにoverflow:visible */
+.contact__outer{
+  position:relative;z-index:2;
+  width:min(1100px, 100%);
+  /* イラストが飛び出すのでoverflowはvisible */
+}
+.contact__card{
+  background:#fff;
+  border-radius:clamp(20px, 2.78vw, 40px);
+  padding:clamp(40px, 5.56vw, 80px) clamp(24px, 4.17vw, 60px);
+  box-shadow:0 0 20px rgba(32,43,102,.3);
+  display:flex;flex-direction:column;align-items:center;gap:30px;
+  position:relative;overflow:visible;
+}
+/* カード内背景テクスチャ */
+/* Figmaレイヤー順 (前→後): テキスト > イラスト > カード背景
+   z-index: カード背景=0, イラスト=1, テキスト=2 */
+.contact__card-bg{
+  position:absolute;inset:0;border-radius:40px;overflow:hidden;z-index:0;
+}
+.contact__card-bg img{width:100%;height:100%;object-fit:cover;opacity:.08;}
+.contact__card > *:not(.contact__card-bg):not(.contact__illust){
+  position:relative;z-index:2;/* テキスト等はイラストより前 */
+}
+
+/* イラスト: カードOUTER基準でabsolute（幅%化でブラウザ幅に追従） */
+.contact__illust{position:absolute;pointer-events:none;z-index:1;/* テキストより後ろ */}
+.contact__illust--tl{
+  /* Figma: left:-138/1100=-12.55% top:-56px w:418.4/1100=38.04% */
+  left:-12.55%;top:clamp(-56px, -3.89vw, -28px);
+  width:38.04%;aspect-ratio:418.4/271.36;
+  overflow:hidden;
+}
+/* TL内の各レイヤー */
+.contact__tl-base{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;max-width:none;display:block;
+}
+.contact__tl-layer{position:absolute;}
+.contact__tl-layer img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;max-width:none;display:block;
+}
+.contact__illust--br{
+  /* Figma: left:826/1100=75.09% top:278/500≈65% w:418.4/1100=38.04% */
+  left:75.09%;top:auto;bottom:-20px;
+  width:38.04%;aspect-ratio:418.4/305.94;
+  height:auto;
+  object-fit:contain;
+}
+
+.contact__title{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-h2);color:#ff6400;text-align:center;line-height:1.4;
+  max-width:744px;
+}
+.contact__body{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#333;text-align:center;line-height:1.8;letter-spacing:.32px;
+}
+.contact__tel-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.contact__tel-row{display:flex;align-items:center;gap:8px;}
+.contact__tel-row svg{width:30px;height:40px;flex-shrink:0;}
+.contact__tel-num{
+  font-family:'Outfit',sans-serif;font-weight:900;
+  font-size:var(--fs-tel);color:#ff6400;line-height:1.2;
+}
+.contact__tel-hours{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#333;letter-spacing:.32px;
+}
+.contact__ctas{
+  /* Figma: 各ボタン外側にdropshadow。FVと同じくcontainer filter で統一 */
+  display:flex;gap:clamp(12px, 1.67vw, 24px);align-items:stretch;justify-content:center;
+  width:100%;max-width:760px;
+  filter:drop-shadow(0 0 5px rgba(0,0,0,.25));
+}
+.contact-btn{
+  flex:1 1 0;
+  min-width:0;max-width:360px;
+  min-height:clamp(56px, 5vw, 72px);
+  padding:clamp(8px, 1vw, 12px) 30px clamp(8px, 1vw, 12px) clamp(10px, 1.5vw, 16px);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-btn);
+  line-height:1.2;
+  letter-spacing:.48px;position:relative;
+}
+.contact-btn__arrow{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+}
+.contact-btn__arrow::after{
+  content:'';display:block;
+  border-left:7px solid var(--orange);
+  border-top:5px solid transparent;border-bottom:5px solid transparent;
+}
+.contact-btn--form{background:var(--yellow);color:#ff6400;}
+.contact-btn--line{background:linear-gradient(to right,var(--gfrom),var(--gto));color:#fff;}
+.contact-btn--line .contact-btn__arrow::after{border-left-color:#fff;}
+
+/* ────────────────────────────────────────
+   FOOTER
+──────────────────────────────────────── */
+/* ────────────────────────────────────────
+   FOOTER
+   背景: Figma画像(object-cover) + rgba(255,111,0,.3) オーバーレイ
+   テキスト: #333
+   Figmaパディング: pt:120px pb:80px px:120px
+──────────────────────────────────────── */
+.footer{
+  /* テクスチャ + オレンジ30%オーバーレイ */
+  color:#333;
+  background:
+    linear-gradient(rgba(255,111,0,.3), rgba(255,111,0,.3)),
+    url('images/v6/7d6b4071-8275-4593-b270-87882f254b1b.jpg') center/cover no-repeat;
+}
+.footer .wrap{
+  /* Figma: pt:120 pb:80 px:120 → clamp で可変
+     120÷1440=8.33vw / 80÷1440=5.56vw */
+  padding: clamp(60px,8.33vw,120px) clamp(20px,8.33vw,120px) clamp(40px,5.56vw,80px);
+  z-index:2;
+  display:flex;flex-direction:column;gap:56px;
+}
+/* メインエリア: 3カラム（PC帯では横並びのまま、flex-shrink で相似縮小） */
+.footer__main{
+  display:flex;justify-content:space-between;align-items:flex-start;
+  gap:clamp(20px, 2.78vw, 40px);
+  min-height:284px;
+}
+/* Col1: ナビ */
+.footer__nav{
+  display:flex;flex-direction:column;gap:20px;
+  justify-content:center;
+}
+.footer__nav a{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#333;line-height:1;
+}
+.footer__nav a:hover{opacity:.7;}
+/* Col2: インフォメーション */
+.footer__info-block{
+  flex:0 1 291px;min-width:0;
+  display:flex;flex-direction:column;gap:16px;
+}
+.footer__info-label{
+  font-family:'Outfit',sans-serif;font-weight:700;
+  font-size:var(--fs-card-title);color:#333;line-height:normal;
+}
+/* ロゴ: 2レイヤーコンポジット (Figma 53.97×33.33px) */
+.footer__logo-wrap{
+  position:relative;width:53.97px;height:33.33px;
+  overflow:hidden;flex-shrink:0;
+}
+.footer__logo-wrap .logo-main,
+.footer__logo-wrap .logo-sub{position:absolute;}
+.footer__logo-wrap .logo-main{inset:0 -0.02% 21.33% 0.03%;}
+.footer__logo-wrap .logo-sub{inset:83.53% 6.43% -0.03% 6.87%;}
+.footer__logo-wrap img{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:contain;max-width:none;display:block;
+}
+.footer__info-text{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:var(--fs-body);color:#333;line-height:1;white-space:nowrap;
+}
+/* Col3: 地図（可変、flex-shrink で縮む） */
+.footer__map{
+  flex:0 1 413px;min-width:0;
+  aspect-ratio:413/284;
+  overflow:hidden;position:relative;
+}
+.footer__map img,
+.footer__map iframe{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;max-width:none;display:block;border:0;
+}
+/* ボトムバー */
+.footer__bottom{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  width:100%;font-size:14px;color:#333;line-height:1;white-space:nowrap;
+}
+.footer__privacy{font-family:'M PLUS 1p',sans-serif;font-weight:700;color:#333;}
+.footer__copy{font-family:'Outfit',sans-serif;font-weight:700;color:#333;}
+
+/* ────────────────────────────────────────
+   RESPONSIVE  max-width:768px
+──────────────────────────────────────── */
+@media(max-width:768px){
+  /* wrap のpaddingをモバイル用に縮小 */
+  .wrap{padding:60px 20px;}
+
+  /* header SP: Figma px:16px py:14px、ロゴ小、CTA非表示、ハンバーガー表示 */
+  .header{padding:14px 16px;}
+  .header__logo{width:40px;height:25px;} /* Figma SP: 39.397×24.33px */
+  .header__nav{display:none;}
+  .header__cta{display:none;}
+  .header__hamburger{display:flex;}
+
+  /* ── FV: SP再構築（Figma SP: 375×700px、全要素absolute配置） ── */
+  .fv{height:700px;}
+
+  /* SP背景 overlay: SP でも全面カバー（Figmaの部分配置はSP可変に非対応のため単純化） */
+  .fv__bg-overlay{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    object-fit:cover;opacity:.2;
+  }
+  /* SP: 中央揃え、オレンジバー(height:288px)上部に人物の下端 / 頭〜鎖骨まで表示
+     cover + top で上部のみ切り出し、文字に被らない高さに抑える */
+  .fv__bg-staff{
+    left: 50%; right: auto; top: auto;
+    bottom: 288px;
+    transform: translateX(calc(-100% + 20px));
+    width: clamp(160px, 42vw, 280px);
+    height: clamp(90px, 24vw, 160px);
+    object-fit: cover; object-position: left top;
+    z-index: 0;
+  }
+  .fv__bg-staff2{
+    left: 50%; right: auto; top: auto;
+    bottom: 288px;
+    transform: translateX(-20px);
+    width: clamp(160px, 42vw, 280px);
+    height: clamp(90px, 24vw, 160px);
+    object-fit: cover; object-position: left top;
+    z-index: 1;
+  }
+
+  /* SP コンテンツ: left/right 16px → width は可変 */
+  .fv__content{
+    position:absolute;
+    left:16px;top:55px;
+    width:calc(100% - 32px); /* 343px固定→可変（375px時: 375-32=343px） */
+    padding:0;gap:8px;
+  }
+
+  /* SP バッジ: Figma 16px、py:6px */
+  .fv__badge{font-size:16px;padding:6px 10px;}
+  /* SP デコ: Figma 29.309×27.989px left:3px top:-17px */
+  .fv__badge-deco{width:30px;height:28px;left:3px;top:-17px;}
+
+  /* SP タグ: 2×2 CSS Grid + "まで、"は右端に span 2行 */
+  .fv__tags{
+    display:grid;
+    grid-template-columns:1fr 1fr auto;
+    grid-template-rows:auto auto;
+    gap:8px;
+    align-items:end;
+    width:100%;
+    flex-wrap:unset; /* PCのflex-wrapをリセット */
+  }
+  .fv__tag{font-size:19px;padding:3px 8px;display:flex;justify-content:center;}
+  .fv__tag:nth-child(1){grid-column:1;grid-row:1;}
+  .fv__tag:nth-child(2){grid-column:2;grid-row:1;}
+  .fv__tag:nth-child(3){grid-column:1;grid-row:2;}
+  .fv__tag:nth-child(4){grid-column:2;grid-row:2;}
+  .fv__tag-suffix{grid-column:3;grid-row:1/span 2;align-self:end;font-size:18px;line-height:1;}
+
+  /* SP 見出し・サブ */
+  .fv__headline{font-size:31px;}
+  .fv__sub{font-size:14px;line-height:1.4;white-space:normal;}
+
+  /* SP オレンジバー: Figma bottom:0 height:288px */
+  /* bar top = 700-288 = 412px / CTA text top:428 → 16px from bar / Btns top:452 → 40px from bar */
+  .fv__bar{
+    top:auto;bottom:0;height:288px;
+    display:block;padding:0;/* flex解除、内部を個別absolute配置 */
+  }
+  .fv__bar-text{
+    position:absolute;
+    top:16px;left:50%;transform:translateX(-50%);
+    font-size:16px;white-space:nowrap;
+  }
+  .fv__ctas{
+    position:absolute;
+    top:40px;left:50%;transform:translateX(-50%);
+    width:calc(100% - 32px);max-width:343px; /* 中央寄せ・最大343px */
+    flex-direction:column;gap:8px;align-items:stretch;
+  }
+  .fv-btn{width:100%;} /* 親(.fv__ctas)に追従 */
+  .fv-btn--tel{border:1px solid var(--orange);}
+  .fv-btn__arrow{right:14px;}
+
+  /* onayami (装飾は .wrap に absolute、SP では小さめに四隅) */
+  .onayami .wrap{padding-bottom:60px;padding-top:80px;}
+  .onayami__heading{font-size:24px;}
+  /* SP で quote は上に近づける */
+  .onayami__head-main{padding-top:28px;}
+  .onayami__quote{width:92%;top:-4px;}
+  /* 装飾は SP でも .wrap 四隅に absolute（カード四隅に重なる） */
+  .onayami__deco--stressed{
+    left:8px;top:24px;
+    width:50px;aspect-ratio:93/171;height:auto;
+  }
+  .onayami__deco--thinking{
+    right:8px;top:12px;
+    width:54px;aspect-ratio:117/272;height:auto;
+  }
+  .onayami__staff--l{
+    left:8px;bottom:0;
+    width:80px;aspect-ratio:159/233;height:auto;
+  }
+  .onayami__staff--r{
+    right:8px;bottom:0;
+    width:70px;aspect-ratio:136/256;height:auto;
+  }
+  .onayami__resolve{gap:16px;}
+  .onayami__resolve-row{margin-top:30px;}
+  /* worry cards: 縦積み */
+  .onayami__row{flex-direction:column;gap:12px;}
+  .onayami__card{width:100%;font-size:16px;}
+  .onayami__resolve-text{font-size:22px;white-space:normal;}
+
+  /* feature */
+  .feature-card__row{flex-direction:column;}
+  .feature-card__img-wrap{width:100%;aspect-ratio:16/9;}
+  .feature-card__num{font-size:72px;}
+
+  /* service */
+  .service__row{flex-direction:column;align-items:center;gap:0;}
+  .svc-card{width:100%;}
+  .svc-card:nth-child(2){margin-top:40px;}
+  .svc-card__img-wrap{width:100%;border-radius:30px 30px 0 0;}
+  .svc-card__text{width:90%;}
+
+  /* case */
+  .case-item{flex-direction:column;gap:20px;}
+  .case-ba{width:100%;}
+  .case-ba__col{width:50%;}
+  .case-card{width:100%;}
+
+  /* flow */
+  .flow-step{flex-direction:column;gap:16px;align-items:flex-start;}
+  .flow-step__vis{width:100%;}
+  .flow__arrow{padding-left:100px;}
+
+  /* faq */
+  .faq-item__q{padding:14px 16px;}
+  .faq-item__a{padding:0 16px;}
+  .faq-item.is-open .faq-item__a{padding:14px 16px;}
+  .faq-item__question,.faq-item__answer{font-size:14px;}
+
+  /* contact */
+  .contact{padding:40px 20px;}
+  .contact__outer{width:100%;}
+  .contact__card{padding:50px 24px;}
+  .contact__title{font-size:24px;max-width:100%;}
+  .contact__illust--tl,.contact__illust--br{display:none;}
+  .contact__ctas{flex-direction:column;align-items:center;}
+  .contact-btn{width:100%;max-width:340px;}
+  .contact__tel-num{font-size:32px;}
+
+  /* footer */
+  .footer .wrap{padding:60px 20px 40px;}
+  .footer__main{flex-direction:column;gap:32px;min-height:0;}
+  .footer__nav{flex-direction:column;gap:16px;}
+  .footer__info-block{width:100%;}
+  .footer__map{width:100%;height:200px;flex:0 0 auto;}
+  .footer__bottom{flex-direction:column;gap:12px;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="header">
+  <a href="/" class="header__logo">
+    <img src="images/v6/9ef8d75f-8935-4bfd-b608-5cf3c6b99e9e.svg" alt="KANEYAMA"/>
+  </a>
+  <div class="header__right">
+    <nav class="header__nav">
+      <a href="#feature">当社が選ばれる理由</a>
+      <a href="#service">サービス内容</a>
+      <a href="#case">施工実績</a>
+      <a href="#flow">ご利用の流れ</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a href="#contact" class="header__cta">お問い合わせ</a>
+    <!-- SP専用: ハンバーガーアイコン -->
+    <button class="header__hamburger" id="menuOpen" aria-label="メニューを開く" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ SP DRAWER ══ -->
+<!-- Figma: SP_展開後メニュー（18:6）白全画面オーバーレイ -->
+<div class="sp-drawer" id="spDrawer" role="dialog" aria-modal="true" aria-label="ナビゲーションメニュー">
+  <!-- ×クローズボタン: Figma right≈20px top:17px -->
+  <button class="sp-drawer__close" id="menuClose" aria-label="メニューを閉じる">
+    <svg viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="1" y1="1" x2="16" y2="16" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+      <line x1="16" y1="1" x2="1" y2="16" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <!-- navリンク: Figma top:80px、中央揃え、gap:38px、color:#e45828 -->
+  <nav class="sp-drawer__nav">
+    <a href="#feature">当社が選ばれる理由</a>
+    <a href="#service">サービス内容</a>
+    <a href="#case">施工実績</a>
+    <a href="#flow">ご利用の流れ</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+  <!-- CTAボタン: Figma gap:16px、shadowはwrapperに -->
+  <div class="sp-drawer__ctas">
+    <a href="tel:0862590632" class="fv-btn fv-btn--tel" style="width:100%;">
+      <svg width="31" height="41" viewBox="0 0 31 41" fill="none"><path d="M3 2C3 2 8 0 10 4C12 8 13 11 13 11C13 11 14 14 11 15C8 16 9 19 13 23C17 27 20 28 21 25C22 22 25 23 25 23C25 23 28 24 29 27C30 30 28 35 28 35C28 35 26 38 22 37C14 35 4 24 2 14C0 8 3 2 3 2Z" stroke="#fe5417" stroke-width="2"/></svg>
+      <span class="tel-num">086-259-0632</span>
+      <span class="fv-btn__arrow"></span>
+    </a>
+    <a href="#contact" class="fv-btn fv-btn--form" style="width:100%;">
+      <svg width="35" height="25" viewBox="0 0 35 25" fill="none"><rect x="1" y="1" width="33" height="23" rx="2" stroke="#fe5417" stroke-width="2"/><path d="M1 4L17.5 14L34 4" stroke="#fe5417" stroke-width="2"/></svg>
+      お問い合わせ
+      <span class="fv-btn__arrow"></span>
+    </a>
+    <a href="#" class="fv-btn fv-btn--line" style="width:100%;">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="#fff"><path d="M15 2C7.8 2 2 7.2 2 13.6c0 5.7 5 10.5 11.8 11.4.5.1 1.1.3 1.2.7.1.3 0 .8 0 .8s-.2 1.2-.2 1.4c-.1.4-.3 1.5 1.3.8 1.6-.7 8.5-5 11.6-8.6C29.6 17.4 28 15.7 28 13.6 28 7.2 22.2 2 15 2z"/></svg>
+      LINEで相談する
+      <span class="fv-btn__arrow fv-btn--line"></span>
+    </a>
+  </div>
+</div>
+
+<!-- ══ FV ══ -->
+<section class="fv">
+  <div class="fv__bg">
+    <!-- imgFv: キッチン背景（フル） -->
+    <img class="fv__bg-kitchen" src="images/v6/b364b324-0ec4-4f7a-86d3-0022800a962f.jpg" alt=""/>
+    <!-- imgFv1: 同キッチン overlay opacity:0.3 (テクスチャ感を加える) -->
+    <img class="fv__bg-overlay" src="images/v6/6f1709fd-33dc-45f5-9a7c-20cd78f75a86.jpg" alt=""/>
+    <!-- imgFv2: 人物グループ写真 left:37.34% top:-6.12% -->
+    <img class="fv__bg-staff" src="images/v12/staff1.png" alt=""/>
+    <!-- imgFv3: 人物写真（前面） left:55.67% top:9.01% -->
+    <img class="fv__bg-staff2" src="images/v12/staff2.png" alt=""/>
+  </div>
+
+  <div class="fv__content">
+    <div class="fv__badge">
+      <img class="fv__badge-deco" src="images/v6/593afb2c-d01f-4185-856a-fd025c5ed5d4.svg" alt=""/>
+      閉店・退去を控えているオーナー様へ
+    </div>
+    <div class="fv__tags">
+      <span class="fv__tag">設備の買取</span>
+      <span class="fv__tag">解体工事</span>
+      <span class="fv__tag">廃棄物処理</span>
+      <span class="fv__tag">原状回復</span>
+      <span class="fv__tag-suffix">まで、</span>
+    </div>
+    <div class="fv__headline">金山株式会社へお任せ！</div>
+    <div class="fv__sub">
+      <p>買取金額を工事費から差し引いて、解体費用をお特に！</p>
+      <p>建物の解体から廃棄物処理・原状回復まで、まとめて一貫対応いたします。</p>
+    </div>
+  </div>
+
+  <div class="fv__bar">
+    <p class="fv__bar-text">＼まずはお気軽にお問い合わせください！／</p>
+    <div class="fv__ctas">
+      <a href="tel:0862590632" class="fv-btn fv-btn--tel">
+        <svg width="31" height="41" viewBox="0 0 31 41" fill="none"><path d="M3 2C3 2 8 0 10 4C12 8 13 11 13 11C13 11 14 14 11 15C8 16 9 19 13 23C17 27 20 28 21 25C22 22 25 23 25 23C25 23 28 24 29 27C30 30 28 35 28 35C28 35 26 38 22 37C14 35 4 24 2 14C0 8 3 2 3 2Z" stroke="#fe5417" stroke-width="2"/></svg>
+        <span class="tel-num">086-259-0632</span>
+        <span class="fv-btn__arrow"></span>
+      </a>
+      <a href="#contact" class="fv-btn fv-btn--form">
+        <svg width="35" height="25" viewBox="0 0 35 25" fill="none"><rect x="1" y="1" width="33" height="23" rx="2" stroke="#fe5417" stroke-width="2"/><path d="M1 4L17.5 14L34 4" stroke="#fe5417" stroke-width="2"/></svg>
+        お問い合わせ
+        <span class="fv-btn__arrow"></span>
+      </a>
+      <a href="#" class="fv-btn fv-btn--line">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="#fff"><path d="M15 2C7.8 2 2 7.2 2 13.6c0 5.7 5 10.5 11.8 11.4.5.1 1.1.3 1.2.7.1.3 0 .8 0 .8s-.2 1.2-.2 1.4c-.1.4-.3 1.5 1.3.8 1.6-.7 8.5-5 11.6-8.6C29.6 17.4 28 15.7 28 13.6 28 7.2 22.2 2 15 2z"/></svg>
+        LINEで相談する
+        <span class="fv-btn__arrow fv-btn--line"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ ONAYAMI ══ -->
+<section class="onayami section">
+  <div class="wrap">
+    <!-- 装飾イラスト: .wrap の四隅に absolute で配置（カードの四隅に重なる） -->
+    <img class="onayami__deco onayami__deco--stressed" src="images/v6/onayami_stressed.png" alt=""/>
+    <img class="onayami__deco onayami__deco--thinking" src="images/v6/onayami_thinking.png" alt=""/>
+    <img class="onayami__staff onayami__staff--l" src="images/v6/staff1.png" alt=""/>
+    <img class="onayami__staff onayami__staff--r" src="images/v6/staff2.png" alt=""/>
+
+    <!-- 上段: 見出し（中央） -->
+    <div class="onayami__head-row">
+      <div class="onayami__head-main">
+        <img class="onayami__quote" src="images/v6/8962fc8a-e1ee-4227-b7d0-c0baaa51ad73.svg" alt=""/>
+        <h2 class="onayami__heading">こんなお悩みはありませんか？</h2>
+      </div>
+    </div>
+
+    <!-- カード 2x2 -->
+    <div class="onayami__cards">
+      <div class="onayami__row">
+        <div class="onayami__card">居抜き物件が決まらず<br>退去期限が迫って焦っている</div>
+        <div class="onayami__card">商業施設内の夜間解体が必要で<br>費用が高くならないか不安…</div>
+      </div>
+      <div class="onayami__row">
+        <div class="onayami__card">近隣住民・他店舗への騒音・<br>トラブルが心配…</div>
+        <div class="onayami__card">解体から廃棄物処理まで<br>別々の業者に頼むのが面倒…</div>
+      </div>
+    </div>
+
+    <!-- 下段: 解決テキスト（中央） -->
+    <div class="onayami__resolve-row">
+      <div class="onayami__resolve">
+        <img class="onayami__dots" src="images/v6/37c19034-cd9a-4efd-8993-75639a65d6d9.svg" alt=""/>
+        <span class="onayami__resolve-text">そのお悩み、すべて金山株式会社が解決します！</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FEATURE ══ -->
+<section class="feature section" id="feature">
+  <div class="wrap">
+    <div class="sec-title">
+      <span class="sec-title__en">Feature</span>
+      <span class="sec-title__ja">当社が選ばれる理由</span>
+    </div>
+    <div class="feature__cards">
+      <div class="feature-card">
+        <div class="feature-card__row">
+          <div class="feature-card__img-wrap">
+            <img src="images/v6/3bc68912-3198-4c8b-89be-a535617bcd49.jpg" alt="設備買取"/>
+          </div>
+          <div class="feature-card__body">
+            <p class="feature-card__title">不用品・設備の高価買取でコストダウン</p>
+            <p class="feature-card__text">厨房機器・冷蔵庫・エアコン・家具など、閉店時に残った設備を高価買取します。買い取った金額はそのまま解体工事費から差し引くため、お客様の実質負担を大幅に減らすことができます。まずは査定だけでもお気軽にご相談ください。</p>
+          </div>
+        </div>
+        <div class="feature-card__num">01</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card__row">
+          <div class="feature-card__img-wrap">
+            <img src="images/v6/381a8b0e-7ff5-4f2e-96f6-f61ed1a0de85.jpg" alt="解体一貫"/>
+          </div>
+          <div class="feature-card__body">
+            <p class="feature-card__title">解体から廃棄物処理まで一貫対応</p>
+            <p class="feature-card__text">解体工事が終わった後に、廃棄物の処理業者を別途手配する必要はありません。金山株式会社では、内装の撤去から出た廃材・不用品の搬出・処分まで、一社でまとめて対応します。複数の業者と日程調整をしながら退去期限に追われることなく、まるごとお引き受けいたします。</p>
+          </div>
+        </div>
+        <div class="feature-card__num">02</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-card__row">
+          <div class="feature-card__img-wrap">
+            <img src="images/v6/9f0e712a-ffaf-49f2-88be-833d0afbbc6b.jpg" alt="岡山密着"/>
+          </div>
+          <div class="feature-card__body">
+            <p class="feature-card__title">岡山密着の迅速対応と柔軟な提案力</p>
+            <p class="feature-card__text">岡山で長年、地元の店舗オーナー様とともに歩んできた実績があります。エリアの慣習や物件の特性を熟知しているからこそ、よそには出せないスピードと精度でご対応できます。積み重ねてきた信頼が私たちの一番の強みです。</p>
+          </div>
+        </div>
+        <div class="feature-card__num">03</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SERVICE ══ -->
+<section class="service section" id="service">
+  <div class="wrap">
+    <div class="sec-title">
+      <span class="sec-title__en">Service</span>
+      <span class="sec-title__ja">サービス内容</span>
+    </div>
+    <div class="service__rows">
+      <div class="service__row">
+        <div class="svc-card">
+          <div class="svc-card__img-wrap">
+            <img src="images/v6/3b6b87b4-a7e9-494b-8d7f-7b9d79bf8b9f.jpg" alt="店舗スケルトン工事"/>
+          </div>
+          <div class="svc-card__text">
+            <p class="svc-card__title">店舗スケルトン工事・内装解体</p>
+            <p class="svc-card__body">飲食店・美容室・小売店など、業種ごとの設備や内装に合わせた解体に対応します。ダクト・配管・電気設備の撤去から間仕切り壁の解体まで、次のテナントがすぐ入居できるスケルトン状態に仕上げます。</p>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__img-wrap">
+            <img src="images/v6/ed6c4a8b-8609-423a-95aa-d5ea9b97f596.jpg" alt="原状回復工事"/>
+          </div>
+          <div class="svc-card__text">
+            <p class="svc-card__title">原状回復工事</p>
+            <p class="svc-card__body">賃貸借契約の原状回復特約に基づき、オーナー様・管理会社様との打ち合わせから工事完了まで一貫してサポートします。壁・床・天井の補修、クロス工事、看板撤去など、退去後のトラブルが起きないよう丁寧に対応。</p>
+          </div>
+        </div>
+      </div>
+      <div class="service__row">
+        <div class="svc-card">
+          <div class="svc-card__img-wrap">
+            <img src="images/v6/4440cbc5-5b4f-490e-bab1-c1e946c70c8e.jpg" alt="建物の全面解体"/>
+          </div>
+          <div class="svc-card__text">
+            <p class="svc-card__title">建物の全面解体</p>
+            <p class="svc-card__body">岡山県内全域の木造戸建て・鉄骨造アパート・商業ビル・工場など、あらゆる建物の全面解体に対応します。安全管理を徹底したうえで着工し、解体後の廃材処理・整地まで一括でお任せいただけます。</p>
+          </div>
+        </div>
+        <div class="svc-card">
+          <div class="svc-card__img-wrap">
+            <img src="images/v6/7018e67a-22ad-47f6-9d5a-482841fbbef3.jpg" alt="廃棄物処理・設備買取"/>
+          </div>
+          <div class="svc-card__text">
+            <p class="svc-card__title">廃棄物処理・不要設備の買取</p>
+            <p class="svc-card__body">解体時に発生する廃材をまとめて処理します。さらに厨房機器・業務用冷蔵庫・エアコンなどまだ価値のある設備は高価買取し、買取金額はそのまま解体工事費から差し引くため、解体費用のコストを大幅に抑えます。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CASE ══ -->
+<section class="case section" id="case">
+  <div class="wrap">
+    <div class="sec-title">
+      <span class="sec-title__en">Case</span>
+      <span class="sec-title__ja">施工実績</span>
+    </div>
+    <div class="case__list">
+      <div class="case-item">
+        <div class="case-ba">
+          <div class="case-ba__col">
+            <div class="case-ba__label case-ba__label--before"><span>Before</span></div>
+            <div class="case-ba__img-wrap"><img src="images/v6/8d96dc8a-c121-428b-8982-c35c2cf2b284.jpg" alt="Before"/></div>
+          </div>
+          <div class="case-ba__col">
+            <div class="case-ba__label case-ba__label--after"><span>After</span></div>
+            <div class="case-ba__img-wrap"><img src="images/v6/e2ef3c14-a098-469c-9907-b604f23b89e4.jpg" alt="After"/></div>
+          </div>
+        </div>
+        <div class="case-card">
+          <p class="case-card__title">工事名テキストが入ります</p>
+          <div class="case-card__divider"></div>
+          <div class="case-card__rows">
+            <div class="case-card__row"><span class="case-card__lbl">作業内容</span><span class="case-card__val">テキストが入ります</span></div>
+            <div class="case-card__row"><span class="case-card__lbl">業種</span><span class="case-card__val">テキストが入ります</span></div>
+            <div class="case-card__row"><span class="case-card__lbl">施工坪数</span><span class="case-card__val">テキストが入ります</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="case-item">
+        <div class="case-ba">
+          <div class="case-ba__col">
+            <div class="case-ba__label case-ba__label--before"><span>Before</span></div>
+            <div class="case-ba__img-wrap"><img src="images/v6/8d96dc8a-c121-428b-8982-c35c2cf2b284.jpg" alt="Before"/></div>
+          </div>
+          <div class="case-ba__col">
+            <div class="case-ba__label case-ba__label--after"><span>After</span></div>
+            <div class="case-ba__img-wrap"><img src="images/v6/e2ef3c14-a098-469c-9907-b604f23b89e4.jpg" alt="After"/></div>
+          </div>
+        </div>
+        <div class="case-card">
+          <p class="case-card__title">工事名テキストが入ります</p>
+          <div class="case-card__divider"></div>
+          <div class="case-card__rows">
+            <div class="case-card__row"><span class="case-card__lbl">作業内容</span><span class="case-card__val">テキストが入ります</span></div>
+            <div class="case-card__row"><span class="case-card__lbl">業種</span><span class="case-card__val">テキストが入ります</span></div>
+            <div class="case-card__row"><span class="case-card__lbl">施工坪数</span><span class="case-card__val">テキストが入ります</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="case-item">
+        <div class="case-ba">
+          <div class="case-ba__col">
+            <div class="case-ba__label case-ba__label--before"><span>Before</span></div>
+            <div class="case-ba__img-wrap"><img src="images/v6/8d96dc8a-c121-428b-8982-c35c2cf2b284.jpg" alt="Before"/></div>
+          </div>
+          <div class="case-ba__col">
+            <div class="case-ba__label case-ba__label--after"><span>After</span></div>
+            <div class="case-ba__img-wrap"><img src="images/v6/e2ef3c14-a098-469c-9907-b604f23b89e4.jpg" alt="After"/></div>
+          </div>
+        </div>
+        <div class="case-card">
+          <p class="case-card__title">工事名テキストが入ります</p>
+          <div class="case-card__divider"></div>
+          <div class="case-card__rows">
+            <div class="case-card__row"><span class="case-card__lbl">作業内容</span><span class="case-card__val">テキストが入ります</span></div>
+            <div class="case-card__row"><span class="case-card__lbl">業種</span><span class="case-card__val">テキストが入ります</span></div>
+            <div class="case-card__row"><span class="case-card__lbl">施工坪数</span><span class="case-card__val">テキストが入ります</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FLOW ══ -->
+<section class="flow section" id="flow">
+  <div class="wrap">
+    <div class="sec-title">
+      <span class="sec-title__en">Flow</span>
+      <span class="sec-title__ja">ご利用の流れ</span>
+    </div>
+    <div class="flow__list">
+      <div class="flow-step">
+        <div class="flow-step__vis">
+          <div class="flow-step__circle-wrap">
+            <img class="flow-step__circle" src="images/v6/6fd3ff7f-be5d-4308-9f3f-51865d8ead8c.svg" alt=""/>
+            <img class="flow-step__icon" src="images/v6/e5897913-c8c1-458a-bf90-a13d3c9f963a.svg" alt=""/>
+          </div>
+          <p class="flow-step__label">STEP 01</p>
+        </div>
+        <div class="flow-step__text">
+          <p class="flow-step__title">ご相談＆お問い合わせ</p>
+          <p class="flow-step__body">お電話またはメール・LINEなど、お気軽にご連絡ください。解体する建物の内容や規模、ご希望の時期などどんな些細なことでもまずはお聞かせください。専門スタッフが丁寧に対応いたします。</p>
+        </div>
+      </div>
+      <div class="flow__arrow"><img src="images/v6/16f4ee4c-5f94-472c-a187-9aa7a8eecbd6.svg" alt="↓"/></div>
+      <div class="flow-step">
+        <div class="flow-step__vis">
+          <div class="flow-step__circle-wrap">
+            <img class="flow-step__circle" src="images/v6/6fd3ff7f-be5d-4308-9f3f-51865d8ead8c.svg" alt=""/>
+            <img class="flow-step__icon" src="images/v6/1ab34e60-896a-47e7-a93c-2100dd25c4e6.svg" alt=""/>
+          </div>
+          <p class="flow-step__label">STEP 02</p>
+        </div>
+        <div class="flow-step__text">
+          <p class="flow-step__title">現地調査・お見積もり</p>
+          <p class="flow-step__body">ご都合の良い日時に担当者がお伺いし、建物の状態や周辺環境を無料で調査いたします。調査結果をもとに設備の買取の査定、解体費用のお見積もりをご提示します。</p>
+        </div>
+      </div>
+      <div class="flow__arrow"><img src="images/v6/a3ad9f30-78dd-4639-bae3-6cc243854659.svg" alt="↓"/></div>
+      <div class="flow-step">
+        <div class="flow-step__vis">
+          <div class="flow-step__circle-wrap">
+            <img class="flow-step__circle" src="images/v6/6fd3ff7f-be5d-4308-9f3f-51865d8ead8c.svg" alt=""/>
+            <img class="flow-step__icon" src="images/v6/cb0c4639-344e-4faa-9d39-ff93dac633ba.svg" alt=""/>
+          </div>
+          <p class="flow-step__label">STEP 03</p>
+        </div>
+        <div class="flow-step__text">
+          <p class="flow-step__title">ご契約</p>
+          <p class="flow-step__body">お見積もりにご納得いただけましたら、工事内容・費用・スケジュールを明記した契約書を締結します。不明点や変更のご要望があれば、納得されるまで何度でもご相談いただけます。</p>
+        </div>
+      </div>
+      <div class="flow__arrow"><img src="images/v6/a3ad9f30-78dd-4639-bae3-6cc243854659.svg" alt="↓"/></div>
+      <div class="flow-step">
+        <div class="flow-step__vis">
+          <div class="flow-step__circle-wrap">
+            <img class="flow-step__circle" src="images/v6/6fd3ff7f-be5d-4308-9f3f-51865d8ead8c.svg" alt=""/>
+            <img class="flow-step__icon" src="images/v6/06ee175f-42a4-4323-8493-7293f7c466f1.svg" alt=""/>
+          </div>
+          <p class="flow-step__label">STEP 04</p>
+        </div>
+        <div class="flow-step__text">
+          <p class="flow-step__title">打ち合わせ・施工作業</p>
+          <p class="flow-step__body">経験豊富なスタッフが安全第一で解体工事を進めます。廃材は法令に従い分別・適正処理。工事中もご不明な点があればいつでもご連絡ください。進捗状況もこまめにご報告します。</p>
+        </div>
+      </div>
+      <div class="flow__arrow"><img src="images/v6/a3ad9f30-78dd-4639-bae3-6cc243854659.svg" alt="↓"/></div>
+      <div class="flow-step flow-step--last">
+        <div class="flow-step__vis">
+          <div class="flow-step__circle-wrap">
+            <img class="flow-step__circle" src="images/v6/9c4136c4-ddbb-4aad-9c9b-305c097bc175.svg" alt=""/>
+            <img class="flow-step__icon" src="images/v6/f5989a2e-a8d7-4ce1-9317-ec7c86cd019e.svg" alt=""/>
+          </div>
+          <p class="flow-step__label">STEP 05</p>
+        </div>
+        <div class="flow-step__text">
+          <p class="flow-step__title">完了確認・引渡し</p>
+          <p class="flow-step__body">工事完了後、お客様立ち会いのもとで仕上がりをご確認いただきます。敷地の清掃・整地まで丁寧に行い、すっきりとした状態でお引き渡しします。引き渡し後のアフターフォローもお気軽にご相談ください。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FAQ ══ -->
+<section class="faq section" id="faq">
+  <div class="wrap">
+    <div class="sec-title">
+      <span class="sec-title__en">Faq</span>
+      <span class="sec-title__ja">よくある質問</span>
+    </div>
+    <div class="faq__list">
+      <div class="faq-item">
+        <button class="faq-item__q" type="button" aria-expanded="false">
+          <div class="faq-item__q-left">
+            <div class="faq-badge faq-badge--q"><img src="images/v6/5956cce8-aab8-4eb9-affa-9167e78e64cf.svg" alt=""/><span class="faq-badge__letter">Q</span></div>
+            <p class="faq-item__question">夜間や早朝の工事は対応可能ですか？</p>
+          </div>
+          <span class="faq-item__icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-item__a">
+          <div class="faq-badge faq-badge--a"><img src="images/v6/b29a2694-beaf-464f-842f-781b8979b45b.svg" alt=""/><span class="faq-badge__letter">A</span></div>
+          <p class="faq-item__answer">はい、商業施設の営業時間外・夜間解体にも対応しております。事前にご相談ください。</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__q" type="button" aria-expanded="false">
+          <div class="faq-item__q-left">
+            <div class="faq-badge faq-badge--q"><img src="images/v6/5956cce8-aab8-4eb9-affa-9167e78e64cf.svg" alt=""/><span class="faq-badge__letter">Q</span></div>
+            <p class="faq-item__question">処分費用も含めて見積もりしてもらえますか？</p>
+          </div>
+          <span class="faq-item__icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-item__a">
+          <div class="faq-badge faq-badge--a"><img src="images/v6/b29a2694-beaf-464f-842f-781b8979b45b.svg" alt=""/><span class="faq-badge__letter">A</span></div>
+          <p class="faq-item__answer">もちろんです。廃棄物処理費用も含めた明確なお見積りを提示いたします。</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__q" type="button" aria-expanded="false">
+          <div class="faq-item__q-left">
+            <div class="faq-badge faq-badge--q"><img src="images/v6/5956cce8-aab8-4eb9-affa-9167e78e64cf.svg" alt=""/><span class="faq-badge__letter">Q</span></div>
+            <p class="faq-item__question">問い合わせする際にはどんな内容を伝えればいいですか？</p>
+          </div>
+          <span class="faq-item__icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-item__a">
+          <div class="faq-badge faq-badge--a"><img src="images/v6/b29a2694-beaf-464f-842f-781b8979b45b.svg" alt=""/><span class="faq-badge__letter">A</span></div>
+          <p class="faq-item__answer">物件の場所・広さ・希望時期など、わかる範囲で構いません。お気軽にご相談ください。</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__q" type="button" aria-expanded="false">
+          <div class="faq-item__q-left">
+            <div class="faq-badge faq-badge--q"><img src="images/v6/5956cce8-aab8-4eb9-affa-9167e78e64cf.svg" alt=""/><span class="faq-badge__letter">Q</span></div>
+            <p class="faq-item__question">買取はどんなものが対象ですか？</p>
+          </div>
+          <span class="faq-item__icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-item__a">
+          <div class="faq-badge faq-badge--a"><img src="images/v6/b29a2694-beaf-464f-842f-781b8979b45b.svg" alt=""/><span class="faq-badge__letter">A</span></div>
+          <p class="faq-item__answer">厨房機器（コンロ・フライヤー・製氷機など）、業務用冷蔵・冷凍庫、業務用エアコン、照明・サイン、テーブル・椅子などの家具什器が主な対象です。状態によっては意外なものが高価買取になることもあります。</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-item__q" type="button" aria-expanded="false">
+          <div class="faq-item__q-left">
+            <div class="faq-badge faq-badge--q"><img src="images/v6/5956cce8-aab8-4eb9-affa-9167e78e64cf.svg" alt=""/><span class="faq-badge__letter">Q</span></div>
+            <p class="faq-item__question">原状回復の範囲について、オーナーや管理会社との交渉もお願いできますか？</p>
+          </div>
+          <span class="faq-item__icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-item__a">
+          <div class="faq-badge faq-badge--a"><img src="images/v6/b29a2694-beaf-464f-842f-781b8979b45b.svg" alt=""/><span class="faq-badge__letter">A</span></div>
+          <p class="faq-item__answer">はい、対応しております。原状回復特約の内容確認から、オーナー様・管理会社様との工事範囲の協議まで丁寧にサポートします。退去後のトラブルを未然に防ぐためにも、契約書や特約内容をご共有いただけるとより正確なご提案が可能です。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT ══ -->
+<section class="contact" id="contact">
+  <div class="contact__outer">
+    <div class="contact__card">
+      <div class="contact__card-bg">
+        <img src="images/v6/f47abd1f-db6f-403d-ab7a-b7ec4a163285.jpg" alt=""/>
+      </div>
+      <!-- TLイラスト: Figma node 18:3152 (8レイヤーコンポジット, 418.4×271.36px) -->
+      <div class="contact__illust contact__illust--tl">
+        <!-- base: isometric platform floor -->
+        <img class="contact__tl-base" src="images/v6/87051c1e-4e00-45c4-804a-c77b1f6d73f4.svg" alt=""/>
+        <!-- Group9: worker left (inset: top 11.91% right 61.49% bottom 41.72% left 26.67%) -->
+        <div class="contact__tl-layer" style="inset:11.91% 61.49% 41.72% 26.67%"><img src="images/v6/a42c35a5-03be-4dd1-b988-368d1d047ef8.svg" alt=""/></div>
+        <!-- Group10: sub-element -->
+        <div class="contact__tl-layer" style="inset:11.21% 67.93% 81.87% 27.94%"><img src="images/v6/a571b7c5-49e6-4352-a527-a4181d05cb79.svg" alt=""/></div>
+        <!-- Group11: worker right -->
+        <div class="contact__tl-layer" style="inset:10.2% 47.63% 41.59% 44.98%"><img src="images/v6/cf87d095-5268-42eb-ac69-41b704a616a5.svg" alt=""/></div>
+        <!-- Group12: sub-element -->
+        <div class="contact__tl-layer" style="inset:9.84% 49.14% 83.39% 46.77%"><img src="images/v6/72b4ef52-d84b-4c3f-9812-3b29238110d6.svg" alt=""/></div>
+        <!-- Group13: rope/cable left -->
+        <div class="contact__tl-layer" style="inset:32.69% 4.71% 35.69% 68.45%"><img src="images/v6/7594916b-9246-4ccc-9bee-addae1c02ef9.svg" alt=""/></div>
+        <!-- Group14: cones/objects center -->
+        <div class="contact__tl-layer" style="inset:55.02% 29.53% 13.37% 43.62%"><img src="images/v6/0f68cbed-ce19-4ee2-914c-637b0caf4a9f.svg" alt=""/></div>
+        <!-- Group15: upper element -->
+        <div class="contact__tl-layer" style="inset:9.8% 18.81% 58.59% 54.35%"><img src="images/v6/a18093a3-7f92-4cb7-8aa8-d3e16160f80a.svg" alt=""/></div>
+      </div>
+      <img class="contact__illust contact__illust--br" src="images/v6/contact_illust_br.png" alt=""/>
+
+      <p class="contact__title">まずはお気軽にお問い合わせください！</p>
+      <p class="contact__body">買取・解体・廃棄物処理・原状回復・近隣への挨拶まわりまで、すべて一社で対応します！<br>退去期限が迫っている方も、まずはお気軽にご連絡ください。<br>岡山密着だからこそ、スピーディにご対応いたします！</p>
+      <div class="contact__tel-wrap">
+        <div class="contact__tel-row">
+          <svg viewBox="0 0 31 41" fill="none" width="30" height="40"><path d="M3 2C3 2 8 0 10 4C12 8 13 11 13 11C13 11 14 14 11 15C8 16 9 19 13 23C17 27 20 28 21 25C22 22 25 23 25 23C25 23 28 24 29 27C30 30 28 35 28 35C28 35 26 38 22 37C14 35 4 24 2 14C0 8 3 2 3 2Z" stroke="#ff6400" stroke-width="2"/></svg>
+          <span class="contact__tel-num">086-259-0632</span>
+        </div>
+        <p class="contact__tel-hours">受付時間　9:00〜18:00</p>
+      </div>
+      <div class="contact__ctas">
+        <a href="#" class="contact-btn contact-btn--form">
+          <svg width="35" height="25" viewBox="0 0 35 25" fill="none"><rect x="1" y="1" width="33" height="23" rx="2" stroke="#ff6400" stroke-width="2"/><path d="M1 4L17.5 14L34 4" stroke="#ff6400" stroke-width="2"/></svg>
+          お問い合わせ
+          <span class="contact-btn__arrow"></span>
+        </a>
+        <a href="#" class="contact-btn contact-btn--line">
+          <svg width="30" height="30" viewBox="0 0 30 30" fill="#fff"><path d="M15 2C7.8 2 2 7.2 2 13.6c0 5.7 5 10.5 11.8 11.4.5.1 1.1.3 1.2.7.1.3 0 .8 0 .8s-.2 1.2-.2 1.4c-.1.4-.3 1.5 1.3.8 1.6-.7 8.5-5 11.6-8.6C29.6 17.4 28 15.7 28 13.6 28 7.2 22.2 2 15 2z"/></svg>
+          LINEで相談する
+          <span class="contact-btn__arrow"></span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer section">
+  <div class="wrap">
+    <!-- 3カラム メインエリア -->
+    <div class="footer__main">
+      <!-- Col1: ナビゲーション -->
+      <nav class="footer__nav">
+        <a href="#feature">当社が選ばれる理由</a>
+        <a href="#service">サービス内容</a>
+        <a href="#case">施工実績</a>
+        <a href="#flow">ご利用の流れ</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <!-- Col2: インフォメーション -->
+      <div class="footer__info-block">
+        <p class="footer__info-label">Information</p>
+        <!-- ロゴ: 2レイヤーコンポジット (Figma 53.97×33.33px) -->
+        <div class="footer__logo-wrap">
+          <div class="logo-main">
+            <img src="images/v6/4e04a628-ac54-44bb-9c29-e1a55bcf41ef.svg" alt="KANEYAMA"/>
+          </div>
+          <div class="logo-sub">
+            <img src="images/v6/61b10ee6-3bff-4f29-bb8b-fb3297ba71fb.svg" alt=""/>
+          </div>
+        </div>
+        <p class="footer__info-text">金山株式会社</p>
+        <p class="footer__info-text">岡山県岡山市南区藤田234-8</p>
+        <p class="footer__info-text">TEL. 086-259-0632</p>
+        <p class="footer__info-text">FAX. 086-250-8626</p>
+      </div>
+      <!-- Col3: Google Map 埋め込み（所在地: 岡山県岡山市南区藤田234-8） -->
+      <div class="footer__map">
+        <iframe
+          src="https://www.google.com/maps?q=%E5%B2%A1%E5%B1%B1%E7%9C%8C%E5%B2%A1%E5%B1%B1%E5%B8%82%E5%8D%97%E5%8C%BA%E8%97%A4%E7%94%B0234-8&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+          title="金山株式会社 所在地マップ"></iframe>
+      </div>
+    </div>
+    <!-- ボトムバー -->
+    <div class="footer__bottom">
+      <a class="footer__privacy" href="#">プライバシーポリシー</a>
+      <p class="footer__copy">Copyright © All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ── SP ハンバーガーメニュー ──
+   #menuOpen  : ハンバーガーボタン（header内）
+   #menuClose : ×ボタン（drawer内）
+   #spDrawer  : ドロワー本体
+   .is-open   : 表示トグル用クラス
+   navリンクをクリックした場合も閉じる
+*/
+(function(){
+  var drawer  = document.getElementById('spDrawer');
+  var btnOpen = document.getElementById('menuOpen');
+  var btnClose= document.getElementById('menuClose');
+
+  function openDrawer(){
+    drawer.classList.add('is-open');
+    btnOpen.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden'; /* 背後スクロール防止 */
+  }
+  function closeDrawer(){
+    drawer.classList.remove('is-open');
+    btnOpen.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+  }
+
+  btnOpen.addEventListener('click', openDrawer);
+  btnClose.addEventListener('click', closeDrawer);
+
+  /* navリンク押下でドロワーを閉じてスクロール */
+  drawer.querySelectorAll('.sp-drawer__nav a, .sp-drawer__ctas a').forEach(function(a){
+    a.addEventListener('click', closeDrawer);
+  });
+
+  /* ドロワー外側（背景）タップで閉じる */
+  drawer.addEventListener('click', function(e){
+    if(e.target === drawer) closeDrawer();
+  });
+})();
+
+/* ── ヘッダー blur 切替 ──
+   FVセクション表示中はヘッダー透明、FVを抜けたら .is-scrolled を付与して blur。
+   rootMargin の top 側を header 高さ分(-72px)縮めることで、
+   FV の下端がヘッダー位置に到達した瞬間に isIntersecting=false となる。 */
+(function(){
+  var header = document.querySelector('.header');
+  var fv = document.querySelector('.fv');
+  if(!header || !fv || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      header.classList.toggle('is-scrolled', !e.isIntersecting);
+    });
+  }, { threshold: 0, rootMargin: '-72px 0px 0px 0px' });
+  io.observe(fv);
+})();
+
+/* ── FAQ アコーディオン ──
+   .faq-item__q(button) クリックで親 .faq-item に is-open を付け外し
+   aria-expanded も同期 */
+(function(){
+  document.querySelectorAll('.faq-item__q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var item = btn.closest('.faq-item');
+      if(!item) return;
+      var open = item.classList.toggle('is-open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>
