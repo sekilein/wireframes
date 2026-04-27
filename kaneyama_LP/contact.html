@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<title>お問い合わせ｜金山株式会社</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=M+PLUS+1p:wght@400;500;700;900&family=Outfit:wght@700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ────────────────────────────────────────
+   RESET
+──────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+img{display:block;max-width:100%;height:auto;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
+input,textarea,button{font-family:inherit;}
+
+/* ────────────────────────────────────────
+   DESIGN TOKENS（index_v12.html踏襲）
+──────────────────────────────────────── */
+:root{
+  --orange:#fe5417;
+  --teal:#01adbe;
+  --yellow:#fff36a;
+  --cream:#fff7d1;
+  --lb:#ebfdff;
+  --gfrom:#8ac65d;
+  --gto:#219d01;
+  --design-w:1440px;
+  --content-w:1100px;
+  --pad-x: clamp(20px, 11.81vw, 170px);
+  --pad-y: clamp(60px,  8.33vw, 120px);
+}
+
+/* ────────────────────────────────────────
+   LAYOUT BASE
+──────────────────────────────────────── */
+.section{position:relative;}
+.wrap{
+  max-width:var(--design-w);
+  margin:0 auto;
+  padding:var(--pad-y) var(--pad-x);
+  position:relative;z-index:2;
+}
+.section::before{
+  content:'';position:absolute;inset:0;
+  pointer-events:none;z-index:0;
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+}
+
+/* ────────────────────────────────────────
+   SECTION TITLE
+──────────────────────────────────────── */
+.sec-title{display:flex;flex-direction:column;gap:8px;margin-bottom:50px;}
+.sec-title__en{
+  display:inline-block;
+  font-family:'Outfit',sans-serif;font-weight:700;
+  font-size:64px;line-height:1;letter-spacing:2px;
+  transform:skewX(-7.11deg) scaleY(.99);
+}
+.sec-title__ja{
+  display:inline-block;
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:20px;line-height:1;
+  transform:skewX(-7.11deg) scaleY(.99);
+}
+
+/* ────────────────────────────────────────
+   HEADER（index_v12.htmlと同一）
+──────────────────────────────────────── */
+.header{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  backdrop-filter:blur(42px);-webkit-backdrop-filter:blur(42px);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 70px;
+}
+.header__logo{width:54px;height:34px;flex-shrink:0;position:relative;overflow:hidden;}
+.header__logo img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;}
+.header__right{display:flex;align-items:center;gap:40px;}
+.header__nav{display:flex;gap:20px;}
+.header__nav a{font-family:'M PLUS 1p',sans-serif;font-weight:700;font-size:16px;color:#fff;white-space:nowrap;}
+.header__cta{
+  display:flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:4px;
+  background:linear-gradient(to right,var(--gfrom),var(--gto));
+  color:#fff;font-family:'M PLUS 1p',sans-serif;font-weight:700;font-size:18px;white-space:nowrap;
+}
+.header__cta::after{
+  content:'';border-left:6px solid #fff;
+  border-top:4px solid transparent;border-bottom:4px solid transparent;
+}
+.header__hamburger{
+  display:none;
+  flex-direction:column;justify-content:space-between;
+  width:24px;height:16px;
+  background:none;border:none;cursor:pointer;padding:0;flex-shrink:0;
+}
+.header__hamburger span{display:block;width:24px;height:2px;background:#fff;border-radius:1px;}
+
+/* ────────────────────────────────────────
+   SP DRAWER
+──────────────────────────────────────── */
+.sp-drawer{display:none;position:fixed;inset:0;z-index:200;background:#fff;overflow-y:auto;}
+.sp-drawer.is-open{display:block;}
+.sp-drawer__close{
+  position:absolute;right:20px;top:17px;
+  width:17px;height:17px;background:none;border:none;cursor:pointer;padding:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.sp-drawer__close svg{width:17px;height:17px;}
+.sp-drawer__nav{padding-top:80px;display:flex;flex-direction:column;align-items:center;gap:38px;}
+.sp-drawer__nav a{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:16px;color:#e45828;white-space:nowrap;line-height:normal;
+}
+.sp-drawer__ctas{
+  display:flex;flex-direction:column;gap:16px;align-items:center;
+  padding:38px 16px 40px;margin:0 16px;
+}
+
+/* ────────────────────────────────────────
+   CTAボタン共通（header drawer用）
+──────────────────────────────────────── */
+.fv-btn{
+  width:360px;height:72px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;font-size:24px;
+  position:relative;box-shadow:0 0 10px rgba(0,0,0,.25);
+}
+.fv-btn__arrow{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  border-left:7px solid var(--orange);
+  border-top:5px solid transparent;border-bottom:5px solid transparent;
+}
+.fv-btn--tel{background:#fff;color:var(--orange);}
+.fv-btn--tel .tel-num{font-family:'Outfit',sans-serif;font-weight:900;font-size:30px;}
+.fv-btn--form{background:var(--yellow);color:var(--orange);}
+.fv-btn--line{background:linear-gradient(to right,var(--gfrom),var(--gto));color:#fff;}
+.fv-btn--line .fv-btn__arrow{border-left-color:#fff;}
+
+/* ────────────────────────────────────────
+   CONTACT HERO（index_v12.html踏襲 簡易版）
+   背景オレンジ+テクスチャ、中央カードに見出し/本文/TEL/LINE CTA
+──────────────────────────────────────── */
+.contact-hero{
+  background-color:#ff956f;
+  position:relative;min-height:680px;
+  display:flex;align-items:center;justify-content:center;
+  padding:140px 0 80px; /* 上パディング＝固定ヘッダー分 */
+  overflow:hidden;
+}
+.contact-hero::before{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:url('images/v6/f47abd1f-db6f-403d-ab7a-b7ec4a163285.jpg');
+  background-size:cover;background-position:center;background-repeat:no-repeat;
+  mix-blend-mode:multiply;
+}
+.contact-hero__card{
+  position:relative;z-index:2;
+  width:1100px;max-width:calc(100% - 40px);
+  background:#fff;border-radius:40px;
+  padding:80px 60px;
+  box-shadow:0 0 20px rgba(32,43,102,.3);
+  display:flex;flex-direction:column;align-items:center;gap:30px;
+  overflow:visible;
+}
+.contact-hero__card-bg{
+  position:absolute;inset:0;border-radius:40px;overflow:hidden;z-index:0;
+}
+.contact-hero__card-bg img{width:100%;height:100%;object-fit:cover;opacity:.08;}
+.contact-hero__card > *:not(.contact-hero__card-bg):not(.contact-hero__illust){
+  position:relative;z-index:2;
+}
+.contact-hero__illust{position:absolute;pointer-events:none;z-index:1;object-fit:contain;}
+.contact-hero__illust--br{
+  right:-60px;bottom:-40px;
+  width:340px;height:auto;
+}
+.contact-hero__title{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:38px;color:#ff6400;text-align:center;line-height:1.4;
+  max-width:744px;
+}
+.contact-hero__body{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:16px;color:#333;text-align:center;line-height:1.8;letter-spacing:.32px;
+}
+.contact-hero__tel-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;}
+.contact-hero__tel-row{display:flex;align-items:center;gap:8px;}
+.contact-hero__tel-row svg{width:30px;height:40px;flex-shrink:0;}
+.contact-hero__tel-num{
+  font-family:'Outfit',sans-serif;font-weight:900;
+  font-size:48px;color:#ff6400;line-height:1.2;
+}
+.contact-hero__tel-hours{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:16px;color:#333;letter-spacing:.32px;
+}
+.contact-hero__ctas{display:flex;gap:24px;align-items:center;}
+
+/* ────────────────────────────────────────
+   CONTACT FORM（Figma 18:1128）
+   背景 #ebfdff + 水玉テクスチャ 10%
+──────────────────────────────────────── */
+.contact-form{background-color:var(--lb);}
+.contact-form::before{
+  background-image:url('images/v6/2d0a3aa9-0d6e-4f7f-9204-83be7701ad18.png');
+  background-size:cover;background-position:center;opacity:.1;
+}
+.contact-form .sec-title__en,
+.contact-form .sec-title__ja{color:var(--teal);}
+.contact-form .wrap{display:flex;flex-direction:column;align-items:center;gap:50px;}
+
+.cform{
+  display:flex;flex-direction:column;gap:32px;align-items:center;
+  width:100%;max-width:640px;
+}
+.cform__field{
+  display:flex;flex-direction:column;gap:8px;
+  width:100%;
+}
+.cform__label{
+  display:flex;align-items:center;gap:8px;
+}
+.cform__badge{
+  background:#ff6400;color:#fff;
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;font-size:14px;
+  padding:4px 8px;border-radius:30px;line-height:1;
+  display:inline-flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.cform__label-text{
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:16px;color:#333;line-height:1.5;
+}
+.cform__input,
+.cform__textarea{
+  width:100%;
+  background:#fff;border:1px solid #ddd;border-radius:0;
+  padding:10px 14px;
+  font-size:16px;color:#333;line-height:1.5;
+  outline:none;
+}
+.cform__input{height:46px;}
+.cform__textarea{height:240px;resize:vertical;}
+.cform__input:focus,
+.cform__textarea:focus{border-color:var(--teal);}
+
+.cform__privacy{
+  display:flex;align-items:center;gap:16px;
+  width:100%;
+  font-family:'M PLUS 1p',sans-serif;font-weight:500;font-size:14px;color:#333;
+}
+.cform__privacy input[type="checkbox"]{
+  width:15px;height:15px;
+  border:1px solid #ddd;background:#fff;
+  appearance:none;-webkit-appearance:none;
+  cursor:pointer;flex-shrink:0;position:relative;
+}
+.cform__privacy input[type="checkbox"]:checked{background:var(--teal);border-color:var(--teal);}
+.cform__privacy input[type="checkbox"]:checked::after{
+  content:'';position:absolute;
+  left:3px;top:-1px;width:5px;height:10px;
+  border:solid #fff;border-width:0 2px 2px 0;
+  transform:rotate(45deg);
+}
+.cform__privacy-link{color:#034495;text-decoration:underline;}
+
+.cform__submit-wrap{
+  display:flex;justify-content:center;
+  box-shadow:0 0 10px rgba(0,0,0,.25);
+  border-radius:8px;
+  margin-top:18px;
+}
+.cform__submit{
+  width:360px;height:72px;border-radius:8px;
+  background:#ff6400;color:#fff;
+  font-family:'M PLUS 1p',sans-serif;font-weight:700;
+  font-size:24px;letter-spacing:.48px;
+  border:none;cursor:pointer;
+  position:relative;
+}
+.cform__submit::after{
+  content:'';position:absolute;right:25px;top:50%;transform:translateY(-50%);
+  border-left:7px solid #fff;
+  border-top:5px solid transparent;border-bottom:5px solid transparent;
+}
+.cform__submit:hover{opacity:.9;}
+
+/* ────────────────────────────────────────
+   FOOTER（index_v12.html踏襲）
+──────────────────────────────────────── */
+.footer{color:#333;}
+.footer::before{
+  background-image:url('images/v6/7d6b4071-8275-4593-b270-87882f254b1b.jpg');
+  opacity:1;
+}
+.footer::after{
+  content:'';position:absolute;inset:0;
+  background:rgba(255,111,0,.3);pointer-events:none;z-index:1;
+}
+.footer .wrap{
+  padding: clamp(60px,8.33vw,120px) clamp(20px,8.33vw,120px) clamp(40px,5.56vw,80px);
+  z-index:2;display:flex;flex-direction:column;gap:56px;
+}
+.footer__main{display:flex;justify-content:space-between;align-items:flex-start;height:284px;}
+.footer__nav{display:flex;flex-direction:column;gap:20px;justify-content:center;height:100%;}
+.footer__nav a{font-family:'M PLUS 1p',sans-serif;font-weight:700;font-size:16px;color:#333;line-height:1;}
+.footer__nav a:hover{opacity:.7;}
+.footer__info-block{width:291px;display:flex;flex-direction:column;gap:16px;}
+.footer__info-label{font-family:'Outfit',sans-serif;font-weight:700;font-size:24px;color:#333;line-height:normal;}
+.footer__logo-wrap{position:relative;width:53.97px;height:33.33px;overflow:hidden;flex-shrink:0;}
+.footer__logo-wrap .logo-main,.footer__logo-wrap .logo-sub{position:absolute;}
+.footer__logo-wrap .logo-main{inset:0 -0.02% 21.33% 0.03%;}
+.footer__logo-wrap .logo-sub{inset:83.53% 6.43% -0.03% 6.87%;}
+.footer__logo-wrap img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;max-width:none;display:block;}
+.footer__info-text{font-family:'M PLUS 1p',sans-serif;font-weight:700;font-size:16px;color:#333;line-height:1;white-space:nowrap;}
+.footer__map{width:413px;height:284px;flex-shrink:0;overflow:hidden;position:relative;}
+.footer__map img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;max-width:none;display:block;}
+.footer__map iframe{width:100%;height:100%;border:0;display:block;}
+.footer__bottom{display:flex;justify-content:space-between;align-items:flex-end;width:100%;font-size:14px;color:#333;line-height:1;white-space:nowrap;}
+.footer__privacy{font-family:'M PLUS 1p',sans-serif;font-weight:700;color:#333;}
+.footer__copy{font-family:'Outfit',sans-serif;font-weight:700;color:#333;}
+
+/* ────────────────────────────────────────
+   RESPONSIVE  max-width:768px
+──────────────────────────────────────── */
+@media(max-width:768px){
+  .wrap{padding:60px 20px;}
+
+  /* header SP */
+  .header{padding:14px 16px;}
+  .header__logo{width:40px;height:25px;}
+  .header__nav{display:none;}
+  .header__cta{display:none;}
+  .header__hamburger{display:flex;}
+
+  /* contact hero SP */
+  .contact-hero{padding:100px 16px 40px;min-height:0;}
+  .contact-hero__card{padding:50px 24px;border-radius:24px;}
+  .contact-hero__title{font-size:24px;max-width:100%;}
+  .contact-hero__illust--br{display:none;}
+  .contact-hero__ctas{flex-direction:column;width:100%;}
+  .contact-hero__ctas .fv-btn{width:100%;max-width:340px;}
+  .contact-hero__tel-num{font-size:32px;}
+
+  /* form SP */
+  .cform{max-width:100%;}
+  .cform__submit{width:100%;max-width:340px;font-size:20px;}
+
+  /* footer SP */
+  .footer .wrap{padding:60px 20px 40px;}
+  .footer__main{flex-direction:column;gap:32px;height:auto;}
+  .footer__nav{flex-direction:column;gap:16px;}
+  .footer__info-block{width:100%;}
+  .footer__map{width:100%;height:200px;}
+  .footer__bottom{flex-direction:column;gap:12px;align-items:flex-start;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<header class="header">
+  <a href="index_v12.html" class="header__logo">
+    <img src="images/v6/9ef8d75f-8935-4bfd-b608-5cf3c6b99e9e.svg" alt="KANEYAMA"/>
+  </a>
+  <div class="header__right">
+    <nav class="header__nav">
+      <a href="index_v12.html#feature">当社が選ばれる理由</a>
+      <a href="index_v12.html#service">サービス内容</a>
+      <a href="index_v12.html#case">施工実績</a>
+      <a href="index_v12.html#flow">ご利用の流れ</a>
+      <a href="index_v12.html#faq">FAQ</a>
+    </nav>
+    <a href="#contact-form" class="header__cta">お問い合わせ</a>
+    <button class="header__hamburger" id="menuOpen" aria-label="メニューを開く" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ SP DRAWER ══ -->
+<div class="sp-drawer" id="spDrawer" role="dialog" aria-modal="true" aria-label="ナビゲーションメニュー">
+  <button class="sp-drawer__close" id="menuClose" aria-label="メニューを閉じる">
+    <svg viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <line x1="1" y1="1" x2="16" y2="16" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+      <line x1="16" y1="1" x2="1" y2="16" stroke="#333" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </button>
+  <nav class="sp-drawer__nav">
+    <a href="index_v12.html#feature">当社が選ばれる理由</a>
+    <a href="index_v12.html#service">サービス内容</a>
+    <a href="index_v12.html#case">施工実績</a>
+    <a href="index_v12.html#flow">ご利用の流れ</a>
+    <a href="index_v12.html#faq">FAQ</a>
+  </nav>
+  <div class="sp-drawer__ctas">
+    <a href="tel:0862590632" class="fv-btn fv-btn--tel" style="width:100%;">
+      <svg width="31" height="41" viewBox="0 0 31 41" fill="none"><path d="M3 2C3 2 8 0 10 4C12 8 13 11 13 11C13 11 14 14 11 15C8 16 9 19 13 23C17 27 20 28 21 25C22 22 25 23 25 23C25 23 28 24 29 27C30 30 28 35 28 35C28 35 26 38 22 37C14 35 4 24 2 14C0 8 3 2 3 2Z" stroke="#fe5417" stroke-width="2"/></svg>
+      <span class="tel-num">086-259-0632</span>
+      <span class="fv-btn__arrow"></span>
+    </a>
+    <a href="#contact-form" class="fv-btn fv-btn--form" style="width:100%;">
+      <svg width="35" height="25" viewBox="0 0 35 25" fill="none"><rect x="1" y="1" width="33" height="23" rx="2" stroke="#fe5417" stroke-width="2"/><path d="M1 4L17.5 14L34 4" stroke="#fe5417" stroke-width="2"/></svg>
+      お問い合わせ
+      <span class="fv-btn__arrow"></span>
+    </a>
+    <a href="#" class="fv-btn fv-btn--line" style="width:100%;">
+      <svg width="30" height="30" viewBox="0 0 30 30" fill="#fff"><path d="M15 2C7.8 2 2 7.2 2 13.6c0 5.7 5 10.5 11.8 11.4.5.1 1.1.3 1.2.7.1.3 0 .8 0 .8s-.2 1.2-.2 1.4c-.1.4-.3 1.5 1.3.8 1.6-.7 8.5-5 11.6-8.6C29.6 17.4 28 15.7 28 13.6 28 7.2 22.2 2 15 2z"/></svg>
+      LINEで相談する
+      <span class="fv-btn__arrow fv-btn--line"></span>
+    </a>
+  </div>
+</div>
+
+<!-- ══ CONTACT HERO ══ -->
+<section class="contact-hero">
+  <div class="contact-hero__card">
+    <div class="contact-hero__card-bg">
+      <img src="images/v6/f47abd1f-db6f-403d-ab7a-b7ec4a163285.jpg" alt=""/>
+    </div>
+    <img class="contact-hero__illust contact-hero__illust--br" src="contact_illust_br.png" alt=""/>
+    <h1 class="contact-hero__title">まずはお気軽にお問い合わせください！</h1>
+    <div class="contact-hero__body">
+      <p>買取・解体・廃棄物処理・原状回復・近隣への挨拶まわりまで、すべて一社で対応します！</p>
+      <p>退去期限が迫っている方も、まずはお気軽にご連絡ください。</p>
+      <p>岡山密着だからこそ、スピーディにご対応いたします！</p>
+    </div>
+    <div class="contact-hero__tel-wrap">
+      <div class="contact-hero__tel-row">
+        <svg viewBox="0 0 31 41" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3 2C3 2 8 0 10 4C12 8 13 11 13 11C13 11 14 14 11 15C8 16 9 19 13 23C17 27 20 28 21 25C22 22 25 23 25 23C25 23 28 24 29 27C30 30 28 35 28 35C28 35 26 38 22 37C14 35 4 24 2 14C0 8 3 2 3 2Z" stroke="#ff6400" stroke-width="2"/></svg>
+        <span class="contact-hero__tel-num">086-259-0632</span>
+      </div>
+      <p class="contact-hero__tel-hours">受付時間　9:00〜18:00</p>
+    </div>
+    <div class="contact-hero__ctas">
+      <a href="#" class="fv-btn fv-btn--line">
+        <svg width="30" height="30" viewBox="0 0 30 30" fill="#fff"><path d="M15 2C7.8 2 2 7.2 2 13.6c0 5.7 5 10.5 11.8 11.4.5.1 1.1.3 1.2.7.1.3 0 .8 0 .8s-.2 1.2-.2 1.4c-.1.4-.3 1.5 1.3.8 1.6-.7 8.5-5 11.6-8.6C29.6 17.4 28 15.7 28 13.6 28 7.2 22.2 2 15 2z"/></svg>
+        LINEで相談する
+        <span class="fv-btn__arrow"></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CONTACT FORM ══ -->
+<section class="contact-form section" id="contact-form">
+  <div class="wrap">
+    <div class="sec-title">
+      <span class="sec-title__en">Contact</span>
+      <span class="sec-title__ja">お問い合わせフォーム</span>
+    </div>
+
+    <form class="cform" action="contact-thanks.html" method="get">
+      <div class="cform__field">
+        <div class="cform__label">
+          <span class="cform__badge">必須</span>
+          <span class="cform__label-text">お名前</span>
+        </div>
+        <input class="cform__input" type="text" name="your-name" required autocomplete="name"/>
+      </div>
+
+      <div class="cform__field">
+        <div class="cform__label">
+          <span class="cform__badge">必須</span>
+          <span class="cform__label-text">会社名</span>
+        </div>
+        <input class="cform__input" type="text" name="your-company" required autocomplete="organization"/>
+      </div>
+
+      <div class="cform__field">
+        <div class="cform__label">
+          <span class="cform__badge">必須</span>
+          <span class="cform__label-text">メールアドレス</span>
+        </div>
+        <input class="cform__input" type="email" name="your-email" required autocomplete="email"/>
+      </div>
+
+      <div class="cform__field">
+        <div class="cform__label">
+          <span class="cform__badge">必須</span>
+          <span class="cform__label-text">お電話番号</span>
+        </div>
+        <input class="cform__input" type="tel" name="your-tel" required autocomplete="tel"/>
+      </div>
+
+      <div class="cform__field">
+        <div class="cform__label">
+          <span class="cform__badge">必須</span>
+          <span class="cform__label-text">お問い合わせ内容</span>
+        </div>
+        <textarea class="cform__textarea" name="your-message" required></textarea>
+      </div>
+
+      <label class="cform__privacy">
+        <input type="checkbox" name="privacy-consent" value="1" required/>
+        <span>上記を確認し、<a class="cform__privacy-link" href="#">個人情報の保存</a>に同意する。</span>
+      </label>
+
+      <div class="cform__submit-wrap">
+        <button class="cform__submit" type="submit">送信する</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer class="footer section">
+  <div class="wrap">
+    <div class="footer__main">
+      <nav class="footer__nav">
+        <a href="index_v12.html#feature">当社が選ばれる理由</a>
+        <a href="index_v12.html#service">サービス内容</a>
+        <a href="index_v12.html#case">施工実績</a>
+        <a href="index_v12.html#flow">ご利用の流れ</a>
+        <a href="index_v12.html#faq">FAQ</a>
+      </nav>
+      <div class="footer__info-block">
+        <p class="footer__info-label">Information</p>
+        <div class="footer__logo-wrap">
+          <div class="logo-main">
+            <img src="images/v6/4e04a628-ac54-44bb-9c29-e1a55bcf41ef.svg" alt="KANEYAMA"/>
+          </div>
+          <div class="logo-sub">
+            <img src="images/v6/61b10ee6-3bff-4f29-bb8b-fb3297ba71fb.svg" alt=""/>
+          </div>
+        </div>
+        <p class="footer__info-text">金山株式会社</p>
+        <p class="footer__info-text">岡山県岡山市南区藤田234-8</p>
+        <p class="footer__info-text">TEL. 086-259-0632</p>
+        <p class="footer__info-text">FAX. 086-250-8626</p>
+      </div>
+      <div class="footer__map">
+        <iframe
+          src="https://www.google.com/maps?q=%E5%B2%A1%E5%B1%B1%E7%9C%8C%E5%B2%A1%E5%B1%B1%E5%B8%82%E5%8D%97%E5%8C%BA%E8%97%A4%E7%94%B0234-8&output=embed"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+          title="金山株式会社 所在地マップ"></iframe>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <a class="footer__privacy" href="#">プライバシーポリシー</a>
+      <p class="footer__copy">Copyright © All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var drawer  = document.getElementById('spDrawer');
+  var btnOpen = document.getElementById('menuOpen');
+  var btnClose= document.getElementById('menuClose');
+
+  function openDrawer(){
+    drawer.classList.add('is-open');
+    btnOpen.setAttribute('aria-expanded','true');
+    document.body.style.overflow='hidden';
+  }
+  function closeDrawer(){
+    drawer.classList.remove('is-open');
+    btnOpen.setAttribute('aria-expanded','false');
+    document.body.style.overflow='';
+  }
+
+  btnOpen.addEventListener('click', openDrawer);
+  btnClose.addEventListener('click', closeDrawer);
+
+  drawer.querySelectorAll('.sp-drawer__nav a, .sp-drawer__ctas a').forEach(function(a){
+    a.addEventListener('click', closeDrawer);
+  });
+
+  drawer.addEventListener('click', function(e){
+    if(e.target === drawer) closeDrawer();
+  });
+})();
+</script>
+
+</body>
+</html>
