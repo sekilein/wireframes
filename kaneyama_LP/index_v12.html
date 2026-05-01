@@ -360,6 +360,7 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
     url('images/v6/5a448df0-74c7-4d38-a421-58a1e195af1c.jpg') center/cover no-repeat,
     var(--cream);
   padding-bottom:0; /* スタッフ分は wrap で調整 */
+  overflow:hidden; /* 引用符 ::after が右端外側に出て横スクロール発生するのを防ぐ */
 }
 .onayami .wrap{padding-top:90px;padding-bottom:90px;}
 
@@ -378,12 +379,29 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
   display:flex;flex-direction:column;align-items:center;gap:30px;
   padding-top:clamp(24px, 3vw, 48px);
 }
-.onayami__quote{
-  position:absolute;top:0;left:50%;transform:translateX(-50%);
-  width:min(646px, 100%);aspect-ratio:646/69;height:auto;
-  object-fit:contain;pointer-events:none;z-index:0;
+/* 引用符は専用 SVG (e1=open, e2=close) を背景画像として配置、見出し文字サイズに合わせて大きく
+   見出しテキストに被らないよう head-main の左右外側に配置 */
+.onayami__quote{display:none;}
+.onayami__head-main::before,
+.onayami__head-main::after{
+  content:'';position:absolute;
+  width:clamp(34px, 3.5vw, 50px);
+  aspect-ratio:1;
+  background-repeat:no-repeat;
+  background-position:center;
+  background-size:contain;
+  pointer-events:none;
 }
-.onayami__head-main > :not(.onayami__quote){position:relative;z-index:1;}
+.onayami__head-main::before{
+  top:1.6em;
+  right:calc(100% + 8px); /* head-main の左外側に配置 */
+  background-image:url('images/v12/quote_open.svg');
+}
+.onayami__head-main::after{
+  bottom:-.5em;
+  left:calc(100% + 8px); /* head-main の右外側に配置 */
+  background-image:url('images/v12/quote_close.svg');
+}
 .onayami__heading{
   font-family:'M PLUS 1p',sans-serif;font-weight:700;
   font-size:var(--fs-h2);color:#222;text-align:center;
@@ -450,10 +468,11 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
   aspect-ratio:159/233;height:auto;
 }
 .onayami__staff--r{
-  /* Figma: right側 (1440-1136-136=168), w=136, h=256 / 下付け */
+  /* Figma: right側 (1440-1136-136=168), w=136, h=256 / 下付け
+     左の身長と頭位置を揃えるため width を縮小 (23% 減で height = staff--l と揃う) */
   right:clamp(20px, 11.67vw, 168px);
   bottom:0;
-  width:clamp(86px, 9.44vw, 136px);
+  width:clamp(70px, 7.7vw, 111px);
   aspect-ratio:136/256;height:auto;
 }
 
@@ -618,14 +637,20 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
   font-size:var(--fs-card-title);color:var(--orange);line-height:1.5;letter-spacing:.48px;
 }
 .case-card__divider{
+  /* 参考線程度の薄い破線 */
   height:1px;
-  background:repeating-linear-gradient(to right,#ddd 0,#ddd 4px,transparent 4px,transparent 8px);
+  background:repeating-linear-gradient(to right,rgba(0,0,0,.12) 0,rgba(0,0,0,.12) 3px,transparent 3px,transparent 7px);
 }
 .case-card__rows{display:flex;flex-direction:column;gap:10px;}
 .case-card__row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
 .case-card__lbl{
-  background:#fff;border:1px solid var(--orange);
+  /* 白背景・枠線なし・幅統一・軽いドロップシャドウ */
+  background:#fff;
   padding:2px 10px;flex-shrink:0;
+  width:clamp(76px, 7vw, 100px);
+  text-align:center;
+  border-radius:4px;
+  box-shadow:0 1px 3px rgba(0,0,0,.15);
   font-family:'M PLUS 1p',sans-serif;font-weight:400;
   font-size:clamp(14px, 1.25vw, 18px);color:var(--orange);line-height:1.8;white-space:nowrap;
 }
@@ -652,55 +677,57 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
 
 .flow-step{display:flex;gap:clamp(20px, 3.33vw, 48px);align-items:center;}
 
-/* ビジュアル部（円＋アイコン＋STEP番号）: %比で縮小 */
+/* ビジュアル部（円＋アイコン＋STEP番号）: 正方形でサークル中心揃え */
 .flow-step__vis{
-  width:min(300px, 30%);flex-shrink:0;
-  display:flex;flex-direction:column;align-items:center;gap:10px;
+  width:min(220px, 24%);flex-shrink:0;
+  display:flex;flex-direction:column;align-items:center;gap:0;
 }
 .flow-step__circle-wrap{
-  width:100%;aspect-ratio:300/200;position:relative;
+  width:100%;aspect-ratio:1;position:relative;
 }
-/* circle: wrap(300×200)内で left:50 size:200×200 → % 化して幅縮小に追従 */
+/* circle: wrap 全体を埋める */
 .flow-step__circle{
-  /* Figma: size-[200px] ml-[50px] mt-[0] → 50/300=16.667%, 200/300=66.667%, 200/200=100% */
-  position:absolute;left:16.667%;top:0;
-  width:66.667%;height:100%;
+  position:absolute;inset:0;
+  width:100%;height:100%;
   object-fit:contain;
 }
-/* アイコン: wrap(300×200) を 100% とする % 指定で circle と一緒に縮む
+/* アイコン: wrap (= circle 200×200) を 100% とする % 指定
    ─────────────────────────────────────────────────
-   STEP01 phone  : 89,53,122,95   → 29.667%/26.5%/40.667%/47.5%
-   STEP02 search : 96,46,107,107  → 32%/23%/35.667%/53.5%
-   STEP03 pen    : 100,51,100.35,99 → 33.333%/25.5%/33.45%/49.5%
-   STEP04 worker : 110,41,80.73,107.56 → 36.667%/20.5%/26.91%/53.78%
-   STEP05 handsh : 86,62,128.72,75.88 → 28.667%/31%/42.907%/37.94%
+   STEP01 phone  : 39,53,122,95     → 19.5%/26.5%/61%/47.5%
+   STEP02 search : 46,46,107,107    → 23%/23%/53.5%/53.5%
+   STEP03 pen    : 50,51,100.35,99  → 25%/25.5%/50.175%/49.5%
+   STEP04 worker : 60,41,80.73,107.56 → 30%/20.5%/40.365%/53.78%
+   STEP05 handsh : 36,62,128.72,75.88 → 18%/31%/64.36%/37.94%
 */
 .flow-step__icon{
   position:absolute;object-fit:contain;
 }
 /* STEP01 */
 .flow__list > .flow-step:nth-child(1) .flow-step__icon{
-  left:29.667%;top:26.5%;width:40.667%;height:47.5%;
+  left:19.5%;top:26.5%;width:61%;height:47.5%;
 }
 /* STEP02 */
 .flow__list > .flow-step:nth-child(3) .flow-step__icon{
-  left:32%;top:23%;width:35.667%;height:53.5%;
+  left:23%;top:23%;width:53.5%;height:53.5%;
 }
 /* STEP03 */
 .flow__list > .flow-step:nth-child(5) .flow-step__icon{
-  left:33.333%;top:25.5%;width:33.45%;height:49.5%;
+  left:25%;top:25.5%;width:50.175%;height:49.5%;
 }
 /* STEP04 */
 .flow__list > .flow-step:nth-child(7) .flow-step__icon{
-  left:36.667%;top:20.5%;width:26.91%;height:53.78%;
+  left:30%;top:20.5%;width:40.365%;height:53.78%;
 }
 /* STEP05 (横長) */
 .flow-step--last .flow-step__icon{
-  left:28.667%;top:31%;width:42.907%;height:37.94%;
+  left:18%;top:31%;width:64.36%;height:37.94%;
 }
 .flow-step__label{
   font-family:'Outfit',sans-serif;font-weight:900;
   font-size:clamp(24px, 2.5vw, 36px);color:var(--teal);letter-spacing:2.88px;line-height:1;
+  /* サークル下部に重ねる */
+  position:relative;z-index:2;
+  margin-top:-1.4em;
 }
 .flow-step--last .flow-step__label{color:var(--orange);}
 
@@ -715,11 +742,9 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
 }
 
 .flow__arrow{
-  display:flex;justify-content:flex-start;
-  /* circle中央（wrap幅×.5+50）ぶんだけ左寄せで矢印を配置 */
-  padding-left:clamp(110px, 10.07vw, 145px);
+  display:flex;justify-content:center;
 }
-.flow__arrow img{width:30px;height:24px;}
+.flow__arrow img{width:30px;height:24px;transform:rotate(180deg);}
 
 /* ────────────────────────────────────────
    FAQ
@@ -1010,6 +1035,11 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
   /* wrap のpaddingをモバイル用に縮小 */
   .wrap{padding:60px 20px;}
 
+  /* セクション見出しを SP では大きめに */
+  .sec-title__en{font-size:56px;}
+  .sec-title__ja{font-size:18px;}
+  .sec-title{gap:10px;margin-bottom:30px;}
+
   /* header SP: Figma px:16px py:14px、ロゴ小、CTA非表示、ハンバーガー表示 */
   .header{padding:14px 16px;}
   .header__logo{width:40px;height:25px;} /* Figma SP: 39.397×24.33px */
@@ -1026,14 +1056,14 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
     width:100%;height:100%;
     object-fit:cover;opacity:.2;
   }
-  /* SP: 中央揃え、オレンジバー(height:288px)上部に人物の下端 / 頭〜鎖骨まで表示
-     cover + top で上部のみ切り出し、文字に被らない高さに抑える */
+  /* SP: 中央揃え、オレンジバー(height:288px)上部に人物の下端 / 頭〜胸上まで表示
+     cover + top で上部のみ切り出し、height を増やして胸上まで見せる */
   .fv__bg-staff{
     left: 50%; right: auto; top: auto;
     bottom: 288px;
     transform: translateX(calc(-100% + 20px));
     width: clamp(160px, 42vw, 280px);
-    height: clamp(90px, 24vw, 160px);
+    height: clamp(130px, 35vw, 220px);
     object-fit: cover; object-position: left top;
     z-index: 0;
   }
@@ -1042,7 +1072,7 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
     bottom: 288px;
     transform: translateX(-20px);
     width: clamp(160px, 42vw, 280px);
-    height: clamp(90px, 24vw, 160px);
+    height: clamp(130px, 35vw, 220px);
     object-fit: cover; object-position: left top;
     z-index: 1;
   }
@@ -1081,21 +1111,19 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
   .fv__headline{font-size:31px;}
   .fv__sub{font-size:14px;line-height:1.4;white-space:normal;}
 
-  /* SP オレンジバー: Figma bottom:0 height:288px */
-  /* bar top = 700-288 = 412px / CTA text top:428 → 16px from bar / Btns top:452 → 40px from bar */
+  /* SP オレンジバー: Figma bottom:0 height:288px、内部は flex で上下中央揃え */
   .fv__bar{
     top:auto;bottom:0;height:288px;
-    display:block;padding:0;/* flex解除、内部を個別absolute配置 */
+    padding:16px;gap:16px;
+    /* PC の flex-direction:column;align-items:center;justify-content:center を継承 */
   }
   .fv__bar-text{
-    position:absolute;
-    top:16px;left:50%;transform:translateX(-50%);
+    position:static;
     font-size:16px;white-space:nowrap;
   }
   .fv__ctas{
-    position:absolute;
-    top:40px;left:50%;transform:translateX(-50%);
-    width:calc(100% - 32px);max-width:343px; /* 中央寄せ・最大343px */
+    position:static;transform:none;
+    width:calc(100% - 32px);max-width:343px;
     flex-direction:column;gap:8px;align-items:stretch;
   }
   .fv-btn{width:100%;} /* 親(.fv__ctas)に追従 */
@@ -1105,28 +1133,42 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
   /* onayami (装飾は .wrap に absolute、SP では小さめに四隅) */
   .onayami .wrap{padding-bottom:60px;padding-top:80px;}
   .onayami__heading{font-size:24px;}
-  /* SP で quote は上に近づける */
-  .onayami__head-main{padding-top:28px;}
-  .onayami__quote{width:92%;top:-4px;}
-  /* 装飾は SP でも .wrap 四隅に absolute（カード四隅に重なる） */
+  /* SP: 引用符は 40px、見出しの左右外側に配置
+     head-row に左右 padding を追加して引用符が見切れず収まる余白を確保 */
+  .onayami__head-row{padding:0 56px;}
+  .onayami__head-main{padding-top:0;}
+  .onayami__head-main::before,
+  .onayami__head-main::after{width:40px;}
+  .onayami__head-main::before{top:-12px;right:calc(100% + 4px);left:auto;}
+  .onayami__head-main::after{bottom:-12px;left:calc(100% + 4px);right:auto;}
+  /* SP: 困りイラスト＝左・カード1～2付近、悩むイラスト＝右・カード3～4付近 */
   .onayami__deco--stressed{
-    left:8px;top:24px;
-    width:50px;aspect-ratio:93/171;height:auto;
+    left:8px;top:30%;bottom:auto;
+    width:58px;aspect-ratio:93/171;height:auto;
   }
   .onayami__deco--thinking{
-    right:8px;top:12px;
-    width:54px;aspect-ratio:117/272;height:auto;
+    right:8px;top:46%;bottom:auto;
+    width:68px;aspect-ratio:117/272;height:auto;
   }
+  /* SP: スタッフは中サイズで resolve テキストを左右から挟む構図 */
   .onayami__staff--l{
-    left:8px;bottom:0;
-    width:80px;aspect-ratio:159/233;height:auto;
+    left:0;bottom:0;
+    width:26vw;max-width:116px;
+    aspect-ratio:159/233;height:auto;
   }
   .onayami__staff--r{
-    right:8px;bottom:0;
-    width:70px;aspect-ratio:136/256;height:auto;
+    right:0;bottom:0;
+    width:20vw;max-width:91px; /* staff--l × 0.779 で頭位置揃え */
+    aspect-ratio:136/256;height:auto;
   }
-  .onayami__resolve{gap:16px;}
-  .onayami__resolve-row{margin-top:30px;}
+  /* resolve: テキストを左右スタッフの間に配置（テキストはスタッフの前面） */
+  .onayami__resolve-row{
+    margin-top:40px;
+    padding:0 17vw;
+    position:relative;z-index:2;
+  }
+  .onayami__resolve{gap:8px;}
+  .onayami__resolve-text{font-size:clamp(18px, 5.6vw, 26px);}
   /* worry cards: 縦積み */
   .onayami__row{flex-direction:column;gap:12px;}
   .onayami__card{width:100%;font-size:16px;}
@@ -1134,6 +1176,21 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
 
   /* feature */
   .feature-card__row{flex-direction:column;}
+  /* SP は数字を本文先頭に float:right で配置し、純粋な回り込みで本文を流す
+     （PC の absolute bottom-right は SP では非表示にして pseudo で代替） */
+  .feature-card__num{display:none;}
+  .feature-card__text::before{
+    float:right;
+    margin:0 0 4px 12px;
+    font-family:'Outfit',sans-serif;font-weight:700;
+    font-size:clamp(56px, 16vw, 80px);line-height:1;letter-spacing:2px;
+    color:var(--teal);
+    transform:skewX(-7.11deg) scaleY(.99);
+  }
+  .feature__cards > .feature-card:nth-child(1) .feature-card__text::before{content:"01";}
+  .feature__cards > .feature-card:nth-child(2) .feature-card__text::before{content:"02";}
+  .feature__cards > .feature-card:nth-child(3) .feature-card__text::before{content:"03";}
+  .feature__cards > .feature-card:nth-child(4) .feature-card__text::before{content:"04";}
   .feature-card__img-wrap{width:100%;aspect-ratio:16/9;}
   .feature-card__num{font-size:72px;}
 
@@ -1151,9 +1208,10 @@ body{font-family:'M PLUS 1p',sans-serif;color:#222;background:#fff;}
   .case-card{width:100%;}
 
   /* flow */
-  .flow-step{flex-direction:column;gap:16px;align-items:flex-start;}
-  .flow-step__vis{width:100%;}
-  .flow__arrow{padding-left:100px;}
+  .flow-step{flex-direction:column;gap:32px;align-items:center;}
+  .flow-step__vis{width:160px;}
+  .flow-step__text{text-align:center;}
+  .flow__arrow{padding-left:0;}
 
   /* faq */
   .faq-item__q{padding:14px 16px;}
