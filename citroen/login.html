@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>PRIVATE PREVIEW — CITROËN C5 AIRCROSS × d design travel</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:#111;color:#fff;
+    font-family:"Hiragino Kaku Gothic ProN","Hiragino Kaku Gothic StdN","Helvetica Neue",sans-serif;
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;line-height:1.6;
+  }
+  .card{
+    width:100%;max-width:420px;
+    background:#1a1a1a;border:1px solid #2a2a2a;
+    padding:48px 36px;text-align:center;
+  }
+  .eyebrow{
+    font-size:10px;letter-spacing:4px;color:#888;
+    margin-bottom:16px;font-weight:700;
+  }
+  h1{
+    font-size:18px;font-weight:700;letter-spacing:1px;
+    margin-bottom:8px;line-height:1.5;
+  }
+  .sub{font-size:11px;color:#888;letter-spacing:1px;margin-bottom:32px}
+  label{display:block;font-size:10px;letter-spacing:2px;color:#aaa;margin-bottom:8px;text-align:left}
+  input[type="password"]{
+    width:100%;background:#0c0c0c;border:1px solid #333;color:#fff;
+    padding:14px 16px;font-size:14px;letter-spacing:2px;
+    outline:none;transition:border-color .2s;
+  }
+  input[type="password"]:focus{border-color:#888}
+  button{
+    width:100%;margin-top:20px;padding:14px;
+    background:#fff;color:#111;border:none;cursor:pointer;
+    font-size:12px;font-weight:700;letter-spacing:3px;
+    transition:opacity .2s;
+  }
+  button:hover{opacity:.85}
+  .err{
+    color:#e60012;font-size:11px;letter-spacing:.5px;
+    margin-top:14px;min-height:1.4em;
+  }
+  .note{
+    margin-top:28px;padding-top:20px;border-top:1px solid #2a2a2a;
+    font-size:10px;color:#666;letter-spacing:.5px;line-height:1.7;
+  }
+</style>
+</head>
+<body>
+  <form class="card" id="loginForm" autocomplete="off">
+    <div class="eyebrow">PRIVATE PREVIEW</div>
+    <h1>CITROËN C5 AIRCROSS<br>× d design travel</h1>
+    <div class="sub">ワイヤーフレーム確認用</div>
+    <label for="pw">PASSWORD</label>
+    <input type="password" id="pw" autofocus>
+    <button type="submit">ENTER →</button>
+    <div class="err" id="err"></div>
+    <div class="note">関係者以外への共有はご遠慮ください。</div>
+  </form>
+<script>
+  (function(){
+    var EXPECTED='toeicm';
+    var f=document.getElementById('loginForm');
+    var pw=document.getElementById('pw');
+    var err=document.getElementById('err');
+    function getNext(){
+      var m=location.search.match(/[?&]next=([^&]+)/);
+      if(m){ try { return decodeURIComponent(m[1]); } catch(e){} }
+      return 'wireframe_d-travel_v2_c.html';
+    }
+    f.addEventListener('submit', function(e){
+      e.preventDefault();
+      if(pw.value===EXPECTED){
+        try { sessionStorage.setItem('citroen_auth','1'); } catch(e){}
+        location.replace(getNext());
+      } else {
+        err.textContent='パスワードが違います';
+        pw.value=''; pw.focus();
+      }
+    });
+  })();
+</script>
+</body>
+</html>
