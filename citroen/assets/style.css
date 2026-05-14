@@ -454,13 +454,6 @@
     align-items: start;
     margin: 0 0 96px;
     position: relative;
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s ease, transform 0.6s ease;
-  }
-  .spot.visible {
-    opacity: 1;
-    transform: translateY(0);
   }
   .spot-media { position: relative; }
   .spot-photo {

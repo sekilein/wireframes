@@ -4,16 +4,7 @@ const obs = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.fade-in, .cat-pullquote').forEach(el => obs.observe(el));
 
-// タイムラインのスポットを順次表示
-const spotObs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      spotObs.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -10% 0px' });
-document.querySelectorAll('.timeline .spot').forEach(el => spotObs.observe(el));
+// タイムラインのスポット表示アニメは無効化（スクロール挙動を優先）
 
 // Hero bubble: cycle 12 texts (shoot in/out from bottom-left corner, hold 5s)
 (function(){
@@ -65,36 +56,8 @@ document.querySelectorAll('.timeline .spot').forEach(el => spotObs.observe(el));
   }
 })();
 
-// タイムライン縦軸線：スクロールに応じて伸びる（RAFスロットル + 要素キャッシュ）
-const _timelineEntries = Array.from(document.querySelectorAll('.timeline')).map(timeline => ({
-  timeline,
-  panel: timeline.closest('.day-panel'),
-  progress: timeline.querySelector('.timeline-progress'),
-}));
-let _tlScheduled = false;
-function updateTimelineProgress() {
-  if (_tlScheduled) return;
-  _tlScheduled = true;
-  requestAnimationFrame(() => {
-    _tlScheduled = false;
-    const viewportH = window.innerHeight;
-    const trigger = viewportH * 0.5;
-    const lineOffsetTop = 58;
-    const lineOffsetBottom = 80;
-    for (const { timeline, panel, progress } of _timelineEntries) {
-      if (!progress) continue;
-      if (panel && !panel.classList.contains('active')) continue;
-      const rect = timeline.getBoundingClientRect();
-      const distance = trigger - rect.top - lineOffsetTop;
-      const maxHeight = Math.max(0, rect.height - lineOffsetTop - lineOffsetBottom);
-      const height = Math.max(0, Math.min(distance, maxHeight));
-      progress.style.height = height + 'px';
-    }
-  });
-}
-window.addEventListener('scroll', updateTimelineProgress, { passive: true });
-window.addEventListener('resize', updateTimelineProgress, { passive: true });
-updateTimelineProgress();
+// タイムライン進捗バーの動的更新は一旦無効化（スクロール挙動を優先）
+function updateTimelineProgress() { /* no-op */ }
 
 // コースタブ切替
 document.querySelectorAll('.course-tab').forEach(tab => {
