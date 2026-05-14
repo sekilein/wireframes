@@ -127,6 +127,14 @@ document.querySelectorAll('.course-tab').forEach(tab => {
   });
 });
 
+// カルーセル & ヒーローバブル：ビューポート外ではアニメーションを停止（スクロール負荷軽減）
+const _offScreenPause = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    e.target.style.animationPlayState = e.isIntersecting ? 'running' : 'paused';
+  });
+}, { threshold: 0 });
+document.querySelectorAll('.carousel-row, .hero-wheel').forEach(el => _offScreenPause.observe(el));
+
 // マップ iframe: クリックで操作可能化、ビューポート外に出たら解除（スクロール捕捉防止）
 document.querySelectorAll('.day-map').forEach(map => {
   map.addEventListener('click', () => map.classList.add('interactive'));
