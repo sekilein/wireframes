@@ -1209,20 +1209,16 @@
   .day-map iframe { display: block; width: 100%; border: 0; }
   .day-mymap { height: 520px; }
   .day-map-note {
-    position: absolute;
-    right: 8px;
-    bottom: 8px;
+    max-width: 1200px;
+    margin: 8px auto 0;
     font-size: 10px;
     color: #444;
-    background: rgba(255,255,255,0.85);
-    padding: 4px 8px;
     line-height: 1.5;
-    pointer-events: none;
-    max-width: calc(100% - 16px);
+    text-align: right;
   }
   @media (max-width: 768px) {
     .day-mymap { height: 380px; }
-    .day-map-note { font-size: 9px; padding: 3px 6px; right: 6px; bottom: 6px; }
+    .day-map-note { font-size: 9px; margin-top: 6px; }
   }
 
   @media (max-width: 768px) {
@@ -1637,64 +1633,70 @@
 
   <div class="course-panel active" data-panel="tokyo">
     <div class="day-panel active" data-day="day1">
-      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1fg1iZKxopaNSRn2XuYxlvgrJk49CLcA&ll=36.11,140.17&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe><span class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</span></div>
+      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1fg1iZKxopaNSRn2XuYxlvgrJk49CLcA&ll=36.11,140.17&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe></div>
       <div class="course-stats">
         <span data-label="DAY 1" class="stat-day">東京 → 茨城</span>
         <span data-label="DISTANCE">約250 km</span>
         <span data-label="SPOTS">5 スポット</span>
         <span data-label="ROUTE">東京 → 茨城</span>
       </div>
+      <p class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</p>
     </div>
     <div class="day-panel" data-day="day2">
-      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1fg1iZKxopaNSRn2XuYxlvgrJk49CLcA&ll=36.11,140.17&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe><span class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</span></div>
+      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1fg1iZKxopaNSRn2XuYxlvgrJk49CLcA&ll=36.11,140.17&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe></div>
       <div class="course-stats">
         <span data-label="DAY 2" class="stat-day">北茨城 → 笠間・益子 → 東京</span>
         <span data-label="DISTANCE">約180 km</span>
         <span data-label="SPOTS">7 スポット</span>
         <span data-label="ROUTE">北茨城 → 笠間・益子 → 東京</span>
       </div>
+      <p class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</p>
     </div>
   </div>
 
   <div class="course-panel" data-panel="nagoya">
     <div class="day-panel active" data-day="day1">
-      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1W8xFlSCYgnmVGyleJA65hRKvHDQmBmE&ll=34.79,136.65&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe><span class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</span></div>
+      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1W8xFlSCYgnmVGyleJA65hRKvHDQmBmE&ll=34.79,136.65&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe></div>
       <div class="course-stats">
         <span data-label="DAY 1" class="stat-day">名古屋 → 多気</span>
         <span data-label="DISTANCE">—</span>
         <span data-label="SPOTS">7 スポット</span>
         <span data-label="ROUTE">名古屋 → 桑名 → 四日市 → 菰野 → 亀山 → 松阪 → 多気</span>
       </div>
+      <p class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</p>
     </div>
     <div class="day-panel" data-day="day2">
-      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1W8xFlSCYgnmVGyleJA65hRKvHDQmBmE&ll=34.79,136.65&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe><span class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</span></div>
+      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1W8xFlSCYgnmVGyleJA65hRKvHDQmBmE&ll=34.79,136.65&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe></div>
       <div class="course-stats">
         <span data-label="DAY 2" class="stat-day">多気 → 伊勢 → 名古屋</span>
         <span data-label="DISTANCE">—</span>
         <span data-label="SPOTS">5 スポット</span>
         <span data-label="ROUTE">多気 → 伊勢 → 名古屋</span>
       </div>
+      <p class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</p>
     </div>
   </div>
 
   <div class="course-panel" data-panel="osaka">
     <div class="day-panel active" data-day="day1">
-      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1QxJzUzYcyycP3DnXCtifGpy7TN7POZ8&ll=35.10,135.89&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe><span class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</span></div>
+      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1QxJzUzYcyycP3DnXCtifGpy7TN7POZ8&ll=35.10,135.89&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe></div>
       <div class="course-stats">
         <span data-label="DAY 1" class="stat-day">大阪 → 高島</span>
         <span data-label="DISTANCE">—</span>
         <span data-label="SPOTS">6 スポット</span>
         <span data-label="ROUTE">大阪 → 京都 → 守山 → 高島</span>
       </div>
+      <p class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</p>
     </div>
     <div class="day-panel" data-day="day2">
-      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1QxJzUzYcyycP3DnXCtifGpy7TN7POZ8&ll=35.10,135.89&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe><span class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</span></div>
+      <div class="day-map"><iframe class="day-mymap" src="https://www.google.com/maps/d/embed?mid=1QxJzUzYcyycP3DnXCtifGpy7TN7POZ8&ll=35.10,135.89&z=8&ehbc=2E312F" loading="lazy" allowfullscreen></iframe></div>
       <div class="course-stats">
         <span data-label="DAY 2" class="stat-day">高島 → 京都</span>
         <span data-label="DISTANCE">—</span>
         <span data-label="SPOTS">8 スポット</span>
         <span data-label="ROUTE">高島 → 長浜 → 彦根 → 近江八幡 → 草津 → 京都</span>
       </div>
+      <p class="day-map-note">※2026年5月現在の情報になります。最新情報はサイト等でお確かめください。</p>
     </div>
   </div>
 </div>
