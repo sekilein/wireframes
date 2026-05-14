@@ -1348,8 +1348,9 @@
      ========================================================================== */
   @media (max-width: 768px) {
 
-    /* d design travel 表紙サムネイル */
+    /* d design travel 表紙サムネイル：4列×3行 */
     .dtravel-block-visual {
+      grid-template-columns: repeat(4, minmax(0, 146px));
       gap: 8px 6px !important;
     }
     .dtravel-cover { font-size: 8px; }
