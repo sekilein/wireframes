@@ -71,7 +71,7 @@
     function getNext(){
       var m=location.search.match(/[?&]next=([^&]+)/);
       if(m){ try { return decodeURIComponent(m[1]); } catch(e){} }
-      return 'wireframe_d-travel_v2_c.html';
+      return 'index.html';
     }
     f.addEventListener('submit', function(e){
       e.preventDefault();
