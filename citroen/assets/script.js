@@ -65,26 +65,35 @@ document.querySelectorAll('.timeline .spot').forEach(el => spotObs.observe(el));
   }
 })();
 
-// タイムライン縦軸線：スクロールに応じて伸びる
+// タイムライン縦軸線：スクロールに応じて伸びる（RAFスロットル + 要素キャッシュ）
+const _timelineEntries = Array.from(document.querySelectorAll('.timeline')).map(timeline => ({
+  timeline,
+  panel: timeline.closest('.day-panel'),
+  progress: timeline.querySelector('.timeline-progress'),
+}));
+let _tlScheduled = false;
 function updateTimelineProgress() {
-  document.querySelectorAll('.timeline').forEach(timeline => {
-    const panel = timeline.closest('.day-panel');
-    if (panel && !panel.classList.contains('active')) return;
-    const progress = timeline.querySelector('.timeline-progress');
-    if (!progress) return;
-    const rect = timeline.getBoundingClientRect();
+  if (_tlScheduled) return;
+  _tlScheduled = true;
+  requestAnimationFrame(() => {
+    _tlScheduled = false;
     const viewportH = window.innerHeight;
-    const trigger = viewportH * 0.5; // 画面中央を基準
+    const trigger = viewportH * 0.5;
     const lineOffsetTop = 58;
     const lineOffsetBottom = 80;
-    const distance = trigger - rect.top - lineOffsetTop;
-    const maxHeight = Math.max(0, rect.height - lineOffsetTop - lineOffsetBottom);
-    const height = Math.max(0, Math.min(distance, maxHeight));
-    progress.style.height = height + 'px';
+    for (const { timeline, panel, progress } of _timelineEntries) {
+      if (!progress) continue;
+      if (panel && !panel.classList.contains('active')) continue;
+      const rect = timeline.getBoundingClientRect();
+      const distance = trigger - rect.top - lineOffsetTop;
+      const maxHeight = Math.max(0, rect.height - lineOffsetTop - lineOffsetBottom);
+      const height = Math.max(0, Math.min(distance, maxHeight));
+      progress.style.height = height + 'px';
+    }
   });
 }
 window.addEventListener('scroll', updateTimelineProgress, { passive: true });
-window.addEventListener('resize', updateTimelineProgress);
+window.addEventListener('resize', updateTimelineProgress, { passive: true });
 updateTimelineProgress();
 
 // コースタブ切替

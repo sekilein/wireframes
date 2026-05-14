@@ -307,6 +307,8 @@
     gap: 0;
     animation-timing-function: linear;
     animation-iteration-count: infinite;
+    will-change: transform;
+    transform: translateZ(0);
   }
   .carousel-row.row-1 {
     animation: scrollRight 33s linear infinite;
