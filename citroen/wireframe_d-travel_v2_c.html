@@ -184,10 +184,28 @@
   .hero-bubble-text.hidden {
     clip-path: inset(0 100% 0 0);
   }
+  .hero-bubble-dot { display: none; }
   @media (max-width: 768px) {
     .hero-car-block { display: flex; flex-direction: column-reverse; gap: 0; margin-top: 40px; align-items: center; transform: none; }
     .hero-car-wrap { margin-top: -32px; max-width: 280px; }
+    .hero-bubble-group {
+      position: relative;
+      display: inline-block;
+      width: 220px;
+      padding: 0 0 4px 4px;
+      text-align: left;
+    }
     .hero-bubble { position: static; margin: 0; font-size: 12px; padding: 8px 14px; }
+    .hero-bubble::before { display: none; }
+    .hero-bubble-dot {
+      display: block;
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #A13019;
+      z-index: 2;
+    }
     .hero-subtitle { font-size: 14px; letter-spacing: 0.5px; margin-bottom: 16px; }
     .hero-subtitle .d-travel-logo { width: 160px; }
     .hero-lead-note { font-size: 11px; margin-top: 12px; }
@@ -265,8 +283,9 @@
   }
 
   .carousel-row {
+    --carousel-gap: 12px;
     display: flex;
-    gap: 12px;
+    gap: var(--carousel-gap);
     animation-timing-function: linear;
     animation-iteration-count: infinite;
   }
@@ -279,10 +298,10 @@
 
   @keyframes scrollLeft {
     0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
+    100% { transform: translateX(calc(-50% - var(--carousel-gap)/2)); }
   }
   @keyframes scrollRight {
-    0% { transform: translateX(-50%); }
+    0% { transform: translateX(calc(-50% - var(--carousel-gap)/2)); }
     100% { transform: translateX(0); }
   }
 
@@ -297,39 +316,24 @@
     box-shadow: 2px 2px 2px rgba(0,0,0,0.12);
   }
   .spot-card-header {
-    padding: 12px 14px;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-  }
-  .spot-card-num {
-    flex-shrink: 0;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--accent-deep);
-    color: #fff;
-    font-size: 11px;
-    font-weight: 700;
+    padding: 0px 14px 0px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    letter-spacing: .5px;
-    margin-top: 1px;
+    gap: 8px;
+    min-height: 50px;
   }
-  .spot-card-info {
+  .spot-card-icon {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    object-fit: contain;
+    display: block;
+  }
+  .spot-card h4 {
     flex: 1;
-    min-width: 0;
-  }
-  .spot-card-info h4 {
     font-size: 13px; font-weight: 700;
-    margin-bottom: 3px; line-height: 1.35;
-  }
-  .spot-card-info .genre {
-    font-size: 10px; color: #999; line-height: 1.5;
-  }
-  .spot-card-desc {
-    font-size: 10px; color: var(--accent); line-height: 1.5;
-    margin-top: 2px;
+    line-height: 1.3;
+    margin: 0;
+    min-width: 0;
   }
   .spot-card-photo {
     width: 100%;
@@ -511,6 +515,13 @@
     line-height: 1.6; margin-top: 4px;
   }
   .spot-editor span { font-weight: 700; }
+  .spot-sub { margin-bottom: 24px; }
+  .spot-sub:last-child { margin-bottom: 0; }
+  .spot-sub-title {
+    font-size: 16px; font-weight: 700;
+    margin: 0 0 8px;
+    color: var(--ink);
+  }
   .spot-info {
     border-top: 1px solid rgba(0,0,0,0.12);
     padding-top: 16px;
@@ -590,7 +601,10 @@
       font-size: 10px;
     }
     .spot-photo { aspect-ratio: 4 / 3; }
+    .spot-title-row { display: flex; align-items: center; gap: 10px; }
+    .spot-title-row .spot-cat { margin-bottom: 0; }
     .spot-title-row h4 { font-size: 20px; }
+    .spot-body h4::after { display: none; }
     /* C5エアクロス〜：ピル左端を縦軸ラインに合わせる */
     .spot-drive {
       margin: 0 0 40px 12px;
@@ -1140,7 +1154,7 @@
       padding: 14px 0;
     }
     .course-stats span {
-      font-size: 13px; gap: 8px; padding: 0 12px;
+      font-size: 13px; gap: 8px; padding: 0 12px 0 8px;
       white-space: normal;
       word-break: break-word;
       flex: 0 1 auto;
@@ -1193,6 +1207,10 @@
     .dtravel-block-wrap { padding: 56px 20px; }
     .car-banner { padding: 80px 24px; }
   }
+  @media (max-width: 768px) {
+    .car-banner { padding: 0; margin: 0; }
+    .car-banner-img { width: 100vw; max-width: 100%; }
+  }
 
   /* SP（≤768px） */
   @media (max-width: 768px) {
@@ -1225,16 +1243,15 @@
     .hero-lead-main { font-size: 12px !important; line-height: 1.85 !important; }
 
     /* カルーセル：SP用にカード縮小・速度UP */
-    .carousel-wrap { padding: 8px 0; gap: 8px; }
-    .carousel-row { gap: 8px; }
-    .spot-card { width: 180px; }
-    .spot-card-header { padding: 10px 12px; min-height: 56px; gap: 8px; }
-    .spot-card-num { width: 20px; height: 20px; font-size: 10px; }
-    .spot-card-info h4 { font-size: 12px; }
-    .spot-card-info .genre { font-size: 9px; }
-    .spot-card-photo { height: 110px; }
-    .carousel-row.row-1 { animation-duration: 25s; }
-    .carousel-row.row-2 { animation-duration: 22s; }
+    .carousel-wrap { padding: 0 0 8px; gap: 8px; }
+    .carousel-row { --carousel-gap: 8px; gap: 8px; }
+    .spot-card { width: 160px; }
+    .spot-card-header { padding: 6px 10px 0; min-height: 40px; gap: 6px; }
+    .spot-card-icon { width: 18px; height: 18px; }
+    .spot-card h4 { font-size: 12px; }
+    .spot-card-photo { height: 96px; }
+    .carousel-row.row-1 { animation-duration: 12.5s; }
+    .carousel-row.row-2 { animation-duration: 11s; }
     .carousel-wrap::before, .carousel-wrap::after { width: 36px; }
 
     /* dtravel-block 内 */
@@ -1298,11 +1315,12 @@
      ========================================================================== */
   @media (max-width: 768px) {
 
-    /* d design travel 表紙サムネイル：4カラム */
+    /* d design travel 表紙サムネイル：4カラム、末尾2枚は中央寄せ */
     .dtravel-block-visual {
       grid-template-columns: repeat(4, 1fr) !important;
       gap: 6px !important;
     }
+    .dtravel-block-visual > :nth-last-child(2) { grid-column: 2; }
     .dtravel-cover { font-size: 8px; }
     .dtravel-cover::before { font-size: 7px; }
 
@@ -1359,7 +1377,10 @@
         <img class="hero-wheel hero-wheel-front" src="assets/imgHeroWheel.png" alt="" aria-hidden="true">
         <img class="hero-wheel hero-wheel-rear" src="assets/imgHeroWheel.png" alt="" aria-hidden="true">
       </div>
-      <div class="hero-bubble" aria-live="polite"><span class="hero-bubble-text">何食べよう？</span></div>
+      <div class="hero-bubble-group">
+        <div class="hero-bubble-dot" aria-hidden="true"></div>
+        <div class="hero-bubble" aria-live="polite"><span class="hero-bubble-text">何食べよう？</span></div>
+      </div>
     </div>
   </div>
 
@@ -1368,84 +1389,84 @@
   <img class="carousel-flag" src="assets/imgHeroFlag.png" alt="">
   <div class="carousel-wrap">
     <div class="carousel-row row-1">
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>HAGISO</h4><div class="genre">宿泊 / カフェ — 谷中</div><div class="spot-card-desc">築約70年木造アパートの複合施設</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>木内酒造</h4><div class="genre">酒蔵 — 那珂</div><div class="spot-card-desc">常陸野ネストビールの蔵元</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>サザコーヒー本店</h4><div class="genre">カフェ — ひたちなか</div><div class="spot-card-desc">スペシャルティコーヒーの名店</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>水戸芸術館</h4><div class="genre">建築 — 水戸</div><div class="spot-card-desc">磯崎新設計のシンボルタワー</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>里海邸 金波楼本邸</h4><div class="genre">宿泊 — 大洗</div><div class="spot-card-desc">明治創業の旅館を再生した宿</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>宮きしめん 神宮店</h4><div class="genre">食事 — 名古屋</div><div class="spot-card-desc">熱田神宮境内の名物きしめん店</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>七里の渡跡・眺憩楼</h4><div class="genre">観光 — 桑名</div><div class="spot-card-desc">東海道の海路と村正ミュージアム</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>BANKO archive design museum</h4><div class="genre">観光 — 四日市</div><div class="spot-card-desc">萬古焼の私設ミュージアム</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>アクアイグニス</h4><div class="genre">観光 — 菰野</div><div class="spot-card-desc">温泉と食の複合リゾート</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>而今禾 SEKI 中町店</h4><div class="genre">工芸 — 亀山</div><div class="spot-card-desc">東海道関宿のライフスタイルブランド</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>RESTAURANT CULTIVATE</h4><div class="genre">食事 — 松阪</div><div class="spot-card-desc">三重食材を活かす中国料理</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_6.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">7</div><div class="spot-card-info"><h4>旅籠ヴィソン</h4><div class="genre">宿泊 — 多気</div><div class="spot-card-desc">VISON内の宿場町ホテル</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_7.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>御舟かもめ</h4><div class="genre">観光 — 大阪</div><div class="spot-card-desc">大阪の川を巡る観光船</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>万博記念公園</h4><div class="genre">観光 — 吹田</div><div class="spot-card-desc">太陽の塔と大阪万博跡地</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>D&amp;DEPARTMENT KYOTO</h4><div class="genre">買い物 — 京都</div><div class="spot-card-desc">佛光寺境内のロングライフショップ</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>佐川美術館</h4><div class="genre">観光 — 守山</div><div class="spot-card-desc">水庭に囲まれたデザイン美術館</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>大與</h4><div class="genre">工芸 — 高島</div><div class="spot-card-desc">1914年創業の和ろうそく工房</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>湖里庵</h4><div class="genre">宿泊 — 高島</div><div class="spot-card-desc">鮒寿し魚治の1日1組宿</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_6.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>HAGISO</h4><div class="genre">宿泊 / カフェ — 谷中</div><div class="spot-card-desc">築約70年木造アパートの複合施設</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>木内酒造</h4><div class="genre">酒蔵 — 那珂</div><div class="spot-card-desc">常陸野ネストビールの蔵元</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>サザコーヒー本店</h4><div class="genre">カフェ — ひたちなか</div><div class="spot-card-desc">スペシャルティコーヒーの名店</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>水戸芸術館</h4><div class="genre">建築 — 水戸</div><div class="spot-card-desc">磯崎新設計のシンボルタワー</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>里海邸 金波楼本邸</h4><div class="genre">宿泊 — 大洗</div><div class="spot-card-desc">明治創業の旅館を再生した宿</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day1_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>宮きしめん 神宮店</h4><div class="genre">食事 — 名古屋</div><div class="spot-card-desc">熱田神宮境内の名物きしめん店</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>七里の渡跡・眺憩楼</h4><div class="genre">観光 — 桑名</div><div class="spot-card-desc">東海道の海路と村正ミュージアム</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>BANKO archive design museum</h4><div class="genre">観光 — 四日市</div><div class="spot-card-desc">萬古焼の私設ミュージアム</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>アクアイグニス</h4><div class="genre">観光 — 菰野</div><div class="spot-card-desc">温泉と食の複合リゾート</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>而今禾 SEKI 中町店</h4><div class="genre">工芸 — 亀山</div><div class="spot-card-desc">東海道関宿のライフスタイルブランド</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>RESTAURANT CULTIVATE</h4><div class="genre">食事 — 松阪</div><div class="spot-card-desc">三重食材を活かす中国料理</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_6.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">7</div><div class="spot-card-info"><h4>旅籠ヴィソン</h4><div class="genre">宿泊 — 多気</div><div class="spot-card-desc">VISON内の宿場町ホテル</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day1_7.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>御舟かもめ</h4><div class="genre">観光 — 大阪</div><div class="spot-card-desc">大阪の川を巡る観光船</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>万博記念公園</h4><div class="genre">観光 — 吹田</div><div class="spot-card-desc">太陽の塔と大阪万博跡地</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>D&amp;DEPARTMENT KYOTO</h4><div class="genre">買い物 — 京都</div><div class="spot-card-desc">佛光寺境内のロングライフショップ</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>佐川美術館</h4><div class="genre">観光 — 守山</div><div class="spot-card-desc">水庭に囲まれたデザイン美術館</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>大與</h4><div class="genre">工芸 — 高島</div><div class="spot-card-desc">1914年創業の和ろうそく工房</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>湖里庵</h4><div class="genre">宿泊 — 高島</div><div class="spot-card-desc">鮒寿し魚治の1日1組宿</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day1_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>HAGISO</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>木内酒造</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayCafes.png" alt=""><h4>サザコーヒー本店</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>水戸芸術館</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>里海邸 金波楼本邸</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>宮きしめん 神宮店</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>七里の渡跡・眺憩楼</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>BANKO archive design museum</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>アクアイグニス</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>而今禾 SEKI 中町店</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>RESTAURANT CULTIVATE</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>旅籠ヴィソン</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_7.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>御舟かもめ</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>万博記念公園</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>D&amp;DEPARTMENT KYOTO</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>佐川美術館</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>大與</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>湖里庵</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>HAGISO</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>木内酒造</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayCafes.png" alt=""><h4>サザコーヒー本店</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>水戸芸術館</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>里海邸 金波楼本邸</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day1_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>宮きしめん 神宮店</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>七里の渡跡・眺憩楼</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>BANKO archive design museum</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>アクアイグニス</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>而今禾 SEKI 中町店</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>RESTAURANT CULTIVATE</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>旅籠ヴィソン</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day1_7.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>御舟かもめ</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>万博記念公園</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>D&amp;DEPARTMENT KYOTO</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>佐川美術館</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>大與</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayHotels.png" alt=""><h4>湖里庵</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day1_6.png" alt=""></div></div>
     </div>
     <div class="carousel-row row-2">
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>春風萬里荘</h4><div class="genre">観光 — 笠間</div><div class="spot-card-desc">北大路魯山人の旧邸を移築</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>回廊ギャラリー門</h4><div class="genre">買い物 — 笠間</div><div class="spot-card-desc">笠間の陶芸家作品を扱う</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>茶屋雨巻</h4><div class="genre">食事 — 益子</div><div class="spot-card-desc">山の麓の石窯ナポリピッツァ</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>starnet</h4><div class="genre">買い物・カフェ — 益子</div><div class="spot-card-desc">ライフスタイルショップの先駆け</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>濱田庄司記念益子参考館</h4><div class="genre">観光 — 益子</div><div class="spot-card-desc">民藝運動の陶芸家の仕事と暮らし</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>民芸店ましこ</h4><div class="genre">買い物 — 益子</div><div class="spot-card-desc">益子焼と各地の民藝品</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_6.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">7</div><div class="spot-card-info"><h4>pejite</h4><div class="genre">買い物 — 益子</div><div class="spot-card-desc">古家具と器のセレクトショップ</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_7.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>D&amp;DEPARTMENT MIE by VISON</h4><div class="genre">買い物 — 多気</div><div class="spot-card-desc">三重の工芸・日用品</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>豊受大神宮（外宮）</h4><div class="genre">観光 — 伊勢</div><div class="spot-card-desc">伊勢神宮の外宮、食を司る神</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>伊勢角屋麦酒</h4><div class="genre">カフェ — 伊勢</div><div class="spot-card-desc">1575年創業の老舗とクラフトビール</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>赤福本店</h4><div class="genre">カフェ — 伊勢</div><div class="spot-card-desc">伊勢を代表する和菓子の本店</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>皇大神宮（内宮）</h4><div class="genre">観光 — 伊勢</div><div class="spot-card-desc">天照大御神を祀るお宮</div></div></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>冨田酒造</h4><div class="genre">酒蔵 — 長浜</div><div class="spot-card-desc">500年続く酒蔵「七本鎗」</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>湖のスコーレ</h4><div class="genre">買い物 — 長浜</div><div class="spot-card-desc">ショップ・カフェの商業文化施設</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>&amp; Anne</h4><div class="genre">買い物 — 彦根</div><div class="spot-card-desc">洋菓子・書店・ギャラリーの複合空間</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>三松</h4><div class="genre">食事 — 近江八幡</div><div class="spot-card-desc">明治20年創業の町の台所</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>ラ コリーナ近江八幡</h4><div class="genre">買い物・カフェ — 近江八幡</div><div class="spot-card-desc">藤森照信設計の草屋根</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>琵琶湖博物館</h4><div class="genre">観光 — 草津</div><div class="spot-card-desc">琵琶湖の自然と暮らしの博物館</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_6.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">7</div><div class="spot-card-info"><h4>サウナの梅湯</h4><div class="genre">観光 — 京都</div><div class="spot-card-desc">湊三次郎さんが手がけた銭湯</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_7.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">8</div><div class="spot-card-info"><h4>モリタ屋 木屋町店</h4><div class="genre">食事 — 京都</div><div class="spot-card-desc">明治2年創業のすき焼き店</div></div></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>春風萬里荘</h4><div class="genre">観光 — 笠間</div><div class="spot-card-desc">北大路魯山人の旧邸を移築</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>回廊ギャラリー門</h4><div class="genre">買い物 — 笠間</div><div class="spot-card-desc">笠間の陶芸家作品を扱う</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>茶屋雨巻</h4><div class="genre">食事 — 益子</div><div class="spot-card-desc">山の麓の石窯ナポリピッツァ</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>starnet</h4><div class="genre">買い物・カフェ — 益子</div><div class="spot-card-desc">ライフスタイルショップの先駆け</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>濱田庄司記念益子参考館</h4><div class="genre">観光 — 益子</div><div class="spot-card-desc">民藝運動の陶芸家の仕事と暮らし</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>民芸店ましこ</h4><div class="genre">買い物 — 益子</div><div class="spot-card-desc">益子焼と各地の民藝品</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_6.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">7</div><div class="spot-card-info"><h4>pejite</h4><div class="genre">買い物 — 益子</div><div class="spot-card-desc">古家具と器のセレクトショップ</div></div></div><div class="spot-card-photo"><img src="assets/tokyo_day2_7.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>D&amp;DEPARTMENT MIE by VISON</h4><div class="genre">買い物 — 多気</div><div class="spot-card-desc">三重の工芸・日用品</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>豊受大神宮（外宮）</h4><div class="genre">観光 — 伊勢</div><div class="spot-card-desc">伊勢神宮の外宮、食を司る神</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>伊勢角屋麦酒</h4><div class="genre">カフェ — 伊勢</div><div class="spot-card-desc">1575年創業の老舗とクラフトビール</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>赤福本店</h4><div class="genre">カフェ — 伊勢</div><div class="spot-card-desc">伊勢を代表する和菓子の本店</div></div></div><div class="spot-card-photo"><img src="assets/nagoya_day2_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>皇大神宮（内宮）</h4><div class="genre">観光 — 伊勢</div><div class="spot-card-desc">天照大御神を祀るお宮</div></div></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">1</div><div class="spot-card-info"><h4>冨田酒造</h4><div class="genre">酒蔵 — 長浜</div><div class="spot-card-desc">500年続く酒蔵「七本鎗」</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_1.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">2</div><div class="spot-card-info"><h4>湖のスコーレ</h4><div class="genre">買い物 — 長浜</div><div class="spot-card-desc">ショップ・カフェの商業文化施設</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_2.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">3</div><div class="spot-card-info"><h4>&amp; Anne</h4><div class="genre">買い物 — 彦根</div><div class="spot-card-desc">洋菓子・書店・ギャラリーの複合空間</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_3.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">4</div><div class="spot-card-info"><h4>三松</h4><div class="genre">食事 — 近江八幡</div><div class="spot-card-desc">明治20年創業の町の台所</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_4.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">5</div><div class="spot-card-info"><h4>ラ コリーナ近江八幡</h4><div class="genre">買い物・カフェ — 近江八幡</div><div class="spot-card-desc">藤森照信設計の草屋根</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_5.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">6</div><div class="spot-card-info"><h4>琵琶湖博物館</h4><div class="genre">観光 — 草津</div><div class="spot-card-desc">琵琶湖の自然と暮らしの博物館</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_6.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">7</div><div class="spot-card-info"><h4>サウナの梅湯</h4><div class="genre">観光 — 京都</div><div class="spot-card-desc">湊三次郎さんが手がけた銭湯</div></div></div><div class="spot-card-photo"><img src="assets/oosaka_day2_7.png" alt=""></div></div>
-      <div class="spot-card"><div class="spot-card-header"><div class="spot-card-num">8</div><div class="spot-card-info"><h4>モリタ屋 木屋町店</h4><div class="genre">食事 — 京都</div><div class="spot-card-desc">明治2年創業のすき焼き店</div></div></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>春風萬里荘</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>回廊ギャラリー門</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>茶屋雨巻</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>starnet</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>濱田庄司記念益子参考館</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>民芸店ましこ</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>pejite</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_7.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>D&amp;DEPARTMENT MIE by VISON</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>豊受大神宮（外宮）</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayCafes.png" alt=""><h4>伊勢角屋麦酒</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayCafes.png" alt=""><h4>赤福本店</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>皇大神宮（内宮）</h4></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>冨田酒造</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>湖のスコーレ</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>&amp; Anne</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>三松</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>ラ コリーナ近江八幡</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>琵琶湖博物館</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>サウナの梅湯</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_7.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>モリタ屋 木屋町店</h4></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>春風萬里荘</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>回廊ギャラリー門</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>茶屋雨巻</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>starnet</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>濱田庄司記念益子参考館</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>民芸店ましこ</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>pejite</h4></div><div class="spot-card-photo"><img src="assets/tokyo_day2_7.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>D&amp;DEPARTMENT MIE by VISON</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>豊受大神宮（外宮）</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayCafes.png" alt=""><h4>伊勢角屋麦酒</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayCafes.png" alt=""><h4>赤福本店</h4></div><div class="spot-card-photo"><img src="assets/nagoya_day2_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>皇大神宮（内宮）</h4></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>冨田酒造</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_1.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>湖のスコーレ</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_2.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>&amp; Anne</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_3.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>三松</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_4.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayShops.png" alt=""><h4>ラ コリーナ近江八幡</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_5.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>琵琶湖博物館</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_6.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGraySights.png" alt=""><h4>サウナの梅湯</h4></div><div class="spot-card-photo"><img src="assets/oosaka_day2_7.png" alt=""></div></div>
+      <div class="spot-card"><div class="spot-card-header"><img class="spot-card-icon" src="assets/imgIconGrayRestaurants.png" alt=""><h4>モリタ屋 木屋町店</h4></div><div class="spot-card-photo"><img src="assets/imgSpotTokyoD1_11.png" alt=""></div></div>
     </div>
   </div>
   </div><!-- /carousel-section -->
@@ -1508,7 +1529,6 @@
       <div class="dtravel-block-editor">
         <div class="editor-photo"><img src="assets/imgEditorPhoto2.png" alt="NEW C5 AIRCROSS と阿蘇の風景"></div>
         <div class="editor-info">
-          <span class="editor-eyebrow">column</span>
           <p>安心感のあるシートに身を預けると、不思議と運転までおおらかになっていき、「ああ、車って気持ちいいな」と、改めて感じさせてくれます。高速走行はとても静かで、景色がヒュンヒュンと流れていく様子は、冗談抜きにまさに雲の上。</p>
         </div>
       </div>
@@ -1966,14 +1986,27 @@
             </div>
             <h4>七里の渡跡・眺憩楼 –村正ミュージアム–</h4>
           </div>
-          <p><strong>七里の渡跡</strong>　東海道で唯一の海路であった「七里の渡し」の桑名側の船着場跡。宮（熱田）と桑名を結んだ約七里（約28km）の航路は、江戸時代の旅人たちが行き交った重要な交通の要所です。ここにある大鳥居は、これより伊勢路に入ることから「伊勢国一の鳥居」と称されています。</p>
-          <p><strong>眺憩楼 –村正ミュージアム–</strong>　桑名宗社（春日神社）の境内にある、名刀「村正」を中心に展示するミュージアム。靴を脱いで上がり、円座に座って心を落ち着かせ、そのまま座った姿勢で見学するというユニークな展示室。建物は、伊勢神宮の式年遷宮で交換されたヒノキを建材にしていて、ここも「伊勢路」ならではの場所です。</p>
-          <div class="spot-info">
-          <div class="spot-info-row"><dt>ADDRESS</dt><dd>七里の渡跡：三重県桑名市東船馬町付近／眺憩楼：三重県桑名市本町46（桑名宗社内）</dd></div>
-          <div class="spot-info-row"><dt>TEL</dt><dd>0594-41-2222（桑名市観光協会）／0594-22-1913（眺憩楼）</dd></div>
-          <div class="spot-info-row"><dt>HOURS</dt><dd>七里の渡跡：見学自由／眺憩楼：10:00～15:00　不定休</dd></div>
-          <div class="spot-info-row"><dt>PARKING</dt><dd>—</dd></div>
-          <div class="spot-info-row"><dt>URL</dt><dd><a href="https://www.kuwanasousha.org/muramasa-museum/" target="_blank" rel="noopener">kuwanasousha.org/muramasa-museum</a></dd></div>
+
+          <div class="spot-sub">
+            <h5 class="spot-sub-title">七里の渡跡</h5>
+            <p>東海道で唯一の海路であった「七里の渡し」の桑名側の船着場跡。宮（熱田）と桑名を結んだ約七里（約28km）の航路は、江戸時代の旅人たちが行き交った重要な交通の要所です。ここにある大鳥居は、これより伊勢路に入ることから「伊勢国一の鳥居」と称されています。</p>
+            <div class="spot-info">
+              <div class="spot-info-row"><dt>ADDRESS</dt><dd>三重県桑名市東船馬町付近</dd></div>
+              <div class="spot-info-row"><dt>TEL</dt><dd>0594-41-2222（桑名市観光協会）</dd></div>
+              <div class="spot-info-row"><dt>HOURS</dt><dd>見学自由</dd></div>
+              <div class="spot-info-row"><dt>URL</dt><dd><a href="https://www.city.kuwana.lg.jp/kanko/miru/kankospot/kanko009.html" target="_blank" rel="noopener">city.kuwana.lg.jp/kanko/miru/kankospot/kanko009.html</a></dd></div>
+            </div>
+          </div>
+
+          <div class="spot-sub">
+            <h5 class="spot-sub-title">眺憩楼 –村正ミュージアム–</h5>
+            <p>桑名宗社（春日神社）の境内にある、名刀「村正」を中心に展示するミュージアム。靴を脱いで上がり、円座に座って心を落ち着かせ、そのまま座った姿勢で見学するというユニークな展示室。建物は、伊勢神宮の式年遷宮で交換されたヒノキを建材にしていて、ここも「伊勢路」ならではの場所です。</p>
+            <div class="spot-info">
+              <div class="spot-info-row"><dt>ADDRESS</dt><dd>三重県桑名市本町46（桑名宗社内）</dd></div>
+              <div class="spot-info-row"><dt>TEL</dt><dd>0594-22-1913</dd></div>
+              <div class="spot-info-row"><dt>HOURS</dt><dd>10:00～15:00　不定休</dd></div>
+              <div class="spot-info-row"><dt>URL</dt><dd><a href="https://www.kuwanasousha.org/muramasa-museum/" target="_blank" rel="noopener">kuwanasousha.org/muramasa-museum</a></dd></div>
+            </div>
           </div>
         </div>
       </div>
@@ -2677,6 +2710,16 @@ document.querySelectorAll('.course-tab').forEach(tab => {
       p.classList.toggle('active', p.dataset.day === 'day1');
     });
     requestAnimationFrame(updateTimelineProgress);
+    // クリック後、該当コースの mymap までスクロール
+    const activePanel = document.querySelector(`.course-panel.active[data-panel="${target}"]`);
+    const map = activePanel && activePanel.querySelector('.day-mymap');
+    if (map) {
+      requestAnimationFrame(() => {
+        const rect = map.getBoundingClientRect();
+        const offset = window.pageYOffset + rect.top - 24;
+        window.scrollTo({ top: offset, behavior: 'smooth' });
+      });
+    }
   });
 });
 
