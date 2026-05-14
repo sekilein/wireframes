@@ -861,16 +861,15 @@
     top: -4px;
   }
   .dtravel-block-visual {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 146px));
     justify-content: center;
     gap: 20px 10px;
     margin: 0 auto 32px;
     max-width: 100%;
   }
   .dtravel-cover {
-    width: 146px;
-    max-width: 100%;
+    width: 100%;
     aspect-ratio: 146 / 192;
     background: var(--paper);
     overflow: hidden;
