@@ -871,7 +871,7 @@
   }
   .dtravel-block-visual {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 20px 10px;
     margin-bottom: 32px;
     max-width: 1100px;
@@ -890,7 +890,7 @@
   }
   .dtravel-block-visual-note { display: none; }
   @media (max-width: 980px) {
-    .dtravel-block-visual { grid-template-columns: repeat(5, 1fr); gap: 14px 10px; }
+    .dtravel-block-visual { grid-template-columns: repeat(6, 1fr); gap: 14px 10px; }
   }
   @media (max-width: 580px) {
     .dtravel-block-visual { grid-template-columns: repeat(3, 1fr); gap: 10px 8px; }
@@ -1356,12 +1356,11 @@
      ========================================================================== */
   @media (max-width: 768px) {
 
-    /* d design travel 表紙サムネイル：4カラム、末尾2枚は中央寄せ */
+    /* d design travel 表紙サムネイル：4カラム */
     .dtravel-block-visual {
       grid-template-columns: repeat(4, 1fr) !important;
       gap: 6px !important;
     }
-    .dtravel-block-visual > :nth-last-child(2) { grid-column: 2; }
     .dtravel-cover { font-size: 8px; }
     .dtravel-cover::before { font-size: 7px; }
 
@@ -1528,7 +1527,6 @@
     <div class="dtravel-block-visual">
       <div class="dtravel-cover"><img src="assets/imgTokyo1.png" alt="d design travel 東京"></div>
       <div class="dtravel-cover"><img src="assets/imgKanagawa1.png" alt="d design travel 神奈川"></div>
-      <div class="dtravel-cover"><img src="assets/imgMie1.png" alt="d design travel 三重"></div>
       <div class="dtravel-cover"><img src="assets/imgFukushima1.png" alt="d design travel 福島"></div>
       <div class="dtravel-cover"><img src="assets/imgGunma1.png" alt="d design travel 群馬"></div>
       <div class="dtravel-cover"><img src="assets/imgKagoshima1.png" alt="d design travel 鹿児島"></div>
@@ -1538,7 +1536,6 @@
       <div class="dtravel-cover"><img src="assets/imgOkayama1.png" alt="d design travel 岡山"></div>
       <div class="dtravel-cover"><img src="assets/imgEhime1.png" alt="d design travel 愛媛"></div>
       <div class="dtravel-cover"><img src="assets/imgIbaraki1.png" alt="d design travel 茨城"></div>
-      <div class="dtravel-cover"><img src="assets/imgKagawa1.png" alt="d design travel 香川"></div>
       <div class="dtravel-cover"><img src="assets/imgToyama21.png" alt="d design travel 富山 vol.2"></div>
     </div>
 
