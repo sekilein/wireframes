@@ -717,9 +717,6 @@
   .floating-cta p { color: #fff; font-size: 12px; letter-spacing: 1px; }
   .floating-cta .cta-btn { padding: 10px 28px; font-size: 12px; background: #555; }
 
-  /* ===== スムーズスクロール ===== */
-  html { scroll-behavior: smooth; }
-
   /* ===== スクロールアニメーション ===== */
   .fade-in {
     opacity: 0;
