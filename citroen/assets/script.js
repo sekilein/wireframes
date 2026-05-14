@@ -118,6 +118,17 @@ document.querySelectorAll('.course-tab').forEach(tab => {
   });
 });
 
+// マップ iframe: クリックで操作可能化、ビューポート外に出たら解除（スクロール捕捉防止）
+document.querySelectorAll('.day-map').forEach(map => {
+  map.addEventListener('click', () => map.classList.add('interactive'));
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) map.classList.remove('interactive');
+    });
+  }, { threshold: 0.5 });
+  io.observe(map);
+});
+
 // DAYトグル切替
 document.querySelectorAll('.day-tab').forEach(tab => {
   tab.addEventListener('click', () => {
