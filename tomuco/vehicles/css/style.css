@@ -1,0 +1,545 @@
+/* ============================================
+   tomuco 車両販売ページ 追加スタイル
+   本体CSS（https://tomuco.co.jp/wp-content/themes/tomuko/style.css）
+   の差分のみを記述。色・タイポは本体に依存。
+   アクセント: 黄 #ffda55 / 青 #000097
+   ============================================ */
+
+:root {
+    --vh-color-yellow: #ffda55;
+    --vh-color-blue: #000097;
+    --vh-color-line: #e5e5e5;
+    --vh-color-line-strong: #1a1a1a;
+    --vh-color-gray-bg: #f5f5f5;
+    --vh-color-text-sub: #535353;
+}
+
+/* ============================================
+   サブページ上部・カテゴリー風見出し（tomuco の column-categories-section に準拠）
+   ============================================ */
+.vehicle-intro-section .column-categories-title { font-family: "Zen Old Mincho", serif; }
+
+/* heading（Vehicle Lineup / Contact）の padding-left: 0.45em に合わせて
+   下のブロック内テキストの左端を揃える */
+.vehicle-intro-section .column-categories-block > p,
+.vehicle-intro-section .column-categories-block > .vehicle-contact-intro {
+    padding-left: 0.45em;
+    margin: 0;
+    line-height: 2;
+    color: #535353;
+    font-size: 14px;
+}
+
+/* ============================================
+   車両カード（column-archive-item を踏襲しつつ、車両情報用に追加）
+   ============================================ */
+.vehicle-archive-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px 24px;
+}
+
+.vehicle-archive-item {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--vh-color-line);
+    transition: box-shadow .25s, transform .25s;
+    color: inherit;
+    text-decoration: none;
+}
+.vehicle-archive-item:hover {
+    box-shadow: 0 12px 32px rgba(0,0,0,.08);
+    transform: translateY(-3px);
+    opacity: 1;
+}
+
+.vehicle-archive-item-thumb {
+    position: relative;
+    aspect-ratio: 4 / 3;
+    background: #f0f0f0;
+    overflow: hidden;
+}
+.vehicle-archive-item-thumb img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+}
+.vehicle-archive-item-badges {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.v-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 2px;
+    letter-spacing: .05em;
+    line-height: 1.4;
+}
+.v-badge-shaken { background: var(--vh-color-yellow); color: #000; }
+.v-badge-recommend { background: var(--vh-color-blue); color: #fff; }
+.v-badge-new { background: #d50000; color: #fff; }
+.v-badge-sold { background: #555; color: #fff; }
+
+.vehicle-archive-item-body {
+    padding: 16px 18px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.vehicle-archive-item-no {
+    font-family: "Roboto", sans-serif;
+    font-size: 11px;
+    color: var(--vh-color-text-sub);
+    letter-spacing: .05em;
+    margin: 0 0 4px;
+}
+.vehicle-archive-item-title {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    margin: 0 0 4px;
+    min-height: 2.4em;
+}
+.vehicle-archive-item-model {
+    font-size: 12px;
+    color: var(--vh-color-text-sub);
+    margin: 0 0 12px;
+}
+.vehicle-archive-item-price-wrap {
+    padding-top: 10px;
+    border-top: 1px solid var(--vh-color-line);
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.vehicle-archive-item-price-label {
+    font-size: 11px;
+    color: var(--vh-color-text-sub);
+}
+.vehicle-archive-item-price {
+    font-family: "Roboto", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #000;
+    line-height: 1;
+}
+.vehicle-archive-item-price-unit { font-size: 12px; font-weight: 700; }
+.vehicle-archive-item-price-tax { font-size: 10px; color: var(--vh-color-text-sub); margin-left: auto; }
+
+.vehicle-archive-item-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--vh-color-line);
+    font-size: 12px;
+}
+.vehicle-archive-item-spec {
+    padding: 10px 4px;
+    border-bottom: 1px solid var(--vh-color-line);
+}
+.vehicle-archive-item-spec:nth-child(odd) { border-right: 1px solid var(--vh-color-line); padding-right: 8px; }
+.vehicle-archive-item-spec:nth-child(even) { padding-left: 8px; }
+.vehicle-archive-item-spec:nth-last-child(-n+2) { border-bottom: none; }
+.vehicle-archive-item-spec-label {
+    display: block;
+    color: var(--vh-color-text-sub);
+    font-size: 10px;
+    margin-bottom: 2px;
+}
+.vehicle-archive-item-spec-value {
+    font-weight: 600;
+    font-size: 13px;
+    color: #000;
+}
+
+.vehicle-archive-item-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+}
+.vehicle-archive-item-link-text { letter-spacing: .05em; }
+.vehicle-archive-item-link-arrow {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #000;
+    color: #fff;
+    transition: background .25s;
+}
+.vehicle-archive-item:hover .vehicle-archive-item-link-arrow { background: var(--vh-color-blue); }
+.vehicle-archive-item-link-arrow svg { width: 14px; height: 14px; }
+
+/* ============================================
+   詳細ページ
+   ============================================ */
+.vehicle-detail-section { padding: 0 0 48px; }
+
+.vehicle-detail-header {
+    border-bottom: 1px solid var(--vh-color-line);
+    padding-bottom: 24px;
+    margin-bottom: 32px;
+}
+.vehicle-detail-badges {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+}
+.vehicle-detail-no {
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    color: var(--vh-color-text-sub);
+    margin: 0 0 6px;
+}
+.vehicle-detail-title {
+    font-family: "Zen Old Mincho", serif;
+    font-size: 30px;
+    font-weight: 500;
+    margin: 0 0 8px;
+    line-height: 1.4;
+}
+.vehicle-detail-subtitle {
+    font-size: 13px;
+    color: var(--vh-color-text-sub);
+    margin: 0;
+}
+
+.vehicle-detail-main {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 40px;
+    margin-bottom: 56px;
+}
+
+.vehicle-detail-gallery .main-photo {
+    aspect-ratio: 4 / 3;
+    background: #f0f0f0;
+    overflow: hidden;
+}
+.vehicle-detail-gallery .main-photo img { width:100%; height:100%; object-fit: cover; }
+.vehicle-detail-gallery-thumbs {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+.vehicle-detail-gallery-thumb { aspect-ratio: 1/1; background: #eee; overflow: hidden; cursor: pointer; }
+.vehicle-detail-gallery-thumb img { width:100%; height:100%; object-fit: cover; }
+
+.vehicle-detail-price-box {
+    background: #000;
+    color: #fff;
+    padding: 24px;
+    margin-bottom: 24px;
+}
+.vehicle-detail-price-label {
+    font-size: 12px;
+    color: var(--vh-color-yellow);
+    letter-spacing: .12em;
+    margin: 0 0 6px;
+}
+.vehicle-detail-price-value {
+    font-family: "Roboto", sans-serif;
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1;
+}
+.vehicle-detail-price-unit { font-size: 18px; margin-left: 4px; }
+.vehicle-detail-price-sub { font-size: 12px; color: #ccc; margin: 8px 0 0; }
+
+.vehicle-detail-quick-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-top: 1px solid var(--vh-color-line-strong);
+    border-bottom: 1px solid var(--vh-color-line-strong);
+    margin-bottom: 20px;
+}
+.vehicle-detail-quick-spec {
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--vh-color-line);
+}
+.vehicle-detail-quick-spec:nth-child(odd) { border-right: 1px solid var(--vh-color-line); }
+.vehicle-detail-quick-spec:nth-last-child(-n+2) { border-bottom: none; }
+.vehicle-detail-quick-spec-label {
+    display: block;
+    font-size: 11px;
+    color: var(--vh-color-text-sub);
+    margin-bottom: 4px;
+}
+.vehicle-detail-quick-spec-value { font-weight: 700; font-size: 15px; }
+
+.vehicle-detail-cta-buttons {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+}
+.btn-contact {
+    background: var(--vh-color-yellow);
+    color: #000;
+    text-align: center;
+    padding: 18px;
+    font-size: 16px;
+    font-weight: 700;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+.btn-contact:hover { background: #ffeba1; opacity: 1; }
+.btn-contact-sub {
+    background: #fff;
+    color: #000;
+    border: 1px solid #000;
+    text-align: center;
+    padding: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* セクション見出し */
+.vehicle-block { margin-top: 56px; }
+.vehicle-block-title {
+    font-family: "Zen Old Mincho", serif;
+    font-size: 22px;
+    font-weight: 500;
+    border-bottom: 2px solid #000;
+    padding-bottom: 12px;
+    margin: 0 0 24px;
+    letter-spacing: .05em;
+}
+.vehicle-block-title .en {
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    color: var(--vh-color-text-sub);
+    margin-left: 12px;
+    letter-spacing: .15em;
+    font-weight: 400;
+}
+
+.vehicle-spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.vehicle-spec-table th, .vehicle-spec-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--vh-color-line);
+    text-align: left;
+    vertical-align: top;
+}
+.vehicle-spec-table th {
+    background: var(--vh-color-gray-bg);
+    width: 35%;
+    font-weight: 600;
+}
+.vehicle-spec-table td { color: var(--vh-color-text-sub); }
+
+.vehicle-spec-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 32px;
+}
+
+.vehicle-comment-box {
+    background: var(--vh-color-gray-bg);
+    padding: 24px 28px;
+    line-height: 2;
+    font-size: 14px;
+}
+
+/* 戻るリンク */
+.vehicle-back-link {
+    margin-top: 48px;
+    text-align: center;
+}
+.vehicle-back-link a {
+    font-size: 14px;
+    color: var(--vh-color-text-sub);
+    text-decoration: underline;
+}
+
+/* ============================================
+   お問い合わせフォーム
+   ============================================ */
+.vehicle-contact-intro {
+    margin: 0 0 32px;
+    color: var(--vh-color-text-sub);
+    line-height: 2;
+}
+.vehicle-contact-intro strong { color: #000; }
+
+.vehicle-contact-form { margin-top: 16px; }
+
+.vh-form-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 24px;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--vh-color-line);
+    align-items: flex-start;
+}
+.vh-form-label {
+    font-size: 14px;
+    font-weight: 600;
+    padding-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.vh-label-required {
+    display: inline-block;
+    background: #d50000;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 700;
+}
+.vh-label-optional {
+    display: inline-block;
+    background: #999;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 2px;
+}
+.vh-input, .vh-textarea, .vh-select {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-family: inherit;
+    border-radius: 2px;
+}
+.vh-input:focus, .vh-textarea:focus, .vh-select:focus {
+    outline: none;
+    border-color: var(--vh-color-blue);
+}
+.vh-textarea { min-height: 160px; resize: vertical; }
+.vh-radio-group, .vh-check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding-top: 8px;
+}
+.vh-radio-label, .vh-check-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.vh-privacy-box {
+    margin-top: 28px;
+    padding: 20px;
+    background: var(--vh-color-gray-bg);
+    font-size: 13px;
+    color: var(--vh-color-text-sub);
+    line-height: 1.9;
+    text-align: center;
+}
+.vh-privacy-box a { color: var(--vh-color-blue); text-decoration: underline; }
+.vh-privacy-check { margin-top: 12px; text-align: center; }
+
+.vh-form-submit {
+    margin-top: 32px;
+    text-align: center;
+}
+.btn-submit {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 20px 72px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: .1em;
+    cursor: pointer;
+    font-family: inherit;
+}
+.btn-submit:hover { background: var(--vh-color-blue); }
+
+/* お問い合わせ車両情報ボックス */
+.vh-target-vehicle {
+    margin: 0 0 32px;
+    padding: 20px;
+    border: 1px solid var(--vh-color-line);
+    background: var(--vh-color-gray-bg);
+    display: flex;
+    gap: 18px;
+    align-items: center;
+}
+.vh-target-vehicle-thumb {
+    width: 120px;
+    aspect-ratio: 4 / 3;
+    background: #ddd;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.vh-target-vehicle-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.vh-target-vehicle-no { font-size: 11px; color: var(--vh-color-text-sub); font-family: "Roboto", sans-serif; }
+.vh-target-vehicle-name { font-size: 16px; font-weight: 700; margin: 4px 0; }
+
+/* ============================================
+   フッターCTAブロック
+   ============================================ */
+.vehicle-bottom-cta {
+    margin-top: 64px;
+    padding: 48px 24px;
+    background: var(--vh-color-gray-bg);
+    text-align: center;
+}
+.vehicle-bottom-cta-title {
+    font-family: "Zen Old Mincho", serif;
+    font-size: 22px;
+    margin: 0 0 12px;
+    font-weight: 500;
+}
+.vehicle-bottom-cta-text { color: var(--vh-color-text-sub); margin: 0 0 24px; }
+.vehicle-bottom-cta-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: #000;
+    color: #fff;
+    padding: 16px 40px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: .05em;
+    text-decoration: none;
+}
+.vehicle-bottom-cta-link:hover { background: var(--vh-color-blue); opacity: 1; }
+
+/* ============================================
+   レスポンシブ
+   ============================================ */
+@media (max-width: 1100px) {
+    .vehicle-archive-list { grid-template-columns: repeat(2, 1fr); }
+    .vehicle-detail-main { grid-template-columns: 1fr; gap: 32px; }
+    .vehicle-spec-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    .vehicle-archive-list { grid-template-columns: 1fr; gap: 24px; }
+    .vehicle-detail-title { font-size: 22px; }
+    .vehicle-detail-price-value { font-size: 32px; }
+    .vh-form-row { grid-template-columns: 1fr; gap: 8px; padding: 14px 0; }
+    .vh-form-label { padding-top: 0; }
+    .vh-target-vehicle { flex-direction: column; text-align: center; }
+    .btn-submit { width: 100%; padding: 18px; }
+}
