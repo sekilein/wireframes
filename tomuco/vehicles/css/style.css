@@ -1,4 +1,15 @@
 /* ============================================
+   ナビゲーション切替を本体(1339px)→1330pxへ
+   1331px以上：グローバルナビ表示・ハンバーガー非表示
+   1330px以下：ハンバーガー（tomuco本体のデフォルト挙動）
+   ============================================ */
+@media screen and (min-width: 1331px) {
+    .global-nav-navigation-wrapper { display: block !important; }
+    .global-nav-hamburger-button-wrapper { display: none !important; }
+    .global-nav-container { padding: 0 24px; align-items: center; }
+}
+
+/* ============================================
    tomuco 車両販売ページ 追加スタイル
    本体CSS（https://tomuco.co.jp/wp-content/themes/tomuko/style.css）
    の差分のみを記述。色・タイポは本体に依存。
