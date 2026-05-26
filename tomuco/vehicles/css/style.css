@@ -53,14 +53,16 @@
 .vehicle-archive-item {
     display: flex;
     flex-direction: column;
-    background: #fff;
-    border: 1px solid var(--vh-color-line);
+    background: #f2f2f2;
+    border: none;
+    border-radius: 0;
+    padding: 16px;
     transition: box-shadow .25s, transform .25s;
     color: inherit;
     text-decoration: none;
 }
 .vehicle-archive-item:hover {
-    box-shadow: 0 12px 32px rgba(0,0,0,.08);
+    box-shadow: 0 12px 32px rgba(0,0,0,.10);
     transform: translateY(-3px);
     opacity: 1;
 }
@@ -68,7 +70,8 @@
 .vehicle-archive-item-thumb {
     position: relative;
     aspect-ratio: 4 / 3;
-    background: #f0f0f0;
+    background: #e2e2e2;
+    border-radius: 0;
     overflow: hidden;
 }
 .vehicle-archive-item-thumb img {
@@ -76,8 +79,8 @@
 }
 .vehicle-archive-item-badges {
     position: absolute;
-    top: 12px;
-    left: 12px;
+    top: 10px;
+    left: 10px;
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
@@ -87,7 +90,7 @@
     font-size: 11px;
     font-weight: 700;
     padding: 4px 10px;
-    border-radius: 2px;
+    border-radius: 0;
     letter-spacing: .05em;
     line-height: 1.4;
 }
@@ -97,100 +100,104 @@
 .v-badge-sold { background: #555; color: #fff; }
 
 .vehicle-archive-item-body {
-    padding: 16px 18px 18px;
+    padding: 18px 4px 4px;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
+/* 問い合わせ番号（白ピル） */
 .vehicle-archive-item-no {
-    font-family: "Roboto", sans-serif;
-    font-size: 11px;
-    color: var(--vh-color-text-sub);
-    letter-spacing: .05em;
-    margin: 0 0 4px;
-}
-.vehicle-archive-item-title {
-    font-size: 16px;
+    align-self: flex-start;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 0;
+    padding: 9px 16px;
+    font-size: 15px;
     font-weight: 700;
-    line-height: 1.5;
-    margin: 0 0 4px;
-    min-height: 2.4em;
+    color: #1a1a1a;
+    letter-spacing: .02em;
+    margin: 0 0 16px;
+}
+.vehicle-archive-item-no::before { content: "問い合わせ番号 ："; }
+
+.vehicle-archive-item-title {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.45;
+    color: #1a1a1a;
+    margin: 0 0 6px;
+    min-height: 2.9em;
 }
 .vehicle-archive-item-model {
-    font-size: 12px;
+    font-size: 14px;
     color: var(--vh-color-text-sub);
-    margin: 0 0 12px;
+    margin: 0 0 22px;
 }
+
+/* 価格ブロック（価格／お問い合わせください。） */
 .vehicle-archive-item-price-wrap {
-    padding-top: 10px;
-    border-top: 1px solid var(--vh-color-line);
     display: flex;
-    align-items: baseline;
+    flex-direction: column;
     gap: 6px;
-    margin-bottom: 12px;
+    margin-bottom: 20px;
 }
 .vehicle-archive-item-price-label {
-    font-size: 11px;
-    color: var(--vh-color-text-sub);
-}
-.vehicle-archive-item-price {
-    font-family: "Roboto", sans-serif;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: 700;
-    color: #000;
-    line-height: 1;
+    color: #1a1a1a;
+    line-height: 1.3;
 }
-.vehicle-archive-item-price-unit { font-size: 12px; font-weight: 700; }
-.vehicle-archive-item-price-tax { font-size: 10px; color: var(--vh-color-text-sub); margin-left: auto; }
+.vehicle-archive-item-price-ask {
+    font-size: 18px;
+    font-weight: 700;
+    color: #d50000;
+    line-height: 1.3;
+}
 
+/* スペック（縦並び・左に黒バー） */
 .vehicle-archive-item-specs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    border-top: 1px solid var(--vh-color-line);
-    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    font-size: 14px;
+    margin-bottom: 22px;
 }
 .vehicle-archive-item-spec {
-    padding: 10px 4px;
-    border-bottom: 1px solid var(--vh-color-line);
+    padding: 0 0 0 12px;
+    border-left: 3px solid #1a1a1a;
+    line-height: 1.4;
+    color: #1a1a1a;
 }
-.vehicle-archive-item-spec:nth-child(odd) { border-right: 1px solid var(--vh-color-line); padding-right: 8px; }
-.vehicle-archive-item-spec:nth-child(even) { padding-left: 8px; }
-.vehicle-archive-item-spec:nth-last-child(-n+2) { border-bottom: none; }
 .vehicle-archive-item-spec-label {
-    display: block;
-    color: var(--vh-color-text-sub);
-    font-size: 10px;
-    margin-bottom: 2px;
+    color: #1a1a1a;
+    font-size: 14px;
+    font-weight: 400;
 }
+.vehicle-archive-item-spec-label::after { content: " ："; }
 .vehicle-archive-item-spec-value {
-    font-weight: 600;
-    font-size: 13px;
-    color: #000;
+    font-weight: 400;
+    font-size: 14px;
+    color: #1a1a1a;
 }
 
+/* 車両詳細へ ボタン（全幅ネイビーピル） */
 .vehicle-archive-item-footer {
     margin-top: auto;
-    padding-top: 14px;
+    padding: 0;
+    height: 58px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    font-size: 13px;
-    font-weight: 600;
-}
-.vehicle-archive-item-link-text { letter-spacing: .05em; }
-.vehicle-archive-item-link-arrow {
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: #000;
+    background: var(--vh-color-blue);
     color: #fff;
+    border-radius: 0;
+    font-size: 17px;
+    font-weight: 700;
     transition: background .25s;
 }
-.vehicle-archive-item:hover .vehicle-archive-item-link-arrow { background: var(--vh-color-blue); }
-.vehicle-archive-item-link-arrow svg { width: 14px; height: 14px; }
+.vehicle-archive-item:hover .vehicle-archive-item-footer { background: #2222b8; }
+.vehicle-archive-item-link-text { letter-spacing: .08em; }
+.vehicle-archive-item-link-arrow { display: none; }
 
 /* ============================================
    詳細ページ
@@ -235,19 +242,136 @@
 }
 
 .vehicle-detail-gallery .main-photo {
+    position: relative;
+    display: block;
+    width: 100%;
     aspect-ratio: 4 / 3;
     background: #f0f0f0;
     overflow: hidden;
+    padding: 0;
+    border: none;
+    cursor: zoom-in;
 }
-.vehicle-detail-gallery .main-photo img { width:100%; height:100%; object-fit: cover; }
+.vehicle-detail-gallery .main-photo img { width:100%; height:100%; object-fit: cover; display: block; }
+.main-photo-caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    letter-spacing: .03em;
+}
+.main-photo-zoom {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.55);
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+}
 .vehicle-detail-gallery-thumbs {
     margin-top: 10px;
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 8px;
 }
-.vehicle-detail-gallery-thumb { aspect-ratio: 1/1; background: #eee; overflow: hidden; cursor: pointer; }
-.vehicle-detail-gallery-thumb img { width:100%; height:100%; object-fit: cover; }
+.vehicle-detail-gallery-thumb {
+    aspect-ratio: 1/1;
+    background: #eee;
+    overflow: hidden;
+    cursor: pointer;
+    padding: 0;
+    border: 2px solid transparent;
+    transition: border-color .2s, opacity .2s;
+}
+.vehicle-detail-gallery-thumb img { width:100%; height:100%; object-fit: cover; display: block; }
+.vehicle-detail-gallery-thumb:hover { opacity: .85; }
+.vehicle-detail-gallery-thumb.is-active { border-color: var(--vh-color-blue); }
+
+/* ライトボックス */
+.vh-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,.9);
+}
+.vh-lightbox.is-open { display: flex; }
+.vh-lightbox-figure {
+    margin: 0;
+    max-width: 90vw;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.vh-lightbox-figure img {
+    max-width: 90vw;
+    max-height: 80vh;
+    object-fit: contain;
+    display: block;
+}
+.vh-lightbox-figure figcaption {
+    color: #fff;
+    font-size: 14px;
+    margin-top: 12px;
+    text-align: center;
+}
+.vh-lightbox-close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    width: 44px;
+    height: 44px;
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 34px;
+    line-height: 1;
+    cursor: pointer;
+}
+.vh-lightbox-nav {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 54px;
+    height: 54px;
+    background: rgba(255,255,255,.12);
+    border: none;
+    color: #fff;
+    font-size: 36px;
+    line-height: 1;
+    cursor: pointer;
+    transition: background .2s;
+}
+.vh-lightbox-nav:hover { background: rgba(255,255,255,.28); }
+.vh-lightbox-prev { left: 16px; }
+.vh-lightbox-next { right: 16px; }
+.vh-lightbox-counter {
+    position: absolute;
+    bottom: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: .08em;
+}
+@media (max-width: 768px) {
+    .vh-lightbox-nav { width: 44px; height: 44px; font-size: 28px; }
+    .vh-lightbox-prev { left: 6px; }
+    .vh-lightbox-next { right: 6px; }
+}
 
 .vehicle-detail-price-box {
     background: #000;
@@ -537,9 +661,9 @@
 .vehicle-bottom-cta-link:hover { background: var(--vh-color-blue); opacity: 1; }
 
 /* ============================================
-   金額関連の非表示
+   金額関連の非表示（詳細ページの価格ボックスのみ。
+   カード側は「価格／お問い合わせください。」を表示するため対象外）
    ============================================ */
-.vehicle-archive-item-price-wrap,
 .vehicle-detail-price-box {
     display: none !important;
 }
