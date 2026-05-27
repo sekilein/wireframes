@@ -1002,3 +1002,82 @@
     .tel-section-btn { min-width: 0; width: 100%; padding: 18px 24px; font-size: 16px; }
     .tel-number { font-size: 32px; }
 }
+
+/* ============================================
+   査定提案ヘッダーバナー（紹介文と車両リストの間）
+   ============================================ */
+.vehicle-assess-banner {
+    margin: 48px 0 64px;
+}
+.vehicle-assess-banner__card {
+    position: relative;
+    width: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+    aspect-ratio: 16 / 5;
+    min-height: 220px;
+    box-shadow: 0 6px 24px rgba(0,0,0,.14);
+}
+.vehicle-assess-banner__card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
+}
+.vehicle-assess-banner__overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 clamp(24px, 6vw, 80px);
+    background: linear-gradient(100deg, rgba(0,12,55,.82) 0%, rgba(0,12,55,.62) 38%, rgba(0,12,55,.12) 62%, rgba(0,12,55,0) 80%);
+}
+.vehicle-assess-banner__inner {
+    color: #fff;
+}
+.vehicle-assess-banner__label {
+    display: inline-block;
+    font-family: "Zen Old Mincho", serif;
+    font-weight: 600;
+    font-size: clamp(15px, 2vw, 24px);
+    letter-spacing: .04em;
+    margin: 0 0 clamp(10px, 1.4vw, 18px);
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--vh-color-yellow);
+}
+.vehicle-assess-banner__copy {
+    font-family: "Zen Old Mincho", serif;
+    font-weight: 900;
+    font-size: clamp(26px, 4.4vw, 56px);
+    line-height: 1.32;
+    margin: 0;
+    text-shadow: 0 2px 10px rgba(0,0,0,.35);
+}
+.vehicle-assess-banner__copy .num {
+    color: var(--vh-color-yellow);
+    font-size: 1.18em;
+}
+.vehicle-assess-banner__copy .ex {
+    color: var(--vh-color-yellow);
+}
+
+@media (max-width: 768px) {
+    .vehicle-assess-banner { margin: 32px 0 40px; }
+    .vehicle-assess-banner__card {
+        aspect-ratio: auto;
+        min-height: 0;
+    }
+    .vehicle-assess-banner__card img {
+        position: static;
+        height: auto;
+        aspect-ratio: 16 / 10;
+    }
+    .vehicle-assess-banner__overlay {
+        background: linear-gradient(180deg, rgba(0,12,55,.2) 0%, rgba(0,12,55,.45) 45%, rgba(0,12,55,.85) 100%);
+        align-items: flex-end;
+        padding: 20px;
+    }
+    .vehicle-assess-banner__copy { line-height: 1.3; }
+}
