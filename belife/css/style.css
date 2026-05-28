@@ -50,7 +50,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   --pad-y: clamp(56px, 6.6vw, 95px);
 
   /* fluid fonts */
-  --fs-hero-headline: clamp(23px, 3.0vw, 43px);
+  --fs-hero-headline: clamp(22px, 2.78vw, 40px);
   --fs-hero-sub:      clamp(14px, 1.25vw, 18px);
   --fs-title-ja:      clamp(26px, 3.3vw, 48px);
   --fs-title-en:      clamp(13px, 1.0vw, 15px);
@@ -148,16 +148,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   transition: color .2s;
 }
 .header__nav a:hover { color: var(--crimson); }
-.header__social { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.header__social a {
-  width: 34px; height: 34px;
-  border: 1px solid #cfcfcf;
-  border-radius: 50%;
-  display: grid; place-items: center;
-  color: #555;
-  transition: .2s;
-}
-.header__social a:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
 .header__hamburger { display: none; }
 
 /* SP Drawer */
@@ -191,25 +181,43 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .fv { padding-top: 72px; background: var(--lavender-3); }
 .fv__hero {
   position: relative;
-  min-height: clamp(440px, 48vw, 700px);
-  border-radius: 0;
+  min-height: clamp(440px, 48vw, 720px);
   overflow: hidden;
-  background-size: cover;
-  background-position: center right;
-  background-color: #cfd4dd;
+  background: var(--lavender-3);
   display: flex;
   align-items: center;
 }
-.fv__hero::before {
+/* 人物写真：右側に配置 */
+.fv__photo {
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 47%;
+  z-index: 1;
+}
+.fv__photo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+.fv__photo::before {
   content: "";
   position: absolute; inset: 0;
-  background: linear-gradient(100deg, rgba(244,246,251,.96) 30%, rgba(244,246,251,.55) 50%, rgba(244,246,251,0) 68%);
+  background: linear-gradient(90deg, var(--lavender-3) 0%, rgba(244,246,251,.55) 16%, rgba(244,246,251,0) 40%);
   z-index: 1;
+}
+/* 岡山県全域エリアマップ */
+.fv__areamap {
+  position: absolute;
+  z-index: 3;
+  left: 43%;
+  top: 48%;
+  width: clamp(140px, 13.8vw, 200px);
+  height: auto;
 }
 .fv__content {
   position: relative;
   z-index: 2;
-  width: min(760px, 70%);
+  width: min(680px, 56%);
   margin-left: var(--pad-x);
   padding: 40px 0;
 }
@@ -288,11 +296,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .btn--line { background: var(--green); }
 .btn--line .btn__icon { background: rgba(255,255,255,.28); }
 
-.fv__area {
-  display: inline-flex; align-items: center; gap: 6px;
-  margin-top: 20px;
-  font-size: 13px; font-weight: 700; color: var(--navy);
-}
 
 /* =========================================================
    ONAYAMI（お悩み）
@@ -920,7 +923,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 
 @media (max-width: 768px) {
-  .header__nav, .header__social { display: none; }
+  .header__nav { display: none; }
   .header__hamburger {
     display: grid; place-items: center;
     margin-left: auto;
@@ -932,11 +935,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   }
 
   .fv { padding-top: 64px; }
-  .fv__hero { min-height: auto; padding: 0; display: block; }
-  .fv__hero::before {
-    background: linear-gradient(180deg, rgba(244,246,251,.95) 50%, rgba(244,246,251,.25));
-  }
-  .fv__content { width: auto; margin: 0; padding: 32px var(--pad-x) clamp(180px, 60vw, 260px); }
+  .fv__hero { min-height: 0; padding: 0; display: flex; flex-direction: column-reverse; }
+  .fv__photo { position: static; width: 100%; height: auto; }
+  .fv__photo img { aspect-ratio: 16 / 11; }
+  .fv__photo::before { display: none; }
+  .fv__areamap { position: static; display: block; width: 150px; margin: 18px 0 0; }
+  .fv__content { width: auto; margin: 0; padding: 32px var(--pad-x); }
   .fv__points { justify-content: space-between; }
   .fv__point { width: clamp(88px, 27vw, 120px); }
   .fv__btns { flex-direction: column; }
