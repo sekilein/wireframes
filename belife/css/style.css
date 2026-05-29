@@ -1096,9 +1096,9 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   .reason__body,
   .reason__item:nth-child(odd) .reason__body,
   .reason__item:nth-child(even) .reason__body {
-    position: static; transform: none;
-    width: 90%; left: auto; right: auto;
-    margin: -48px auto 0;
+    position: relative; z-index: 2; transform: none;
+    width: 88%; left: auto; right: auto;
+    margin: clamp(-110px, -22vw, -70px) auto 0;  /* 白カードを写真の上にしっかり重ねる */
   }
 }
 
