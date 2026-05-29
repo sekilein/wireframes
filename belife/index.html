@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="_auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-<script src="_firebase_comments.js"></script>
 <title>BELIEF inc.｜岡山県の不動産直接買取専門店｜他社に断られた物件もお任せください</title>
 <meta name="description" content="岡山県内で他社に断られた物件を直接買い取ります。事故物件・再建築不可・築古・雨漏り・残置物そのままでもOK。仲介ではなく不動産の直接買取専門店BELIEF inc.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,21 +54,26 @@
 <!-- ============ FV ============ -->
 <section class="fv" id="top">
   <div class="fv__hero">
-    <div class="fv__photo"><img src="images/fv-1.jpg" alt="BELIEF inc. スタッフ"></div>
-    <img class="fv__areamap" src="images/fv-areamap.png" alt="岡山県全域エリア">
-    <div class="fv__content">
-      <h1 class="fv__headline">岡山県内で、他社に断られた物件。<br>当社が直接買い取ります。</h1>
+    <div class="fv__copy">
+      <h1 class="fv__headline">
+        <span class="fv__headline-l1">岡山県内で、他社に断られた物件。</span>
+        <span class="fv__headline-l2">当社が直接買い取ります。</span>
+      </h1>
       <p class="fv__sub">事故物件・再建築不可・築古・雨漏り・残置物そのままでも構いません。<br>私たちは仲介ではなく、不動産の直接買取専門店です。</p>
-      <div class="fv__points">
-        <span class="fv__point">年間◯件以上の<br>買取実績</span>
-        <span class="fv__point">最短1週間で<br>査定完了</span>
-        <span class="fv__point">訳あり物件も<br>そのまま買取</span>
+    </div>
+    <div class="fv__photo"><img src="images/fv-1.jpg" alt="BELIEF inc. スタッフ"></div>
+    <div class="fv__pointsrow">
+        <div class="fv__points">
+          <span class="fv__point">年間◯件以上の<br>買取実績</span>
+          <span class="fv__point">最短1週間で<br>査定完了</span>
+          <span class="fv__point">訳あり物件も<br>そのまま買取</span>
+        </div>
+        <img class="fv__areamap" src="images/fv-areamap.png" alt="岡山県全域エリア">
       </div>
       <div class="fv__btns">
-        <a href="#cta" class="btn btn--assess"><span class="btn__icon">&#128187;</span>今すぐ無料査定を依頼してみる</a>
-        <a href="#cta" class="btn btn--line"><span class="btn__icon">&#9993;</span>まずはLINEから相談してみる</a>
+        <a href="#cta" class="btn btn--assess"><img class="btn__icon" src="images/icon-laptop.png" alt="">今すぐ無料査定を依頼してみる</a>
+        <a href="#cta" class="btn btn--line"><img class="btn__icon" src="images/icon-line.png" alt="">まずはLINEから相談してみる</a>
       </div>
-    </div>
   </div>
 </section>
 
@@ -134,7 +136,7 @@
         </div>
       </div>
       <div class="reason__item">
-        <div class="reason__img"><img src="images/reason-2.png" alt="複数物件もまとめて対応"></div>
+        <div class="reason__img"><img src="images/reason-03.jpg" alt="複数物件もまとめて対応"></div>
         <div class="reason__body">
           <span class="reason__num">REASON 03</span>
           <h3 class="reason__h3">複数物件の売却も、まとめてお任せ</h3>
@@ -148,18 +150,22 @@
 <!-- ============ CTA（中間） ============ -->
 <section class="cta section">
   <div class="wrap">
-    <div class="cta__illust"><img src="images/benefit-illust.png" alt="スタッフイラスト"></div>
-    <div class="cta__body">
-      <h2 class="cta__title">まずはお気軽にお問い合わせください！</h2>
-      <p class="cta__sub">他社で断られたわけあり物件、私たちが<b>スピード現金化</b>します。</p>
-      <div class="cta__tel">
-        <span>&#128222;</span>
-        <span class="cta__tel-num">086-259-0231</span>
-        <span class="cta__tel-time">受付時間 9:30〜18:00</span>
+    <div class="cta__top">
+      <div class="cta__illust"><img src="images/cta-people.png" alt="BELIEFのスタッフ"></div>
+      <div class="cta__head">
+        <h2 class="cta__title">まずはお気軽にお問い合わせください！</h2>
+        <p class="cta__sub">他社で断られたその物件、私たちが<b>スピード現金化</b>します。</p>
+        <p class="cta__desc">岡山市・倉敷市などの中心エリアだけでなく、郡部・山間部の物件も査定対象です。<br>立地や流通性により価格は変動しますが、「売れない」と決めつける前にまずは、ご相談ください。<br>岡山県全域、迅速対応いたします。（完全無料・秘密厳守）</p>
+      </div>
+    </div>
+    <div class="cta__bottom">
+      <div class="cta__contact">
+        <p class="cta__tel"><span class="cta__tel-ico">&#128222;</span><span class="cta__tel-num">086-259-0231</span></p>
+        <p class="cta__hours"><span class="cta__badge">営業時間</span>9:30〜18:30<span class="cta__badge">定休日</span>毎週 水曜日/日曜日</p>
       </div>
       <div class="cta__btns">
-        <a href="#" class="btn btn--assess"><span class="btn__icon">&#128187;</span>今すぐ無料査定を依頼してみる</a>
-        <a href="#" class="btn btn--line"><span class="btn__icon">&#9993;</span>まずはLINEから相談してみる</a>
+        <a href="#" class="btn btn--assess"><img class="btn__icon" src="images/icon-laptop.png" alt="">今すぐ無料査定を依頼してみる</a>
+        <a href="#" class="btn btn--line"><img class="btn__icon" src="images/icon-line.png" alt="">まずはLINEから相談してみる</a>
       </div>
     </div>
   </div>
@@ -169,12 +175,14 @@
 <section class="voice section" id="voice">
   <div class="wrap">
     <div class="voice__cta">
-      <div class="voice__cta-illust"><img src="images/voice-worried.png" alt=""></div>
-      <p class="voice__cta-text">売却を急いでいるのに、相談先が決められず困っていませんか？<br>BELIEFでは、そんなお客様から <b>最初の相談先として選ばれています！</b></p>
-      <div class="voice__cta-illust"><img src="images/voice-relieved.png" alt=""></div>
+      <div class="voice__cta-illust voice__cta-illust--left"><img src="images/voice-worried.png" alt=""></div>
+      <div class="voice__cta-center">
+        <p class="voice__cta-text">売却を急いでいるのに、相談先が決められず困っていませんか？<br>BELIEFでは、そんなお客様から<br><b>最初の相談先として選ばれています！</b></p>
+        <div class="voice__dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="voice__cta-illust voice__cta-illust--right"><img src="images/voice-relieved.png" alt=""></div>
     </div>
-    <div class="voice__dots"><span></span><span></span><span></span></div>
-    <div class="sec-head sec-head--center">
+    <div class="sec-head">
       <h2 class="sec-head__title">お客様の声</h2>
       <span class="sec-head__label">VOICE</span>
     </div>
@@ -216,7 +224,7 @@
     </div>
     <div class="target__grid">
       <div class="target__card"><div class="target__card-img"><img src="images/target-1.jpg" alt="戸建住宅"></div><div class="target__card-label">戸建住宅</div></div>
-      <div class="target__card"><div class="target__card-img"><img src="images/target-2.png" alt="空き家"></div><div class="target__card-label">空き家</div></div>
+      <div class="target__card"><div class="target__card-img"><img src="images/target-akiya.jpg" alt="空き家"></div><div class="target__card-label">空き家</div></div>
       <div class="target__card"><div class="target__card-img"><img src="images/target-3.jpg" alt="アパート・収益物件"></div><div class="target__card-label">アパート・収益物件</div></div>
       <div class="target__card"><div class="target__card-img"><img src="images/target-4.jpg" alt="再建築不可物件"></div><div class="target__card-label">再建築不可物件</div></div>
       <div class="target__card"><div class="target__card-img"><img src="images/target-5.jpg" alt="事故物件"></div><div class="target__card-label">事故物件</div></div>
@@ -225,7 +233,7 @@
     <p class="target__note">※農地・山林のみの物件は原則対象外となります。（宅地を含む場合はご相談ください。）<br>※立地条件・法令制限等によりお受けできない場合もございますが、その場合も理由を明確にご説明いたします。</p>
 
     <div class="target__possible">
-      <h3 class="target__possible-title">こんな物件も買取可能！</h3>
+      <h3 class="target__possible-title">こんな物件も買取可能！<span class="target__possible-ico">&#128161;</span></h3>
       <div class="target__tags">
         <span class="target__tag">築40年以上</span>
         <span class="target__tag">ボロ家</span>
@@ -238,28 +246,30 @@
 
     <!-- なぜ買取が選ばれるのか -->
     <div class="why">
+      <div class="why__dots"><span></span><span></span><span></span><span></span></div>
       <div class="why__head">なぜ買取が選ばれるのか</div>
       <div class="why__cols">
         <div class="why__col why__col--bad">
-          <div class="why__col-title">仲介の場合</div>
-          <ul>
+          <h4 class="why__col-title">仲介の場合</h4>
+          <ul class="why__list why__list--bad">
             <li>買主が見つかるまで不確定</li>
             <li>内覧対応が何度も発生</li>
             <li>価格交渉が続く</li>
             <li>売れる保証はない</li>
           </ul>
         </div>
+        <span class="why__arrow" aria-hidden="true"></span>
         <div class="why__col why__col--good">
-          <div class="why__col-title">当社の直接買取なら</div>
-          <ul>
+          <h4 class="why__col-title">当社の直接買取なら</h4>
+          <ul class="why__list why__list--good">
             <li>価格提示後、即決可能</li>
             <li>売却時期が読める</li>
             <li>契約後のトラブルリスク軽減</li>
             <li>瑕疵物件・築古・空室物件も対応</li>
           </ul>
+          <p class="why__catch"><b>“確実性”</b>を重視する方に選ばれています。</p>
         </div>
       </div>
-      <p class="why__catch"><b>“確実性”</b>を重視する方に選ばれています。</p>
     </div>
   </div>
 </section>
@@ -274,49 +284,55 @@
     <p class="case__lead">岡山県内の物件買取実績100件以上！相続・空き家・複数物件など、さまざまな物件の実績がございます。</p>
     <div class="case__list">
       <article class="case__item">
-        <div class="case__icon"><img src="images/case-1.svg" alt=""></div>
-        <div class="case__body">
-          <div class="case__head">
-            <span class="case__no">CASE 01</span>
+        <div class="case__head">
+            <img class="case__icon" src="images/case-1.svg" alt="">
+            <span class="case__no">CASE <b>01</b></span>
             <span class="case__tag case__tag--area">エリア</span><span class="case__tag-text">岡山市北区庭瀬</span>
             <span class="case__tag case__tag--issue">訳あり内容</span><span class="case__tag-text">接道に条件に難あり</span>
           </div>
           <p class="case__text">前面道路が狭く一般的な仲介では売却が難しい物件でしたが、売主様にご負担をお掛けすることなく、建物付きのまま当社が買取り。解体・造成後、無事に次の買主様へ引き継ぐことができました。</p>
-        </div>
       </article>
       <article class="case__item">
-        <div class="case__icon"><img src="images/case-2.svg" alt=""></div>
-        <div class="case__body">
-          <div class="case__head">
-            <span class="case__no">CASE 02</span>
+        <div class="case__head">
+            <img class="case__icon" src="images/case-2.svg" alt="">
+            <span class="case__no">CASE <b>02</b></span>
             <span class="case__tag case__tag--area">エリア</span><span class="case__tag-text">岡山市東区政津</span>
             <span class="case__tag case__tag--issue">訳あり内容</span><span class="case__tag-text">事故物件</span>
           </div>
           <p class="case__text">過去の事情により配慮が必要で売却に不安を抱えられていた物件でしたが、状況整理・告知対応・販売計画を当社にて一貫対応。安心して取引いただける環境を整えた上で、円滑に売却まで完了しました。</p>
-        </div>
       </article>
       <article class="case__item">
-        <div class="case__icon"><img src="images/case-2.svg" alt=""></div>
-        <div class="case__body">
-          <div class="case__head">
-            <span class="case__no">CASE 03</span>
+        <div class="case__head">
+            <img class="case__icon" src="images/case-2.svg" alt="">
+            <span class="case__no">CASE <b>03</b></span>
             <span class="case__tag case__tag--area">エリア</span><span class="case__tag-text">岡山市南区藤田</span>
             <span class="case__tag case__tag--issue">訳あり内容</span><span class="case__tag-text">共有者が多数存在する不動産</span>
           </div>
           <p class="case__text">相続をきっかけに複数名の共有名義となっていた不動産。共有者の人数が多く、居住地や意向もバラバラなため、長年にわたり「誰も使えず処分も進まない」状態が続いていましたが、「共有者全員の権利関係の整理」「それぞれの事情・意向を丁寧にヒアリング」「合意形成に向けた条件調整・スケジュール管理」を行い、最終的には全共有者の納得のもと売却を実現。</p>
-        </div>
       </article>
       <article class="case__item">
-        <div class="case__icon"><img src="images/case-3.svg" alt=""></div>
-        <div class="case__body">
-          <div class="case__head">
-            <span class="case__no">CASE 04</span>
+        <div class="case__head">
+            <img class="case__icon" src="images/case-3.svg" alt="">
+            <span class="case__no">CASE <b>04</b></span>
             <span class="case__tag case__tag--area">エリア</span><span class="case__tag-text">岡山市北区中央町</span>
             <span class="case__tag case__tag--issue">訳あり内容</span><span class="case__tag-text">第三者が占有する不動産</span>
           </div>
           <p class="case__text">対象不動産は、第三者が占有しているビルの為、賃貸借関係が不明確で、将来の明渡しや収益性に不安があることから、通常の売却が難しい状況でした。「占有状況・契約関係の詳細な調査」「法的リスクを踏まえた取引条件の整理」「買主・関係者双方が納得できるスキームを構築」することで、リスクがあるから売りづらいとされていた不動産を取引可能な状態へ。</p>
-        </div>
       </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACHIEVEMENT（売買成約実績マップ） ============ -->
+<section class="achievement section">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2 class="sec-head__title">売買成約実績</h2>
+      <span class="sec-head__label">ACHIEVEMENT</span>
+    </div>
+    <div class="achievement__map">
+      <!-- ここに地図iframeを後日挿入（例: Mapbox / Google Map） -->
+      <span class="achievement__map-note">地図エリア（iframe挿入予定）</span>
     </div>
   </div>
 </section>
@@ -348,6 +364,30 @@
   </div>
 </section>
 
+<!-- ============ CTA（メリット下） ============ -->
+<section class="cta section">
+  <div class="wrap">
+    <div class="cta__top">
+      <div class="cta__illust"><img src="images/cta-people.png" alt="BELIEFのスタッフ"></div>
+      <div class="cta__head">
+        <h2 class="cta__title">まずはお気軽にお問い合わせください！</h2>
+        <p class="cta__sub">他社で断られたその物件、私たちが<b>スピード現金化</b>します。</p>
+        <p class="cta__desc">岡山市・倉敷市などの中心エリアだけでなく、郡部・山間部の物件も査定対象です。<br>立地や流通性により価格は変動しますが、「売れない」と決めつける前にまずは、ご相談ください。<br>岡山県全域、迅速対応いたします。（完全無料・秘密厳守）</p>
+      </div>
+    </div>
+    <div class="cta__bottom">
+      <div class="cta__contact">
+        <p class="cta__tel"><span class="cta__tel-ico">&#128222;</span><span class="cta__tel-num">086-259-0231</span></p>
+        <p class="cta__hours"><span class="cta__badge">営業時間</span>9:30〜18:30<span class="cta__badge">定休日</span>毎週 水曜日/日曜日</p>
+      </div>
+      <div class="cta__btns">
+        <a href="#" class="btn btn--assess"><img class="btn__icon" src="images/icon-laptop.png" alt="">今すぐ無料査定を依頼してみる</a>
+        <a href="#" class="btn btn--line"><img class="btn__icon" src="images/icon-line.png" alt="">まずはLINEから相談してみる</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ============ COMPARISON ============ -->
 <section class="comparison section">
   <div class="wrap">
@@ -355,6 +395,7 @@
       <h2 class="sec-head__title">他社との比較</h2>
       <span class="sec-head__label">COMPARISON</span>
     </div>
+    <div class="comp-table-scroll">
     <div class="comp-table">
       <div class="comp-table__head comp-table__head--label"></div>
       <div class="comp-table__head comp-table__head--other">一般的な不動産会社</div>
@@ -380,9 +421,10 @@
       <div class="comp-table__cell comp-table__cell--other"><span class="comp-table__mark comp-table__mark--bad">▲</span>雨漏りやシロアリが見つかると、売主が自費で修理しなければならない場合も</div>
       <div class="comp-table__cell comp-table__cell--belief"><span class="comp-table__mark comp-table__mark--good">◎</span>お客様の負担は一切なし</div>
     </div>
+    </div>
 
     <div class="comp-catch">
-      <p class="comp-catch__text">他社では断られてしまうような物件や、遠方で管理ができない物件でも諦める必要はありません。<b>とにかく早く、ラクに売りたいというお客様の想いに、私たちが全力でお応えします！</b></p>
+      <p class="comp-catch__text">他社では断られてしまうような物件や、<br>遠方で管理ができない物件でも諦める必要はありません。<br><b>とにかく早く、ラクに売りたいというお客様の想いに、</b><br>私たちが全力でお応えします！</p>
       <div class="comp-catch__illust"><img src="images/comparison-illust.png" alt="スタッフがご相談に対応するイラスト"></div>
     </div>
 
@@ -398,7 +440,7 @@
           <li>・タイミングを見たい</li>
           <li>・複数物件を整理したい</li>
         </ul>
-        <p class="comp-advice__note">市場・再販計画を踏まえ、可能な限り価格をご提案します。</p>
+        <p class="comp-advice__note">市場・再販計画を踏まえ、可能な限り価格を<br>ご提案します。</p>
       </div>
       <div class="comp-advice__col">
         <div class="comp-advice__head">
@@ -411,7 +453,7 @@
           <li>・資金化が必要</li>
           <li>・空室が続き損失を止めたい</li>
         </ul>
-        <p class="comp-advice__note">最短◯日で契約可能！内覧対応・広告掲載不要。秘密厳守で進めます。</p>
+        <p class="comp-advice__note">最短◯日で契約可能！内覧対応・広告掲載不要。<br>秘密厳守で進めます。</p>
       </div>
     </div>
   </div>
@@ -546,18 +588,22 @@
 <!-- ============ CTA（最終） ============ -->
 <section class="cta section" id="cta">
   <div class="wrap">
-    <div class="cta__illust"><img src="images/benefit-illust.png" alt="スタッフイラスト"></div>
-    <div class="cta__body">
-      <h2 class="cta__title">まずはお気軽に<b>お問い合わせ</b>ください！</h2>
-      <p class="cta__sub">他社で断られたわけあり物件、私たちがスピード現金化します。</p>
-      <div class="cta__tel">
-        <span>&#128222;</span>
-        <span class="cta__tel-num">086-259-0231</span>
-        <span class="cta__tel-time">受付時間 9:30〜18:00</span>
+    <div class="cta__top">
+      <div class="cta__illust"><img src="images/cta-people.png" alt="BELIEFのスタッフ"></div>
+      <div class="cta__head">
+        <h2 class="cta__title">まずはお気軽にお問い合わせください！</h2>
+        <p class="cta__sub">他社で断られたその物件、私たちが<b>スピード現金化</b>します。</p>
+        <p class="cta__desc">岡山市・倉敷市などの中心エリアだけでなく、郡部・山間部の物件も査定対象です。<br>立地や流通性により価格は変動しますが、「売れない」と決めつける前にまずは、ご相談ください。<br>岡山県全域、迅速対応いたします。（完全無料・秘密厳守）</p>
+      </div>
+    </div>
+    <div class="cta__bottom">
+      <div class="cta__contact">
+        <p class="cta__tel"><span class="cta__tel-ico">&#128222;</span><span class="cta__tel-num">086-259-0231</span></p>
+        <p class="cta__hours"><span class="cta__badge">営業時間</span>9:30〜18:30<span class="cta__badge">定休日</span>毎週 水曜日/日曜日</p>
       </div>
       <div class="cta__btns">
-        <a href="#" class="btn btn--assess"><span class="btn__icon">&#128187;</span>今すぐ無料査定を依頼してみる</a>
-        <a href="#" class="btn btn--line"><span class="btn__icon">&#9993;</span>まずはLINEから相談してみる</a>
+        <a href="#" class="btn btn--assess"><img class="btn__icon" src="images/icon-laptop.png" alt="">今すぐ無料査定を依頼してみる</a>
+        <a href="#" class="btn btn--line"><img class="btn__icon" src="images/icon-line.png" alt="">まずはLINEから相談してみる</a>
       </div>
     </div>
   </div>
@@ -565,36 +611,12 @@
 
 <!-- ============ Footer ============ -->
 <footer class="footer">
+  <a href="#top" class="footer__top" aria-label="ページ上部へ戻る">&#94;</a>
   <div class="footer__inner">
-    <div class="footer__company">
-      <div class="footer__logo-text">BELIEF inc.</div>
-      <p class="footer__info">
-        〒700-0000 岡山県岡山市〇〇〇〇<br>
-        TEL：086-259-0231（受付 9:30〜18:00）<br>
-        不動産直接買取専門店
-      </p>
-    </div>
-    <nav class="footer__nav">
-      <ul>
-        <li><a href="#target">住まいを探す</a></li>
-        <li><a href="#flow">物件売却</a></li>
-        <li><a href="#merit">サービス</a></li>
-      </ul>
-      <ul>
-        <li><a href="#reason">BELIEF inc.とは</a></li>
-        <li><a href="#voice">お客様の声</a></li>
-        <li><a href="#faq">よくあるご質問</a></li>
-      </ul>
-    </nav>
+    <p class="footer__license">岡山県知事 (2) 第5671号</p>
+    <p class="footer__copy">Copyright &copy; belief CO.LTD. All Right Reserved.</p>
   </div>
-  <div class="footer__copy">&copy; BELIEF inc. All Rights Reserved.</div>
 </footer>
-
-<!-- ============ Floating CTA (SP) ============ -->
-<div class="float-cta">
-  <a href="#cta" class="float-cta__assess">&#128187; 無料査定を依頼</a>
-  <a href="#cta" class="float-cta__line">&#9993; LINEで相談</a>
-</div>
 
 <script src="js/main.js"></script>
 </body>
