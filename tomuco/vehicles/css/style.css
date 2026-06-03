@@ -1063,6 +1063,156 @@
     color: var(--vh-color-yellow);
 }
 
+/* ============================================
+   キービジュアル（ページ先頭）
+   ※ キャッチコピーは暫定（木村さん検討中）
+   ============================================ */
+.vehicle-hero {
+    position: relative;
+    overflow: hidden;
+    background: #00072e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    min-height: 380px;
+    margin-bottom: 64px;
+}
+.vehicle-hero__bg { position: absolute; inset: 0; }
+.vehicle-hero__bg img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    opacity: .4;
+    object-position: center 42%;
+}
+.vehicle-hero__inner {
+    position: relative;
+    z-index: 1;
+    padding: clamp(40px, 6vw, 76px) clamp(24px, 6vw, 72px);
+    width: 100%;
+}
+.vehicle-hero__en {
+    font-family: "Roboto", sans-serif;
+    letter-spacing: .25em;
+    font-size: 13px;
+    color: var(--vh-color-yellow);
+    margin: 0 0 18px;
+}
+.vehicle-hero__copy {
+    font-family: "Zen Old Mincho", serif;
+    font-weight: 900;
+    font-size: clamp(28px, 4.8vw, 54px);
+    line-height: 1.32;
+    margin: 0 0 22px;
+    text-shadow: 0 2px 12px rgba(0,0,0,.4);
+}
+.vehicle-hero__copy .accent { color: var(--vh-color-yellow); }
+.vehicle-hero__lead {
+    font-size: clamp(14px, 1.5vw, 16px);
+    line-height: 1.95;
+    color: #e3e7f3;
+    margin: 0 0 26px;
+    max-width: 42em;
+}
+.vehicle-hero__note {
+    display: inline-block;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.32);
+    padding: 12px 20px;
+    font-size: 13px;
+    line-height: 1.75;
+    color: #fff;
+    max-width: 44em;
+}
+.vehicle-hero__note strong { color: var(--vh-color-yellow); font-weight: 700; }
+@media (max-width: 768px) {
+    .vehicle-hero { min-height: 0; margin-bottom: 40px; }
+    .vehicle-hero__bg img { aspect-ratio: 16 / 11; height: auto; }
+    .vehicle-hero__inner { padding: 36px 22px; }
+}
+
+/* ============================================
+   購入フロー図
+   ============================================ */
+.purchase-flow { margin-top: 64px; }
+.purchase-flow-header { text-align: center; margin-bottom: 36px; }
+.purchase-flow-header-en {
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    letter-spacing: .25em;
+    color: var(--vh-color-blue);
+    margin: 0 0 8px;
+}
+.purchase-flow-header-title {
+    font-family: "Zen Old Mincho", serif;
+    font-size: 28px;
+    font-weight: 500;
+    margin: 0;
+    letter-spacing: .08em;
+}
+.purchase-flow-steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+.purchase-flow-step {
+    flex: 1 1 0;
+    min-width: 110px;
+    background: #fff;
+    border: 1px solid var(--vh-color-line);
+    border-top: 3px solid var(--vh-color-blue);
+    padding: 22px 8px;
+    text-align: center;
+    position: relative;
+}
+.purchase-flow-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -16px;
+    transform: translateY(-50%);
+    width: 0; height: 0;
+    border-left: 9px solid var(--vh-color-blue);
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+    z-index: 2;
+}
+.purchase-flow-step-num {
+    display: block;
+    font-family: "Roboto", sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .12em;
+    color: var(--vh-color-blue);
+    margin-bottom: 10px;
+}
+.purchase-flow-step-label {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1a1a1a;
+    line-height: 1.45;
+}
+.purchase-flow-note {
+    margin-top: 22px;
+    font-size: 13px;
+    line-height: 1.85;
+    color: var(--vh-color-text-sub);
+    text-align: center;
+}
+@media (max-width: 768px) {
+    .purchase-flow-steps { flex-direction: column; gap: 26px; }
+    .purchase-flow-step { min-width: 0; }
+    .purchase-flow-step:not(:last-child)::after {
+        top: auto;
+        bottom: -18px;
+        right: 50%;
+        transform: translateX(50%);
+        border-left: 7px solid transparent;
+        border-right: 7px solid transparent;
+        border-top: 9px solid var(--vh-color-blue);
+        border-bottom: 0;
+    }
+}
+
 @media (max-width: 768px) {
     .vehicle-assess-banner { margin: 32px 0 40px; }
     .vehicle-assess-banner__card {
