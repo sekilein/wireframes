@@ -1075,7 +1075,7 @@
     display: flex;
     align-items: center;
     min-height: 380px;
-    margin-bottom: 64px;
+    margin: 40px 0 56px;
 }
 .vehicle-hero__bg { position: absolute; inset: 0; }
 .vehicle-hero__bg img {
@@ -1133,7 +1133,7 @@
 /* ============================================
    購入フロー図
    ============================================ */
-.purchase-flow { margin-top: 64px; }
+.purchase-flow { margin-top: 0; margin-bottom: 56px; }
 .purchase-flow-header { text-align: center; margin-bottom: 36px; }
 .purchase-flow-header-en {
     font-family: "Roboto", sans-serif;
