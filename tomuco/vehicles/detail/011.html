@@ -181,7 +181,43 @@
                     <!-- メイン情報 -->
                     <div class="vehicle-detail-main">
                         <div class="vehicle-detail-gallery">
-                            <div class="vehicle-detail-no-photo">写真は準備中です</div>
+                            <button type="button" class="main-photo" id="galleryMain" data-index="0">
+                                <img src="../images/011/large/01.jpg" alt="右前" id="galleryMainImg">
+                                <span class="main-photo-caption" id="galleryMainCaption">右前</span>
+                                <span class="main-photo-zoom" aria-hidden="true">＋</span>
+                            </button>
+                            <div class="vehicle-detail-gallery-thumbs" id="galleryThumbs">
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/01.jpg" data-label="右前"><img src="../images/011/thumb/01.jpg" alt="右前" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/02.jpg" data-label="正面"><img src="../images/011/thumb/02.jpg" alt="正面" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/03.jpg" data-label="左前"><img src="../images/011/thumb/03.jpg" alt="左前" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/04.jpg" data-label="左正面"><img src="../images/011/thumb/04.jpg" alt="左正面" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/05.jpg" data-label="左後"><img src="../images/011/thumb/05.jpg" alt="左後" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/06.jpg" data-label="後正面"><img src="../images/011/thumb/06.jpg" alt="後正面" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/07.jpg" data-label="右後"><img src="../images/011/thumb/07.jpg" alt="右後" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/08.jpg" data-label="右正面"><img src="../images/011/thumb/08.jpg" alt="右正面" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/09.jpg" data-label="左前タイヤ"><img src="../images/011/thumb/09.jpg" alt="左前タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/10.jpg" data-label="燃料タンク付近"><img src="../images/011/thumb/10.jpg" alt="燃料タンク付近" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/11.jpg" data-label="燃料タンク"><img src="../images/011/thumb/11.jpg" alt="燃料タンク" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/12.jpg" data-label="左後タイヤ"><img src="../images/011/thumb/12.jpg" alt="左後タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/13.jpg" data-label="左後前タイヤ"><img src="../images/011/thumb/13.jpg" alt="左後前タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/14.jpg" data-label="左後後タイヤ"><img src="../images/011/thumb/14.jpg" alt="左後後タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/15.jpg" data-label="右前タイヤ"><img src="../images/011/thumb/15.jpg" alt="右前タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/16.jpg" data-label="エアタンク付近"><img src="../images/011/thumb/16.jpg" alt="エアタンク付近" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/17.jpg" data-label="エアタンク付近"><img src="../images/011/thumb/17.jpg" alt="エアタンク付近" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/18.jpg" data-label="右後タイヤ"><img src="../images/011/thumb/18.jpg" alt="右後タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/19.jpg" data-label="右後前タイヤ"><img src="../images/011/thumb/19.jpg" alt="右後前タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/20.jpg" data-label="右後後タイヤ"><img src="../images/011/thumb/20.jpg" alt="右後後タイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/21.jpg" data-label="スペアタイヤ"><img src="../images/011/thumb/21.jpg" alt="スペアタイヤ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/22.jpg" data-label="メーターパネル"><img src="../images/011/thumb/22.jpg" alt="メーターパネル" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/23.jpg" data-label="センターコンソール"><img src="../images/011/thumb/23.jpg" alt="センターコンソール" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/24.jpg" data-label="シフトノブ"><img src="../images/011/thumb/24.jpg" alt="シフトノブ" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/25.jpg" data-label="センターパネル"><img src="../images/011/thumb/25.jpg" alt="センターパネル" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/26.jpg" data-label="ペダル"><img src="../images/011/thumb/26.jpg" alt="ペダル" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/27.jpg" data-label="メーター右スイッチ類"><img src="../images/011/thumb/27.jpg" alt="メーター右スイッチ類" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/28.jpg" data-label="室内灯"><img src="../images/011/thumb/28.jpg" alt="室内灯" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/29.jpg" data-label="バックモニター"><img src="../images/011/thumb/29.jpg" alt="バックモニター" loading="lazy"></button>
+                                <button type="button" class="vehicle-detail-gallery-thumb" data-large="../images/011/large/30.jpg" data-label="運転席左スイッチ類"><img src="../images/011/thumb/30.jpg" alt="運転席左スイッチ類" loading="lazy"></button>
+                            </div>
                         </div>
 
                         <div class="vehicle-detail-summary">
