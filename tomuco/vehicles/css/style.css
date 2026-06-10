@@ -77,6 +77,11 @@
 .vehicle-archive-item-thumb img {
     width: 100%; height: 100%; object-fit: cover; display: block;
 }
+.vehicle-archive-item-noimg {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    color: #999; font-size: 14px; letter-spacing: .05em;
+}
 .vehicle-archive-item-badges {
     position: absolute;
     top: 10px;
@@ -296,6 +301,17 @@
 .vehicle-detail-gallery-thumb img { width:100%; height:100%; object-fit: cover; display: block; }
 .vehicle-detail-gallery-thumb:hover { opacity: .85; }
 .vehicle-detail-gallery-thumb.is-active { border-color: var(--vh-color-blue); }
+.vehicle-detail-no-photo {
+    aspect-ratio: 4/3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f0f0f0;
+    color: #999;
+    font-size: 14px;
+    letter-spacing: .05em;
+    border: 1px dashed #ccc;
+}
 
 /* ライトボックス */
 .vh-lightbox {
