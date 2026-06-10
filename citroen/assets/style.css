@@ -1009,12 +1009,12 @@
   }
   .category-icons {
     display: grid;
-    grid-template-columns: repeat(6, max-content);
-    justify-content: space-between;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: center;
     align-items: start;
-    gap: 24px;
-    max-width: 1080px;
-    margin: 48px auto 0;
+    gap: 40px 96px;
+    max-width: 720px;
+    margin: 72px auto 8px;
   }
   .cat-icon-wrap {
     text-align: center;
@@ -1049,6 +1049,11 @@
     .cat-icon-img { width: 32px; height: 32px; margin-bottom: 6px; }
     .cat-icon-desc { font-size: 10px; line-height: 1.4; }
     .cat-quote-mark { font-size: 30px; }
+  }
+  @media (max-width: 370px) {
+    .category-icons {
+      grid-template-columns: repeat(2, max-content);
+    }
   }
 
   /* ===== コースタブ（Figma準拠: 3タブ 200×56 / active=#a13019 / inactive=white+#e5e5e5） ===== */

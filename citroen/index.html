@@ -5,14 +5,74 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <script src="_auth.js"></script>
-<title>RECOVERY dRIVE — Ver4（dトラベル編集長コース）</title>
+<title>RECOVERY dRIVE — A案（ヒーロー左動画）</title>
 <link rel="stylesheet" href="assets/style.css">
+<style>
+/* ===== A案：ヒーロー = 左動画 / 右コピー（初期ロードで縦100vh） ===== */
+.hero-split-A {
+  height: 100vh;
+  min-height: 100vh;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+.hero-split-A-video {
+  flex: 1 1 50%;
+  min-width: 0;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.hero-split-A-video video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.hero-split-A .hero-text {
+  flex: 1 1 50%;
+  min-width: 0;
+  justify-content: center;
+  padding: 32px 40px;
+  background: #fff;
+  align-self: stretch;
+}
+.hero-split-A .hero-title { margin-top: 0; }
+/* カルーセルはヒーローの外＝初期ビューの下、スクロールで続く */
+.carousel-section { background: var(--beige); padding-top: 24px; }
+/* 旗を左→右エリア（白カラム）側の下に移動 */
+.carousel-flag { left: auto !important; right: 24px; margin-left: 0 !important; }
+
+@media (max-width: 900px) {
+  /* SP：動画がブラウザ縦幅いっぱい→その下にRECOVERY〜が続く */
+  .hero-split-A {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+  .hero-split-A-video {
+    flex: none;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;       /* モバイルのURLバー考慮 */
+  }
+  .hero-split-A .hero-text { flex: none; padding: 56px 16px 32px; }
+}
+</style>
 </head>
 <body>
 
 <!-- ===== ナビ ===== -->
 <!-- ===== 1. ヒーロー ===== -->
-<section class="hero">
+<section class="hero hero-split-A">
+  <div class="hero-split-A-video">
+    <video src="assets/movie.mp4" autoplay muted loop playsinline controls preload="metadata"></video>
+  </div>
   <div class="hero-text">
     <h1 class="hero-title">RECOVERY DRIVE</h1>
     <p class="hero-subtitle">by <img decoding="async" class="d-travel-logo" src="assets/img/imgDdtravelLogo.png" alt="d design travel"></p>
@@ -35,8 +95,9 @@
       </div>
     </div>
   </div>
+</section>
 
-  <!-- カルーセル -->
+  <!-- カルーセル（ヒーロー外・スクロールで続く） -->
   <div class="carousel-section">
   <img decoding="async" class="carousel-flag" src="assets/img/imgHeroFlag.png" alt="">
   <div class="carousel-wrap">
@@ -123,8 +184,6 @@
   </div>
   </div><!-- /carousel-section -->
 
-</section>
-
 <!-- ===== 2. d design travel × 編集長 大ブロック（B案・統合訴求） ===== -->
 <section class="dtravel-block-wrap">
   <div class="dtravel-block fade-in">
@@ -149,6 +208,33 @@
       <div class="dtravel-cover"><img loading="lazy" decoding="async" src="assets/img/imgEhime1.png" alt="d design travel 愛媛"></div>
       <div class="dtravel-cover"><img loading="lazy" decoding="async" src="assets/img/imgIbaraki1.png" alt="d design travel 茨城"></div>
       <div class="dtravel-cover"><img loading="lazy" decoding="async" src="assets/img/imgToyama21.png" alt="d design travel 富山 vol.2"></div>
+    </div>
+
+    <div class="category-icons">
+      <div class="cat-icon-wrap">
+        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup36.png" alt="その土地を知る"></div>
+        <span class="cat-icon-desc">その土地を知る</span>
+      </div>
+      <div class="cat-icon-wrap">
+        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup37.png" alt="その土地で食事する"></div>
+        <span class="cat-icon-desc">その土地で食事する</span>
+      </div>
+      <div class="cat-icon-wrap">
+        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup38.png" alt="お茶をする、お酒を飲む"></div>
+        <span class="cat-icon-desc">お茶をする、お酒を飲む</span>
+      </div>
+      <div class="cat-icon-wrap">
+        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup39.png" alt="その土地らしい買い物"></div>
+        <span class="cat-icon-desc">その土地らしい買い物</span>
+      </div>
+      <div class="cat-icon-wrap">
+        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup40.png" alt="その土地に泊まる"></div>
+        <span class="cat-icon-desc">その土地に泊まる</span>
+      </div>
+      <div class="cat-icon-wrap">
+        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup41.png" alt="その土地のキーマン"></div>
+        <span class="cat-icon-desc">その土地のキーマン</span>
+      </div>
     </div>
 
     <p class="dtravel-block-lead">
@@ -197,32 +283,6 @@
       <span class="cat-pullquote-line cat-pullquote-line-2">素敵な景色まで込みで、1泊2日の旅をアレンジ。</span>
       <span class="cat-quote-mark cat-quote-close">&rdquo;</span>
     </p>
-    <div class="category-icons">
-      <div class="cat-icon-wrap">
-        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup36.png" alt="その土地を知る"></div>
-        <span class="cat-icon-desc">その土地を知る</span>
-      </div>
-      <div class="cat-icon-wrap">
-        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup37.png" alt="その土地で食事する"></div>
-        <span class="cat-icon-desc">その土地で食事する</span>
-      </div>
-      <div class="cat-icon-wrap">
-        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup38.png" alt="お茶をする、お酒を飲む"></div>
-        <span class="cat-icon-desc">お茶をする、お酒を飲む</span>
-      </div>
-      <div class="cat-icon-wrap">
-        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup39.png" alt="その土地らしい買い物"></div>
-        <span class="cat-icon-desc">その土地らしい買い物</span>
-      </div>
-      <div class="cat-icon-wrap">
-        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup40.png" alt="その土地に泊まる"></div>
-        <span class="cat-icon-desc">その土地に泊まる</span>
-      </div>
-      <div class="cat-icon-wrap">
-        <div class="cat-icon-img"><img decoding="async" src="assets/img/imgGroup41.png" alt="その土地のキーマン"></div>
-        <span class="cat-icon-desc">その土地のキーマン</span>
-      </div>
-    </div>
     <img decoding="async" class="concept-car-img" src="assets/img/imgPersonCar.png" alt="NEW C5 AIRCROSS">
   </div>
 </section>
