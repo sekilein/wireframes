@@ -1247,3 +1247,47 @@
     }
     .vehicle-assess-banner__copy { line-height: 1.3; }
 }
+
+/* ============================================
+   売約済み車両：問い合わせ導線の非表示
+   （トムコ打ち合わせ 2026-06-11 決定）
+   - カード：価格「お問い合わせください。」を非表示
+   - 詳細：問い合わせボタン／下部CTAを非表示し、売約済みの案内を表示
+   ※ 商談中の車両は引き続き問い合わせ可（対象外）
+   ============================================ */
+.vehicle-archive-item.is-sold .vehicle-archive-item-price-wrap {
+    display: none;
+}
+/* 売約済みカードはリンク無効（クリック不可）＋カーソルも通常に */
+.vehicle-archive-item.is-sold {
+    pointer-events: none;
+    cursor: default;
+}
+/* 詳細リンクボタンを灰色＋「売約済み」表記に */
+.vehicle-archive-item.is-sold .vehicle-archive-item-footer,
+.vehicle-archive-item.is-sold:hover .vehicle-archive-item-footer {
+    background: #999;
+}
+.vehicle-archive-item.is-sold .vehicle-archive-item-link-text {
+    display: none;
+}
+.vehicle-archive-item.is-sold .vehicle-archive-item-footer::after {
+    content: "売約済み";
+    letter-spacing: .08em;
+}
+.vehicle-detail-section.is-sold .vehicle-detail-cta-buttons,
+.vehicle-detail-section.is-sold .vehicle-bottom-cta {
+    display: none !important;
+}
+.vehicle-detail-sold-note {
+    background: #f3f3f3;
+    border-left: 4px solid #555;
+    color: #333;
+    font-weight: 700;
+    padding: 16px 18px;
+    margin: 0 0 8px;
+    line-height: 1.6;
+}
+.vehicle-detail-section:not(.is-sold) .vehicle-detail-sold-note {
+    display: none;
+}
