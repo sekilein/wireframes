@@ -8,7 +8,14 @@
 <title>RECOVERY dRIVE — A案（ヒーロー左動画）</title>
 <link rel="stylesheet" href="assets/style.css">
 <style>
-/* ===== A案：ヒーロー = 左動画 / 右コピー（初期ロードで縦100vh） ===== */
+/* ==================================================================
+   ▼▼▼【差し替え① ヒーローに動画を追加】CSS ここから ▼▼▼
+   現状ページ(web.citroen.jp/cpn/recovery-drive)のヒーローを
+   「左：動画(YouTube) / 右：コピー」の2カラム構成に変更しています。
+   ↓ このコメント〜「差し替え① CSS ここまで」までを、まるっと追加してください。
+   ※ 下部の【差し替え① HTML】とセットです（class "hero-split-A" を使用）。
+   ================================================================== */
+/* 2カラム化したヒーロー本体（初期ロードで縦100vh） */
 .hero-split-A {
   height: 100vh;
   min-height: 100vh;
@@ -18,6 +25,7 @@
   padding: 0;
   overflow: hidden;
 }
+/* 左カラム＝動画エリア */
 .hero-split-A-video {
   flex: 1 1 50%;
   min-width: 0;
@@ -36,6 +44,7 @@
   border: 0;
   display: block;
 }
+/* 右カラム＝コピー（中身は現状ページと同じ） */
 .hero-split-A .hero-text {
   flex: 1 1 50%;
   min-width: 0;
@@ -47,8 +56,6 @@
 .hero-split-A .hero-title { margin-top: 0; }
 /* カルーセルはヒーローの外＝初期ビューの下、スクロールで続く */
 .carousel-section { background: var(--beige); padding-top: 24px; }
-/* 旗を左→右エリア（白カラム）側の下に移動 */
-.carousel-flag { left: auto !important; right: 24px; margin-left: 0 !important; }
 
 @media (max-width: 900px) {
   /* SP：動画がブラウザ縦幅いっぱい→その下にRECOVERY〜が続く */
@@ -71,13 +78,34 @@
   }
   .hero-split-A .hero-text { flex: none; padding: 56px 16px 32px; }
 }
+/* ▲▲▲【差し替え① ヒーローに動画を追加】CSS ここまで ▲▲▲ */
+
+
+/* ==================================================================
+   ▼▼▼【差し替え② アイコン(旗)の位置変更】CSS ここから ▼▼▼
+   カルーセル上の旗アイコン(.carousel-flag)を「左 → 右下」に移動しています。
+   ↓ この1ルールを追加(上書き)してください。HTML側の変更は不要です。
+   ================================================================== */
+.carousel-flag { left: auto !important; right: 24px; margin-left: 0 !important; }
+/* ▲▲▲【差し替え② アイコン(旗)の位置変更】CSS ここまで ▲▲▲ */
 </style>
 </head>
 <body>
 
 <!-- ===== ナビ ===== -->
 <!-- ===== 1. ヒーロー ===== -->
+<!-- ==================================================================
+     ▼▼▼【差し替え① ヒーローに動画を追加】HTML ここから ▼▼▼
+     現状ページのヒーロー<section>を、この <section>〜</section> で
+     まるっと差し替えてください。変更点は次の2つです。
+       (1) <section> に class "hero-split-A" を追加（2カラム化）
+       (2) 左カラムとして下記 <div class="hero-split-A-video"> を新規追加
+           ※動画＝YouTube Shorts(縦)を自動再生・ループ・playsinlineで埋め込み
+     右カラム <div class="hero-text"> の中身は現状ページと同じです。
+     ※ <head>内の【差し替え① CSS】とセットで適用してください。
+     ================================================================== -->
 <section class="hero hero-split-A">
+  <!-- ↓ ここが今回の追加要素：左カラムの動画（iframe） -->
   <div class="hero-split-A-video">
     <iframe
       src="https://www.youtube.com/embed/AryTqJSH2zI?autoplay=1&playsinline=1&loop=1&playlist=AryTqJSH2zI&rel=0&modestbranding=1"
@@ -85,6 +113,7 @@
       allow="autoplay; encrypted-media; fullscreen"
       allowfullscreen></iframe>
   </div>
+  <!-- ↓ 右カラム：コピー（現状ページと同じ内容） -->
   <div class="hero-text">
     <h1 class="hero-title">RECOVERY DRIVE</h1>
     <p class="hero-subtitle">by <img decoding="async" class="d-travel-logo" src="assets/img/imgDdtravelLogo.png" alt="d design travel"></p>
@@ -108,9 +137,12 @@
     </div>
   </div>
 </section>
+<!-- ▲▲▲【差し替え① ヒーローに動画を追加】HTML ここまで ▲▲▲ -->
 
   <!-- カルーセル（ヒーロー外・スクロールで続く） -->
   <div class="carousel-section">
+  <!-- 【差し替え②】この旗アイコンの「位置」を CSS .carousel-flag（差し替え②）で
+       左→右下に変更しています。HTML(この<img>)自体は現状ページのままでOKです。 -->
   <img decoding="async" class="carousel-flag" src="assets/img/imgHeroFlag.png" alt="">
   <div class="carousel-wrap">
     <div class="carousel-row row-1">
