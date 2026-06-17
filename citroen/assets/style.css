@@ -1007,9 +1007,15 @@
   .cat-pullquote.visible .cat-pullquote-line {
     clip-path: inset(0 0 0 0);
   }
+  /* ==================================================================
+     ▼▼▼【差し替え② カテゴリーアイコンの位置変更】CSS ここから ▼▼▼
+     現状ページの横1列(6個)から「3列×2段」に変更しています。
+     ポイントは grid-template-columns: repeat(3, …)（=3列＝2段組）。
+     ※配置場所の移動はHTML側(index.html「差し替え②」)で対応。
+     ================================================================== */
   .category-icons {
     display: grid;
-    grid-template-columns: repeat(3, max-content);
+    grid-template-columns: repeat(3, max-content);  /* ← 3列＝2段組（現状は1列6個） */
     justify-content: center;
     align-items: start;
     gap: 40px 96px;
@@ -1052,9 +1058,10 @@
   }
   @media (max-width: 370px) {
     .category-icons {
-      grid-template-columns: repeat(2, max-content);
+      grid-template-columns: repeat(2, max-content);  /* 極小幅のみ2列 */
     }
   }
+  /* ▲▲▲【差し替え② カテゴリーアイコンの位置変更】CSS ここまで ▲▲▲ */
 
   /* ===== コースタブ（Figma準拠: 3タブ 200×56 / active=#a13019 / inactive=white+#e5e5e5） ===== */
   .course-tabs {
