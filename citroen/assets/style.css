@@ -1412,3 +1412,77 @@
     }
 
   }
+/* ==================================================================
+   ▼▼▼【差し替え① ヒーローに動画を追加】CSS ここから ▼▼▼
+   現状ページ(web.citroen.jp/cpn/recovery-drive)のヒーローを
+   「左：動画(YouTube) / 右：コピー」の2カラム構成に変更しています。
+   ↓ このコメント〜「差し替え① CSS ここまで」までを、まるっと追加してください。
+   ※ HTML側の【差し替え① HTML】とセットです（class "hero-split-A" を使用）。
+   ※ ブロック末尾の .carousel-flag（旗の位置）もキービジュアル調整の一部です。
+   ================================================================== */
+/* 2カラム化したヒーロー本体（初期ロードで縦100vh） */
+.hero-split-A {
+  height: 100vh;
+  min-height: 100vh;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+  overflow: hidden;
+}
+/* 左カラム＝動画エリア */
+.hero-split-A-video {
+  flex: 1 1 50%;
+  min-width: 0;
+  background: #000;
+  position: relative;
+  overflow: hidden;
+}
+/* YouTube Shorts(縦9:16)を50vw×100vhの左カラムに object-fit:cover 相当で敷く */
+.hero-split-A-video iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(56.25vh, 50vw);
+  height: max(100vh, 88.8889vw);
+  border: 0;
+  display: block;
+}
+/* 右カラム＝コピー（中身は現状ページと同じ） */
+.hero-split-A .hero-text {
+  flex: 1 1 50%;
+  min-width: 0;
+  justify-content: center;
+  padding: 32px 40px;
+  background: #fff;
+  align-self: stretch;
+}
+.hero-split-A .hero-title { margin-top: 0; }
+/* カルーセルはヒーローの外＝初期ビューの下、スクロールで続く */
+.carousel-section { background: var(--beige); padding-top: 24px; }
+
+@media (max-width: 900px) {
+  /* SP：動画がブラウザ縦幅いっぱい→その下にRECOVERY〜が続く */
+  .hero-split-A {
+    flex-direction: column;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+  .hero-split-A-video {
+    flex: none;
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;       /* モバイルのURLバー考慮 */
+  }
+  .hero-split-A-video iframe {
+    /* SP：100vw×100dvh のカラムに cover */
+    width: max(56.25dvh, 100vw);
+    height: max(100dvh, 177.7778vw);
+  }
+  .hero-split-A .hero-text { flex: none; padding: 56px 16px 32px; }
+}
+/* 旗アイコンを左→右下へ（※キービジュアル調整に含まれる微調整） */
+.carousel-flag { left: auto !important; right: 24px; margin-left: 0 !important; }
+/* ▲▲▲【差し替え① ヒーローに動画を追加】CSS ここまで ▲▲▲ */
