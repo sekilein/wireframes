@@ -12,9 +12,6 @@
     --beige-light: #f9f7f7; /* カード上半分 */
     --citroen-type: "CitroenTypeLatin", "Citroen Type", "Hiragino Kaku Gothic ProN", "Hiragino Kaku Gothic StdN", "Hiragino Kaku Gothic", sans-serif;
     --serif: "Hiragino Mincho ProN", "Yu Mincho", serif;
-    /* 本番ページのグローバルヘッダー(g-header)実寸。ヒーロー縦幅計算に使用 */
-    --cit-header-pc: 104px;            /* PC: default-view margin-top10 + height94 */
-    --cit-header-sp: calc(19vw + 3px); /* SP: 固定ヘッダー height19vw + border3px */
   }
   /* 英数字のみ Citroen Type（自前ホスト）、日本語はヒラギノ角ゴへフォールバック */
   @font-face {
@@ -1423,10 +1420,11 @@
    ※ HTML側の【差し替え① HTML】とセットです（class "hero-split-A" を使用）。
    ※ ブロック末尾の .carousel-flag（旗の位置）もキービジュアル調整の一部です。
    ================================================================== */
-/* 2カラム化したヒーロー本体（本番ヘッダー分を差し引いた残り画面高で1画面に収める） */
+/* 2カラム化したヒーロー本体（本番グローバルヘッダー約104pxを差し引いて1画面に収める）
+   ※104px = g-header default-view の margin-top10 + height94。実ヘッダーに合わせて調整可 */
 .hero-split-A {
-  height: calc(100vh - var(--cit-header-pc));
-  min-height: calc(100vh - var(--cit-header-pc));
+  height: calc(100vh - 104px);
+  min-height: calc(100vh - 104px);
   flex-direction: row;
   align-items: stretch;
   gap: 0;
@@ -1441,15 +1439,15 @@
   position: relative;
   overflow: hidden;
 }
-/* YouTube Shorts(縦9:16)を「50vw × (100vh-ヘッダー)」の左カラムに object-fit:cover 相当で敷く */
+/* YouTube Shorts(縦9:16)を「50vw × (100vh-104px)」の左カラムに object-fit:cover 相当で敷く */
 .hero-split-A-video iframe {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   /* cover: 列高Hに対し 幅=max(列幅, H*9/16) / 高=max(H, 列幅*16/9) */
-  width: max(50vw, calc((100vh - var(--cit-header-pc)) * 9 / 16));
-  height: max(calc(100vh - var(--cit-header-pc)), 88.8889vw);
+  width: max(50vw, calc((100vh - 104px) * 9 / 16));
+  height: max(calc(100vh - 104px), 88.8889vw);
   border: 0;
   display: block;
 }
@@ -1477,13 +1475,13 @@
   .hero-split-A-video {
     flex: none;
     width: 100%;
-    /* SP：固定ヘッダー分を引いた残り画面高に収める（URLバー考慮で dvh） */
-    height: calc(100dvh - var(--cit-header-sp));
+    /* SP：固定ヘッダー(19vw+border3px)分を引いた残り画面高に収める（URLバー考慮で dvh） */
+    height: calc(100dvh - (19vw + 3px));
   }
   .hero-split-A-video iframe {
     /* SP：100vw × (100dvh-ヘッダー) のカラムに cover */
-    width: max(100vw, calc((100dvh - var(--cit-header-sp)) * 9 / 16));
-    height: max(calc(100dvh - var(--cit-header-sp)), 177.7778vw);
+    width: max(100vw, calc((100dvh - (19vw + 3px)) * 9 / 16));
+    height: max(calc(100dvh - (19vw + 3px)), 177.7778vw);
   }
   .hero-split-A .hero-text { flex: none; padding: 56px 16px 32px; }
 }
