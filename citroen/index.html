@@ -27,7 +27,8 @@
   <!-- ↓ ここが今回の追加要素：左カラムの動画（iframe） -->
   <div class="hero-split-A-video">
     <iframe
-      src="https://www.youtube.com/embed/AryTqJSH2zI?autoplay=1&mute=1&playsinline=1&loop=1&playlist=AryTqJSH2zI&rel=0&modestbranding=1"
+      id="heroYT"
+      src="https://www.youtube.com/embed/AryTqJSH2zI?enablejsapi=1&autoplay=1&mute=1&playsinline=1&loop=1&playlist=AryTqJSH2zI&rel=0&modestbranding=1&controls=0"
       title="RECOVERY DRIVE"
       allow="autoplay; encrypted-media; fullscreen"
       allowfullscreen></iframe>
@@ -1291,5 +1292,29 @@
 </section>
 
 <script src="assets/script.js"></script>
+<!-- ヒーローYouTubeを確実にデフォルトミュート（loop+playlist時にmute=1が効かない対策） -->
+<script>
+  (function () {
+    function setupHeroYT() {
+      if (!document.getElementById('heroYT')) return;
+      new YT.Player('heroYT', {
+        events: {
+          onReady: function (e) { e.target.mute(); e.target.playVideo(); },
+          // ループ再生で頭出しされる度にミュートを再適用（稀に音が戻る対策）
+          onStateChange: function (e) { if (e.data === YT.PlayerState.PLAYING) e.target.mute(); }
+        }
+      });
+    }
+    if (window.YT && window.YT.Player) {
+      setupHeroYT();
+    } else {
+      var prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function () { if (prev) prev(); setupHeroYT(); };
+      var tag = document.createElement('script');
+      tag.src = 'https://www.youtube.com/iframe_api';
+      document.head.appendChild(tag);
+    }
+  })();
+</script>
 </body>
 </html>
