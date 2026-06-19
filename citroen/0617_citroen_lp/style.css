@@ -1439,15 +1439,16 @@
   position: relative;
   overflow: hidden;
 }
-/* YouTube Shorts(縦9:16)を「50vw × (100vh-104px)」の左カラムに object-fit:cover 相当で敷く */
+/* YouTube Shorts(縦9:16)を「縦100%・左右中央」で表示（contain）。
+   上下を切らない＝ツールバー(下部)まで常に見える。左右は黒帯（カラム背景#000）。 */
 .hero-split-A-video iframe {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  /* cover: 列高Hに対し 幅=max(列幅, H*9/16) / 高=max(H, 列幅*16/9) */
-  width: max(50vw, calc((100vh - 104px) * 9 / 16));
-  height: max(calc(100vh - 104px), 88.8889vw);
+  height: 100%;          /* カラム高 = (100vh - 104px) いっぱい */
+  width: auto;
+  aspect-ratio: 9 / 16;  /* 高さ基準で幅を9:16に算出 */
   border: 0;
   display: block;
 }
@@ -1479,9 +1480,10 @@
     height: calc(100dvh - (19vw + 3px));
   }
   .hero-split-A-video iframe {
-    /* SP：100vw × (100dvh-ヘッダー) のカラムに cover */
-    width: max(100vw, calc((100dvh - (19vw + 3px)) * 9 / 16));
-    height: max(calc(100dvh - (19vw + 3px)), 177.7778vw);
+    /* SP も縦100%・左右中央（contain）。上下を切らずツールバーまで表示 */
+    height: 100%;
+    width: auto;
+    aspect-ratio: 9 / 16;
   }
   .hero-split-A .hero-text { flex: none; padding: 56px 16px 32px; }
 }

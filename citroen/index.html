@@ -7,10 +7,128 @@
 <script src="_auth.js"></script>
 <title>RECOVERY dRIVE — A案（ヒーロー左動画）</title>
 <link rel="stylesheet" href="assets/style.css">
+<!-- 本番グローバルヘッダー(g-header)用CSS：配信元基準で画像/フォントも解決される。クラスはg-header__で名前空間化されており当ページのスタイルと衝突しない -->
+<link rel="stylesheet" href="https://web.citroen.jp/common/css/lp_v2-bace.css">
 <!-- ※ 差し替え①のCSSは style.css 内（▼▼▼【差し替え① ヒーローに動画を追加】CSS）に記載 -->
 </head>
 <body>
 
+<!-- ===== g-header (本番web.citroen.jpから移植) ここから ===== -->
+      <header class="g-header">
+  <div class="g-header__default-view">
+      <div class="g-header__default-view--left js-gh--hum">
+          <span></span>
+          <span></span>
+          <span></span>
+          <p>MENU</p>
+      </div>
+      <div class="logo_wrap"><a href="https://www.citroen.jp/" target="_blank"><img
+                  src="https://web.citroen.jp/common/inc/images/citroen-logo.png"></a>
+      </div>
+      <div class="g-header__default-view__other-links gh-pc-only">
+        <div class="g-header__default-view__other-links__item">
+            <a href="https://www.citroen.jp/tools/configurator.html" target="_blank"
+                class="g-header__default-view__other-links__item--link">
+                <img src="https://web.citroen.jp/common/inc/images/g-header-configurator.jpg">
+            </a>
+        </div>
+        <div class="g-header__default-view__other-links__item">
+            <a href="https://krs.bz/pcj/m/ct_testdrive" target="_blank"
+                class="g-header__default-view__other-links__item--link">
+                <img src="https://web.citroen.jp/common/inc/images/g-header-drive.png">
+            </a>
+        </div>
+        <div class="g-header__default-view__other-links__item">
+            <a href="https://web.citroen.jp/dealers-list/" target="_blank"
+                class="g-header__default-view__other-links__item--link">
+                <img src="https://web.citroen.jp/common/inc/images/g-header-delar.svg">
+            </a>
+        </div>
+          <!-- <div class="g-header__default-view__other-links__item">
+              <a href="https://citroen-boutique.jp/" target="_blank"
+                  class="g-header__default-view__other-links__item--link">
+                  <img src="https://web.citroen.jp/common/inc/images/g-header-online.png"><br>
+                  <span>シトロエンブティック<br>オンライン</span></a>
+          </div>
+          <div class="g-header__default-view__other-links__item">
+              <div class="g-header__default-view__other-links__item--img">
+                  <a href="" target="_blank" class="g-header__default-view__other-links__item--link">
+                      <img src="https://web.citroen.jp/common/inc/images/mycitroen-logo-original.svg"></a>
+              </div>
+          </div> -->
+      </div>
+  </div>
+  <div class="g-header__open">
+      <!-- <div class="g-header__open-view">
+          <div class="g-header__open-view__2column">
+              <div class="g-header__open-view__2column--left"><a href="https://www.citroen.jp/">
+                      <span id="js-gh--prev-text"><i class="fa-solid fa-house"></i></span></a>
+              </div>
+              <div class="g-header__open-view__2column--right js-gh--hum">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+              </div>
+          </div>
+      </div> -->
+      <div class="g-header__page">
+        <div class="g-header__page__home gh-sp-only"><a href="https://www.citroen.jp/"></a></div>
+          <nav class="g-header__page__nav">
+              <ul class="g-header__page__list">
+                  <li class="g-header__page__list--item">
+                    <a href="https://www.citroen.jp/citroen-range.html" target="_blank">モデルラインアップ<img class="gh-sp-only nolazy" src="https://web.citroen.jp/common/inc/images/g-header-arrow.png"></a>
+                  </li>
+                  <li class="g-header__page__list--item">
+                    <a href="https://www.citroen.jp/citizen/drive-citroen.html" target="_blank">シトロエンを検討中の方へ<img class="gh-sp-only nolazy" src="https://web.citroen.jp/common/inc/images/g-header-arrow.png"></a>
+                  </li>
+                  <li class="g-header__page__list--item">
+                    <a href="https://www.citroen.jp/citizen/drive-zen.html" target="_blank">快適なカーライフのために<img class="gh-sp-only nolazy" src="https://web.citroen.jp/common/inc/images/g-header-arrow.png"></a>
+                  </li>
+                  <li class="g-header__page__list--item">
+                    <a href="https://www.citroen.jp/used-car.html" target="_blank">認定中古車<img class="gh-sp-only nolazy" src="https://web.citroen.jp/common/inc/images/g-header-arrow.png"></a>
+                  </li>
+                  <li class="g-header__page__list--item">
+                    <a href="https://www.citroen.jp/citroen-brand/news.html" target="_blank">最新ニュース<img class="gh-sp-only nolazy" src="https://web.citroen.jp/common/inc/images/g-header-arrow.png"></a>
+                  </li>
+              </ul>
+          </nav>
+          <div class="g-header__page__other gh-sp-only">
+              <div class="g-header__page__other__content">
+                  <a href="https://web.citroen.jp/dealers-list/" target="_blank">
+                    <span>ディーラーを探す</span>
+                  </a>
+              </div>
+              <div class="g-header__page__other__content">
+                  <a href="https://www.citroen.jp/tools/configurator.html" target="_blank">
+                    <span>愛車プランニング</span>
+                  </a>
+              </div>
+              <div class="g-header__page__other__content">
+                  <a href="https://krs.bz/pcj/m/ct_testdrive" target="_blank">
+                    <span>試乗申込み</span>
+                  </a>
+              </div>
+              <div class="g-header__page__other__content">
+                  <a href="https://krs.bz/pcj/m/ct_appointment" target="_blank">
+                    <span>来店・商談予約</span>
+                  </a>
+              </div>
+              <!-- <div class="g-header__page__other__content">
+              <div class="g-header__page__other__content--img delear"><img
+                      src="https://web.citroen.jp/common/inc/images/g-header-delar.png"></div>
+              <p class="g-header__page__other__content--ttl">ディーラー一覧</p>
+          </div>
+          <div class="g-header__page__other__content">
+              <div class="g-header__page__other__content--img online"><img
+                      src="https://web.citroen.jp/common/inc/images/g-header-online.png">
+              </div>
+              <p class="g-header__page__other__content--ttl">シトロエンブティック<br>オンライン</p>
+          </div> -->
+          </div>
+      </div>
+  </div>
+</header>
+<!-- ===== g-header ここまで ===== -->
 <!-- ===== ナビ ===== -->
 <!-- ===== 1. ヒーロー ===== -->
 <!-- ==================================================================
@@ -28,7 +146,7 @@
   <div class="hero-split-A-video">
     <iframe
       id="heroYT"
-      src="https://www.youtube.com/embed/AryTqJSH2zI?enablejsapi=1&autoplay=1&mute=1&playsinline=1&loop=1&playlist=AryTqJSH2zI&rel=0&modestbranding=1&controls=0"
+      src="https://www.youtube.com/embed/AryTqJSH2zI?enablejsapi=1&autoplay=1&mute=1&playsinline=1&loop=1&playlist=AryTqJSH2zI&rel=0&modestbranding=1"
       title="RECOVERY DRIVE"
       allow="autoplay; encrypted-media; fullscreen"
       allowfullscreen></iframe>
@@ -1316,5 +1434,8 @@
     }
   })();
 </script>
+<!-- 本番ヘッダー開閉(ハンバーガー)用：jQuery + lp_v2-bace.js（g-header__/g-footer__限定で副作用小） -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+<script src="https://web.citroen.jp/common/js/lp_v2-bace.js"></script>
 </body>
 </html>
