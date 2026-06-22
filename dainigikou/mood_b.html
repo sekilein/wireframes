@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>第二開発技工｜ムード案B 明るい・共感</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Baloo+2:wght@600;700&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --sky:#1aa3e8; --sky-d:#1380c2; --green:#34c08a; --ink:#1d3247; --gray:#5f7186;
+    --cream:#f3f9fd; --mint:#eafaf3; --line:#e6eef5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden;max-width:100%}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:#fff;line-height:1.85;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit} img{display:block;max-width:100%}
+  .round{font-family:"Baloo 2",sans-serif}
+
+  /* header */
+  .hd{position:absolute;top:0;left:0;width:100%;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,56px)}
+  .hd .lg{display:flex;align-items:center;gap:11px}
+  .hd .lg .m{width:44px;height:44px;border-radius:14px;background:linear-gradient(135deg,var(--sky),var(--green));display:grid;place-items:center;font-weight:900;color:#fff;font-size:19px;box-shadow:0 8px 18px rgba(26,163,232,.3)}
+  .hd .lg b{font-size:17px;font-weight:900;letter-spacing:.05em;color:var(--ink)}
+  .hd nav{display:flex;gap:24px;font-size:14px;font-weight:700}
+  .hd nav a{color:var(--ink)}.hd nav a:hover{color:var(--sky)}
+  .hd .cta{background:var(--ink);color:#fff;padding:11px 22px;border-radius:999px;font-size:13px;font-weight:700}
+  .hd .cta:hover{background:var(--sky)}
+
+  /* hero */
+  .hero{position:relative;background:linear-gradient(160deg,var(--cream),#fff 60%);overflow:hidden}
+  .blob{position:absolute;border-radius:50%;filter:blur(4px);z-index:0;opacity:.5}
+  .blob.a{width:520px;height:520px;background:radial-gradient(circle,#bfe6fa,transparent 68%);top:-120px;right:-80px}
+  .blob.b{width:380px;height:380px;background:radial-gradient(circle,#c4f0de,transparent 68%);bottom:-100px;left:-60px}
+  .hero .in{position:relative;z-index:5;max-width:1240px;margin:0 auto;padding:clamp(120px,14vw,160px) clamp(20px,4vw,56px) clamp(50px,7vw,84px);
+     display:grid;grid-template-columns:1.02fr .98fr;gap:clamp(28px,4vw,56px);align-items:center}
+  .pill{display:inline-flex;align-items:center;gap:9px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 18px;font-size:13px;font-weight:700;color:var(--sky-d);box-shadow:0 6px 16px rgba(29,50,71,.06);margin-bottom:24px}
+  .pill .dot{width:9px;height:9px;border-radius:50%;background:var(--green)}
+  .hero h1{font-size:clamp(30px,4.4vw,56px);font-weight:900;line-height:1.4;letter-spacing:.01em;margin-bottom:22px;color:var(--ink)}
+  .hero h1 .hl{position:relative;white-space:nowrap}
+  .hero h1 .hl::after{content:"";position:absolute;left:-2px;right:-2px;bottom:.06em;height:.34em;background:#bfe9c9;z-index:-1;border-radius:6px}
+  .hero .lead{font-size:15.5px;color:var(--gray);max-width:500px;line-height:1.95;margin-bottom:30px}
+  .acts{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .b1{background:linear-gradient(135deg,var(--sky),var(--green));color:#fff;font-weight:700;padding:16px 32px;border-radius:999px;font-size:15px;display:inline-flex;gap:10px;align-items:center;box-shadow:0 12px 26px rgba(26,163,232,.34);transition:.25s}
+  .b1:hover{transform:translateY(-2px)}
+  .b2{color:var(--ink);font-weight:700;font-size:15px;display:inline-flex;gap:8px;align-items:center;border-bottom:2px solid var(--line);padding-bottom:4px}
+  .b2:hover{border-color:var(--sky)}
+  /* hero image */
+  .him{position:relative}
+  .him .ph{border-radius:30px;overflow:hidden;aspect-ratio:5/5;box-shadow:0 30px 70px rgba(29,50,71,.18)}
+  .him .ph img{width:100%;height:100%;object-fit:cover}
+  .him .chip{position:absolute;background:#fff;border-radius:18px;padding:14px 18px;box-shadow:0 16px 36px rgba(29,50,71,.16);display:flex;align-items:center;gap:12px}
+  .him .chip .ic{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:18px}
+  .him .c1{left:-26px;top:40px}.him .c1 .ic{background:var(--sky)}
+  .him .c2{right:-20px;bottom:54px}.him .c2 .ic{background:var(--green)}
+  .him .chip b{display:block;font-size:15px;font-weight:900}.him .chip span{font-size:11px;color:var(--gray)}
+
+  /* service cards */
+  .svc{max-width:1180px;margin:0 auto;padding:0 24px clamp(70px,9vw,110px);display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+  .card{border-radius:24px;padding:32px 28px;border:1px solid var(--line);transition:.3s;position:relative;overflow:hidden}
+  .card:hover{transform:translateY(-6px);box-shadow:0 24px 50px rgba(29,50,71,.12)}
+  .card.s1{background:var(--cream)}.card.s2{background:var(--mint)}.card.s3{background:#fff7ed}
+  .card .ic{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px;margin-bottom:18px}
+  .card.s1 .ic{background:var(--sky)}.card.s2 .ic{background:var(--green)}.card.s3 .ic{background:#f0a93c}
+  .card h3{font-size:21px;font-weight:900;margin-bottom:8px}
+  .card p{font-size:13.5px;color:var(--gray);line-height:1.85}
+  .card .more{display:inline-block;margin-top:14px;font-size:13px;font-weight:700;color:var(--sky-d)}
+
+  @media(max-width:880px){
+    .hd nav{display:none}
+    .hero .in{grid-template-columns:1fr}
+    .him{max-width:440px;margin:6px auto 0}
+    .svc{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+<header class="hd">
+  <div class="lg"><span class="m round">技</span><b>第二開発技工</b></div>
+  <nav><a>事業概要</a><a>選ばれる理由</a><a>施工実績</a><a>求人情報</a><a>会社概要</a></nav>
+  <a class="cta">お問合せ</a>
+</header>
+
+<section class="hero">
+  <span class="blob a"></span><span class="blob b"></span>
+  <div class="in">
+    <div class="copy">
+      <span class="pill"><span class="dot"></span>岡山・倉敷の測量・土木のパートナー</span>
+      <h1>“はかる”技術で、<br><span class="hl">まちの未来</span>を<br>つくっていく。</h1>
+      <p class="lead">公共測量・工事測量で培った確かな技術を、ものづくりの現場へ。早く・安く・良く、安心・安全をモットーに、地域とともに歩みます。</p>
+      <div class="acts">
+        <a class="b1">事業について知る <span>→</span></a>
+        <a class="b2">採用情報を見る →</a>
+      </div>
+    </div>
+    <div class="him">
+      <div class="ph"><img src="img/catch01.jpg" alt=""></div>
+      <div class="chip c1"><span class="ic round">測</span><div><b>4分野</b><span>測量・管理・設計・調査</span></div></div>
+      <div class="chip c2"><span class="ic round">岡</span><div><b>岡山全域</b><span>倉敷を拠点に対応</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="svc">
+  <div class="card s1"><span class="ic round">測</span><h3>測量</h3><p>土木・橋梁・舗装・トンネル・造成など、幅広い分野の測量を行います。</p><span class="more">詳しくはこちら →</span></div>
+  <div class="card s2"><span class="ic round">管</span><h3>施工管理</h3><p>施工現場で、測量技術を活かした技術支援を行います。</p><span class="more">詳しくはこちら →</span></div>
+  <div class="card s3"><span class="ic round">調</span><h3>調査・設計</h3><p>測量と同時に、地質調査・設計照査等も対応可能です。</p><span class="more">詳しくはこちら →</span></div>
+</section>
+</body>
+</html>

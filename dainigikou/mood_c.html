@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>第二開発技工｜ムード案C 大地・ものづくり</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@500;600;700;900&family=Noto+Sans+JP:wght@400;500;700&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --char:#1c1a17; --char2:#272320; --sand:#c2a06a; --sand-l:#d9c39a;
+    --cream:#f4efe6; --paper:#ece5d8; --ink:#2a2622; --gray:#7b7468;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{overflow-x:hidden;max-width:100%}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:var(--cream);line-height:1.9;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit} img{display:block;max-width:100%}
+  .ser{font-family:"Noto Serif JP",serif}
+  .cor{font-family:"Cormorant Garamond",serif;letter-spacing:.1em}
+
+  /* header */
+  .hd{position:absolute;top:0;left:0;width:100%;z-index:20;display:flex;justify-content:space-between;align-items:center;padding:26px clamp(20px,4vw,60px);color:var(--cream)}
+  .hd .lg{display:flex;align-items:center;gap:12px}
+  .hd .lg .m{width:42px;height:42px;border:1px solid var(--sand);display:grid;place-items:center;font-weight:700;color:var(--sand);font-size:18px;font-family:"Noto Serif JP",serif}
+  .hd .lg b{font-size:17px;font-weight:700;letter-spacing:.14em;font-family:"Noto Serif JP",serif}
+  .hd nav{display:flex;gap:28px;font-size:13px;letter-spacing:.06em}
+  .hd nav a{opacity:.82}.hd nav a:hover{opacity:1;color:var(--sand-l)}
+  .hd .cta{border:1px solid var(--sand);color:var(--sand-l);padding:9px 20px;font-size:12px;letter-spacing:.14em}
+
+  /* hero split */
+  .hero{display:grid;grid-template-columns:1.02fr 1.1fr;min-height:100vh}
+  .left{background:var(--char);color:var(--cream);position:relative;display:flex;align-items:center;padding:clamp(80px,9vw,120px) clamp(28px,4.5vw,72px) clamp(40px,5vw,72px)}
+  .left::before{content:"";position:absolute;top:0;left:0;width:100%;height:100%;
+     background-image:radial-gradient(rgba(194,160,106,.06) 1px,transparent 1px);background-size:22px 22px;opacity:.7}
+  .left .in{position:relative;z-index:2;max-width:560px}
+  .num{font-family:"Cormorant Garamond",serif;font-size:15px;color:var(--sand);letter-spacing:.3em;margin-bottom:30px;display:flex;align-items:center;gap:16px}
+  .num::after{content:"";flex:1;height:1px;background:rgba(194,160,106,.4)}
+  .eg{font-family:"Cormorant Garamond",serif;font-size:14px;color:var(--sand-l);letter-spacing:.28em;margin-bottom:20px;text-transform:uppercase}
+  .hero h1{font-family:"Noto Serif JP",serif;font-weight:600;font-size:clamp(30px,3.8vw,52px);line-height:1.55;letter-spacing:.04em;margin-bottom:30px}
+  .hero h1 .a{color:var(--sand-l)}
+  .hero .lead{font-size:14px;color:#c9c1b4;line-height:2.1;max-width:430px;margin-bottom:40px}
+  .acts{display:flex;gap:26px;align-items:center;flex-wrap:wrap}
+  .b1{border:1px solid var(--sand);color:var(--cream);padding:15px 34px;font-size:13px;letter-spacing:.12em;transition:.3s}
+  .b1:hover{background:var(--sand);color:var(--char)}
+  .b2{font-size:13px;letter-spacing:.1em;color:var(--sand-l);border-bottom:1px solid var(--sand);padding-bottom:4px}
+
+  .right{position:relative;overflow:hidden}
+  .right img{width:100%;height:100%;object-fit:cover;filter:saturate(.85) contrast(1.05)}
+  .right::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(28,26,23,.5),transparent 28%)}
+  .vlabel{position:absolute;right:30px;top:50%;transform:translateY(-50%);writing-mode:vertical-rl;z-index:3;
+     font-family:"Noto Serif JP",serif;font-size:14px;letter-spacing:.5em;color:rgba(244,239,230,.9);text-shadow:0 2px 12px rgba(0,0,0,.5)}
+
+  /* statement band */
+  .stmt{background:var(--paper);padding:clamp(56px,8vw,104px) clamp(24px,5vw,72px);position:relative}
+  .stmt .in{max-width:1000px;margin:0 auto;text-align:center}
+  .stmt .eg{justify-content:center;display:block;color:var(--sand);margin-bottom:24px}
+  .stmt p{font-family:"Noto Serif JP",serif;font-weight:500;font-size:clamp(19px,2.5vw,30px);line-height:2;letter-spacing:.04em;color:var(--char)}
+  .stmt p .a{color:#a07c3e;border-bottom:1px solid var(--sand)}
+  .stmt .sign{margin-top:34px;font-size:13px;letter-spacing:.16em;color:var(--gray)}
+  .stmt .rule{width:1px;height:54px;background:var(--sand);margin:0 auto 30px}
+
+  @media(max-width:900px){
+    .hd nav{display:none}
+    .hero{grid-template-columns:1fr;min-height:auto}
+    .right{min-height:46vh;order:2}
+    .left{order:1;padding-top:120px}
+    .vlabel{font-size:12px;right:18px}
+  }
+</style>
+</head>
+<body>
+<header class="hd">
+  <div class="lg"><span class="m">技</span><b>第二開発技工</b></div>
+  <nav><a>事業概要</a><a>選ばれる理由</a><a>施工実績</a><a>求人情報</a><a>会社概要</a></nav>
+  <a class="cta cor">CONTACT</a>
+</header>
+
+<section class="hero">
+  <div class="left">
+    <div class="in">
+      <div class="num">01 — OKAYAMA / KURASHIKI</div>
+      <p class="eg">Since 1979 · Surveying &amp; Civil Engineering</p>
+      <h1>大地を<span class="a">測り</span>、<br>まちの礎を、<br>技術屋の良心で。</h1>
+      <p class="lead">公共測量・工事測量で培った“はかる”技術を、ものづくりの現場へ。早く・安く・良く、安心・安全を信条に、地域の基盤を支え続けます。</p>
+      <div class="acts">
+        <a class="b1 cor">VIEW MORE</a>
+        <a class="b2">採用情報を見る →</a>
+      </div>
+    </div>
+  </div>
+  <div class="right">
+    <img src="img/catch03.jpg" alt="測量の現場">
+    <div class="vlabel">測る、ということ。</div>
+  </div>
+</section>
+
+<section class="stmt">
+  <div class="in">
+    <span class="eg cor">OUR PHILOSOPHY</span>
+    <div class="rule"></div>
+    <p>一点を正確に<span class="a">測る</span>ことから、<br>すべてのものづくりは始まる。<br>私たちは岡山・倉敷の地で、<br>確かな技術と良心を、未来へつないでいく。</p>
+    <p class="sign">株式会社 第二開発技工</p>
+  </div>
+</section>
+</body>
+</html>
