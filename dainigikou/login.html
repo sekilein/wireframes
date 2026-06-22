@@ -40,7 +40,7 @@
   });
   function check() {
     var pw = document.getElementById('pw').value;
-    if (pw === 'leindainigikou0622') {
+    if (pw === 'stgadmin') {
       sessionStorage.setItem('dainigikou_auth', '1');
       var p = new URLSearchParams(location.search).get('next');
       location.href = p || 'index.html';
