@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>株式会社 第二開発技工｜TOP FV 制作物</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Noto Sans JP",sans-serif;background:#0c2b51;color:#fff;min-height:100vh;display:grid;place-items:center;padding:40px}
+  .wrap{max-width:720px;width:100%;text-align:center}
+  h1{font-size:26px;font-weight:900;letter-spacing:.04em;margin-bottom:8px}
+  .sub{font-size:13px;opacity:.7;letter-spacing:.1em;margin-bottom:40px}
+  .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  a.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.2);border-radius:16px;padding:34px 24px;color:#fff;text-decoration:none;transition:.25s}
+  a.card:hover{background:rgba(25,195,214,.16);border-color:#19c3d6;transform:translateY(-4px)}
+  a.card .ico{font-size:34px;margin-bottom:14px}
+  a.card b{display:block;font-size:19px;font-weight:900;margin-bottom:6px}
+  a.card span{font-size:12px;opacity:.7;line-height:1.7}
+  @media(max-width:600px){.cards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>株式会社 第二開発技工</h1>
+    <p class="sub">TOP ページ ファーストビュー 制作物</p>
+    <div class="cards">
+      <a class="card" href="top_mono.html"><div class="ico">◑</div><b>TOPページ モノクロ版</b><span>ワイヤー寄り・グレースケール<br>（フルページ）</span></a>
+      <a class="card" href="top.html"><div class="ico">◨</div><b>TOPページ デザインラフ</b><span>フルページ・ミドルファイ<br>（ワイヤー×デザインの中間）</span></a>
+      <a class="card" href="wireframe.html"><div class="ico">▦</div><b>FV ワイヤーフレーム</b><span>構造・レイアウト確認用<br>（グレースケール／注釈付き）</span></a>
+      <a class="card" href="design.html"><div class="ico">◧</div><b>FV デザイン</b><span>配色・トーン適用版<br>（PC / SP レスポンシブ）</span></a>
+    </div>
+  </div>
+</body>
+</html>

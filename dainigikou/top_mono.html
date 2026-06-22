@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>株式会社 第二開発技工｜TOPページ（モノクロ・ワイヤー寄り）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --ink:#1a1d20;        /* 黒に近い基調 */
+    --ink2:#3a3f44;
+    --gray:#6b7176;
+    --gray-l:#9aa0a5;
+    --line:#d7dadd;
+    --line-d:#b9bdc1;
+    --fill:#f2f3f4;
+    --fill2:#e8eaeb;
+    --dark:#1f2225;       /* 反転帯 */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  html,body{overflow-x:hidden;max-width:100%}
+  body{font-family:"Noto Sans JP",sans-serif;color:var(--ink);background:#fff;line-height:1.8;-webkit-font-smoothing:antialiased}
+  a{text-decoration:none;color:inherit}
+  img{display:block;max-width:100%;filter:grayscale(1) contrast(1.02)}
+  .wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+  .en{font-family:"Roboto",sans-serif;font-weight:700;letter-spacing:.18em}
+
+  /* ===== section heading ===== */
+  .shead{text-align:center;margin-bottom:48px}
+  .shead .en{display:block;color:var(--gray-l);font-size:13px;margin-bottom:8px}
+  .shead h2{font-size:clamp(26px,3.4vw,38px);font-weight:900;color:var(--ink);letter-spacing:.06em}
+  .shead .deco{width:40px;height:2px;background:var(--ink);margin:18px auto 0}
+  .shead.left{text-align:left}
+  .shead.left .deco{margin-left:0}
+
+  /* ===== Header ===== */
+  .header{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--ink)}
+  .header-in{max-width:1280px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:12px clamp(18px,3vw,40px)}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand .lm{width:44px;height:44px;border:1.5px solid var(--ink);border-radius:6px;display:grid;place-items:center;color:var(--ink);font-weight:900;font-size:20px}
+  .brand b{display:block;font-size:17px;font-weight:900;letter-spacing:.06em;color:var(--ink)}
+  .brand span{font-size:10px;letter-spacing:.15em;color:var(--gray)}
+  .gnav{display:flex;align-items:center;gap:clamp(12px,1.6vw,26px)}
+  .gnav a{font-size:14px;font-weight:700;color:var(--ink2);position:relative;padding:8px 0}
+  .gnav a::after{content:"";position:absolute;left:0;bottom:2px;width:0;height:2px;background:var(--ink);transition:.25s}
+  .gnav a:hover::after{width:100%}
+  .hbtns{display:flex;align-items:center;gap:12px}
+  .htel{text-align:right;line-height:1.1}
+  .htel small{font-size:10px;color:var(--gray);letter-spacing:.1em}
+  .htel b{font-family:"Roboto",sans-serif;font-size:20px;color:var(--ink)}
+  .hcta{background:var(--ink);color:#fff;font-weight:700;font-size:13px;padding:11px 20px;border-radius:4px;transition:.25s}
+  .hcta:hover{background:var(--gray)}
+
+  /* ===== Hero (light / split, wireframe-ish) ===== */
+  .hero{background:#fff;position:relative;border-bottom:1px solid var(--line)}
+  .hero-in{max-width:1240px;margin:0 auto;padding:clamp(40px,6vw,80px) clamp(20px,4vw,48px);display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(24px,4vw,56px);align-items:center}
+  .hero-copy .eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--gray);font-weight:700;font-size:13px;letter-spacing:.12em;margin-bottom:20px}
+  .hero-copy .eyebrow::before{content:"";width:30px;height:2px;background:var(--ink)}
+  .hero-copy h1{font-size:clamp(28px,4vw,50px);font-weight:900;line-height:1.45;color:var(--ink);letter-spacing:.02em;margin-bottom:24px}
+  .hero-copy h1 .mk{position:relative}
+  .hero-copy h1 .mk::after{content:"";position:absolute;left:0;right:0;bottom:.05em;height:.16em;background:var(--fill2);z-index:-1}
+  .hero-copy .lead{font-size:15px;color:var(--gray);line-height:1.95;margin-bottom:28px;max-width:560px}
+  .tags{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:30px}
+  .tags span{font-size:13px;font-weight:700;color:var(--ink2);background:#fff;border:1px solid var(--line-d);border-radius:999px;padding:7px 16px}
+  .hactions{display:flex;flex-wrap:wrap;gap:14px}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-weight:700;padding:15px 28px;border-radius:4px;font-size:15px;transition:.25s}
+  .btn .arw{transition:transform .25s}.btn:hover .arw{transform:translateX(4px)}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:var(--gray)}
+  .btn-line{background:#fff;color:var(--ink);border:1.5px solid var(--ink)}
+  .btn-line:hover{background:var(--ink);color:#fff}
+  /* hero collage */
+  .hero-img{position:relative}
+  .hero-img .main{border:1px solid var(--line-d);overflow:hidden;aspect-ratio:4/3}
+  .hero-img .main img{width:100%;height:100%;object-fit:cover}
+  .hero-img .sub{position:absolute;left:-22px;bottom:-22px;width:42%;overflow:hidden;border:4px solid #fff;outline:1px solid var(--line-d);aspect-ratio:1/1}
+  .hero-img .sub img{width:100%;height:100%;object-fit:cover}
+  .hero-img .badge{position:absolute;right:-12px;top:-12px;background:var(--ink);color:#fff;padding:14px 18px;text-align:center}
+  .hero-img .badge b{display:block;font-family:"Roboto",sans-serif;font-size:30px;line-height:1}
+  .hero-img .badge small{font-size:10px;letter-spacing:.1em;color:var(--gray-l)}
+
+  /* ===== Stat bar ===== */
+  .stats{background:var(--dark);color:#fff}
+  .stats-in{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;padding:34px 24px}
+  .stat{text-align:center;position:relative}
+  .stat+.stat::before{content:"";position:absolute;left:0;top:10%;height:80%;width:1px;background:rgba(255,255,255,.18)}
+  .stat b{font-family:"Roboto",sans-serif;font-size:clamp(28px,3.4vw,42px);font-weight:900;color:#fff;line-height:1}
+  .stat b i{font-size:.5em;font-style:normal;margin-left:3px;color:var(--gray-l)}
+  .stat span{display:block;font-size:12px;letter-spacing:.06em;opacity:.7;margin-top:8px}
+
+  /* ===== Section base ===== */
+  .sec{padding:clamp(56px,8vw,96px) 0}
+  .bg-soft{background:var(--fill)}
+
+  /* ===== Service ===== */
+  .services{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  .scard{background:#fff;border:1px solid var(--line-d);overflow:hidden;transition:.25s}
+  .scard:hover{border-color:var(--ink)}
+  .scard .thumb{aspect-ratio:16/10;overflow:hidden;position:relative;border-bottom:1px solid var(--line)}
+  .scard .thumb img{width:100%;height:100%;object-fit:cover;transition:.4s}
+  .scard:hover .thumb img{transform:scale(1.04)}
+  .scard .no{position:absolute;top:0;left:0;background:var(--ink);color:#fff;font-family:"Roboto",sans-serif;font-weight:700;font-size:13px;padding:5px 13px;letter-spacing:.08em}
+  .scard .body{padding:24px 24px 28px}
+  .scard h3{font-size:22px;font-weight:900;color:var(--ink);margin-bottom:10px}
+  .scard p{font-size:14px;color:var(--gray);line-height:1.85;min-height:78px}
+  .scard .more{display:inline-flex;align-items:center;gap:8px;margin-top:14px;color:var(--ink);font-weight:700;font-size:14px;border-bottom:1px solid var(--ink);padding-bottom:2px}
+
+  /* ===== Reasons ===== */
+  .reasons{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+  .rcard{background:#fff;border:1px solid var(--line-d);padding:36px 28px;text-align:center;position:relative}
+  .rcard .ic{width:64px;height:64px;border:1.5px solid var(--ink);border-radius:50%;margin:0 auto 18px;display:grid;place-items:center;color:var(--ink);font-size:26px;font-weight:900}
+  .rcard .rn{position:absolute;top:16px;right:20px;font-family:"Roboto",sans-serif;font-weight:900;font-size:34px;color:var(--fill2)}
+  .rcard h3{font-size:19px;font-weight:900;color:var(--ink);margin-bottom:10px}
+  .rcard p{font-size:13.5px;color:var(--gray);line-height:1.85}
+
+  /* ===== Works ===== */
+  .works-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .works-grid a{aspect-ratio:1/1;overflow:hidden;position:relative;display:block;border:1px solid var(--line-d)}
+  .works-grid img{width:100%;height:100%;object-fit:cover;transition:.4s}
+  .works-grid a:hover img{transform:scale(1.06)}
+
+  /* ===== News & Recruit ===== */
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
+  .news-list{border-top:1px solid var(--ink)}
+  .news-list li{list-style:none;border-bottom:1px solid var(--line)}
+  .news-list a{display:flex;gap:16px;align-items:center;padding:16px 4px;transition:.2s}
+  .news-list a:hover{background:#fff;padding-left:10px}
+  .news-list time{font-family:"Roboto",sans-serif;font-size:13px;color:var(--gray);min-width:88px}
+  .news-list .cat{font-size:11px;font-weight:700;color:var(--ink);border:1px solid var(--line-d);padding:3px 10px;white-space:nowrap}
+  .news-list .cat.rc{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .news-list p{font-size:14px;font-weight:500;color:var(--ink2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .listmore{display:inline-flex;align-items:center;gap:8px;margin-top:22px;color:var(--ink);font-weight:700;font-size:14px;border-bottom:1px solid var(--ink);padding-bottom:2px}
+
+  /* ===== Recruit band ===== */
+  .recruit{position:relative;overflow:hidden;color:#fff;padding:clamp(40px,6vw,72px) clamp(28px,5vw,64px);border:1px solid var(--ink)}
+  .recruit::before{content:"";position:absolute;inset:0;background:url('img/catch03.jpg') center/cover;filter:grayscale(1) contrast(1.05);z-index:0}
+  .recruit::after{content:"";position:absolute;inset:0;background:rgba(20,22,25,.78);z-index:1}
+  .recruit>*{position:relative;z-index:2}
+  .recruit .en{color:var(--gray-l);font-size:13px}
+  .recruit h2{font-size:clamp(26px,3.6vw,40px);font-weight:900;letter-spacing:.04em;margin:8px 0 16px;line-height:1.4}
+  .recruit p{font-size:15px;opacity:.92;max-width:620px;margin-bottom:30px;line-height:1.9}
+  .recruit .btn-primary{background:#fff;color:var(--ink)}
+  .recruit .btn-primary:hover{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px #fff}
+
+  /* ===== Company ===== */
+  .company{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px);align-items:start}
+  .ctable{width:100%;border-collapse:collapse;border-top:1px solid var(--ink)}
+  .ctable th,.ctable td{text-align:left;padding:16px 8px;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+  .ctable th{width:34%;color:var(--ink);font-weight:700;white-space:nowrap}
+  .ctable td{color:var(--gray)}
+  .map{overflow:hidden;aspect-ratio:4/3;border:1px solid var(--line-d);background:
+      repeating-linear-gradient(45deg,var(--fill),var(--fill) 10px,var(--fill2) 10px,var(--fill2) 20px);
+      display:grid;place-items:center;color:var(--gray);font-size:14px;position:relative}
+  .map .pin{position:absolute;font-size:32px;filter:grayscale(1)}
+
+  /* ===== Contact CTA ===== */
+  .contact{background:var(--dark);color:#fff;text-align:center;padding:clamp(50px,7vw,84px) 24px}
+  .contact .en{color:var(--gray-l);font-size:13px}
+  .contact h2{font-size:clamp(24px,3.4vw,36px);font-weight:900;margin:8px 0 14px;letter-spacing:.04em}
+  .contact p{opacity:.8;font-size:15px;margin-bottom:30px}
+  .contact-row{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:center}
+  .bigtel{display:flex;flex-direction:column;line-height:1.1}
+  .bigtel small{font-size:11px;letter-spacing:.14em;opacity:.7}
+  .bigtel b{font-family:"Roboto",sans-serif;font-size:34px;font-weight:900;letter-spacing:.02em}
+
+  /* ===== Footer ===== */
+  .footer{background:var(--ink);color:#fff;padding:48px 24px 26px}
+  .footer-in{max-width:1180px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;gap:30px;padding-bottom:30px;border-bottom:1px solid rgba(255,255,255,.16)}
+  .footer .brand .lm{border-color:rgba(255,255,255,.6);color:#fff}
+  .footer .brand b{color:#fff}.footer .brand span{color:rgba(255,255,255,.55)}
+  .footer .fadd{font-size:13px;opacity:.75;margin-top:14px;line-height:1.8}
+  .fnav{display:flex;gap:40px;flex-wrap:wrap}
+  .fnav ul{list-style:none}
+  .fnav li{margin-bottom:10px}
+  .fnav a{font-size:13px;opacity:.8}.fnav a:hover{opacity:1}
+  .copy{text-align:center;font-size:12px;opacity:.55;margin-top:22px;font-family:"Roboto",sans-serif}
+
+  .ptop{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border:1px solid #fff;background:var(--ink);color:#fff;display:grid;place-items:center;z-index:40}
+
+  /* ===== Responsive ===== */
+  @media(max-width:980px){
+    .gnav,.htel{display:none}
+    .hero-in{grid-template-columns:1fr}
+    .hero-img{max-width:520px;margin:10px auto 0}
+    .services,.reasons{grid-template-columns:1fr 1fr}
+    .two,.company{grid-template-columns:1fr}
+    .works-grid{grid-template-columns:repeat(3,1fr)}
+  }
+  @media(max-width:600px){
+    .header-in{padding:10px 16px}
+    .brand b{font-size:15px}
+    .stats-in{grid-template-columns:1fr 1fr;gap:24px 10px}
+    .services,.reasons{grid-template-columns:1fr}
+    .works-grid{grid-template-columns:repeat(2,1fr)}
+    .btn{flex:1;justify-content:center;padding:14px 18px}
+    .hero-img .sub{width:38%}
+    .ctable th{width:38%}
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== Header ===== -->
+<header class="header">
+  <div class="header-in">
+    <a href="#" class="brand"><span class="lm">技</span><span><b>第二開発技工</b><span>DAINI KAIHATSU GIKO</span></span></a>
+    <nav class="gnav">
+      <a href="#service">事業概要</a>
+      <a href="#reason">選ばれる理由</a>
+      <a href="#works">施工実績</a>
+      <a href="#news">新着情報</a>
+      <a href="#recruit">求人情報</a>
+      <a href="#company">会社概要</a>
+    </nav>
+    <div class="hbtns">
+      <div class="htel"><small>受付 8:30-17:30</small><b>086-423-1899</b></div>
+      <a href="#contact" class="hcta">お問合せ</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="hero-in">
+    <div class="hero-copy">
+      <span class="eyebrow">岡山・倉敷｜測量・施工管理・土木設計・地質調査</span>
+      <h1>公共測量・工事測量で培った<br><span class="mk">“はかる”技術</span>を、<br>ものづくりの現場で活かす。</h1>
+      <p class="lead">私共は今後も顧客の皆様の立場に立ち、早く・安く・良く（技術屋の良心）、安心・安全をモットーに技術力を提供し、社会に貢献したいと考えております。</p>
+      <div class="tags"><span>測量</span><span>施工管理</span><span>土木設計</span><span>地質調査</span><span>人材派遣</span></div>
+      <div class="hactions">
+        <a href="#recruit" class="btn btn-primary">採用情報を見る <span class="arw">→</span></a>
+        <a href="#service" class="btn btn-line">事業内容を見る <span class="arw">→</span></a>
+      </div>
+    </div>
+    <div class="hero-img">
+      <div class="main"><img src="img/catch01.jpg" alt="岡山・倉敷の街並み"></div>
+      <div class="sub"><img src="img/catch03.jpg" alt="測量作業の様子"></div>
+      <div class="badge"><b>1979</b><small>創業 ※仮</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Stat bar ===== -->
+<section class="stats">
+  <div class="stats-in">
+    <div class="stat"><b>45<i>年</i></b><span>培ってきた測量実績 ※仮</span></div>
+    <div class="stat"><b>1,200<i>件+</i></b><span>累計プロジェクト ※仮</span></div>
+    <div class="stat"><b>4<i>分野</i></b><span>測量・管理・設計・調査</span></div>
+    <div class="stat"><b>岡山<i>全域</i></b><span>倉敷を拠点に対応</span></div>
+  </div>
+</section>
+
+<!-- ===== Service ===== -->
+<section class="sec" id="service">
+  <div class="wrap">
+    <div class="shead"><span class="en">SERVICE</span><h2>事業概要</h2><div class="deco"></div></div>
+    <div class="services">
+      <a href="#" class="scard">
+        <div class="thumb"><span class="no">01</span><img src="img/catch02.jpg" alt="測量"></div>
+        <div class="body"><h3>測量</h3><p>土木工事・橋梁工事・舗装工事・トンネル工事・造成工事などの測量をおこなっております。</p><span class="more">詳しくはこちら →</span></div>
+      </a>
+      <a href="#" class="scard">
+        <div class="thumb"><span class="no">02</span><img src="img/catch03.jpg" alt="施工管理"></div>
+        <div class="body"><h3>施工管理</h3><p>施工現場において、測量技術を活かした技術支援を行っております。</p><span class="more">詳しくはこちら →</span></div>
+      </a>
+      <a href="#" class="scard">
+        <div class="thumb"><span class="no">03</span><img src="img/catch04.jpg" alt="調査・設計"></div>
+        <div class="body"><h3>調査・設計</h3><p>測量と同時に地質調査・設計照査等も対応が可能です。幅広い分野でお手伝いします。</p><span class="more">詳しくはこちら →</span></div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Reasons ===== -->
+<section class="sec bg-soft" id="reason">
+  <div class="wrap">
+    <div class="shead"><span class="en">REASON</span><h2>選ばれる理由</h2><div class="deco"></div></div>
+    <div class="reasons">
+      <div class="rcard"><span class="rn">01</span><div class="ic">良</div><h3>早く・安く・良く</h3><p>「技術屋の良心」をモットーに、スピード・コスト・品質のバランスを追求。お客様の立場に立った提案を行います。</p></div>
+      <div class="rcard"><span class="rn">02</span><div class="ic">安</div><h3>安心・安全の品質</h3><p>官公庁発注の調査測量で培った確かな技術力で、安心・安全を第一に正確な成果をお届けします。</p></div>
+      <div class="rcard"><span class="rn">03</span><div class="ic">技</div><h3>幅広い対応力</h3><p>測量から施工管理・土木設計・地質調査・人材派遣まで、ものづくりの現場をワンストップで支援します。</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Works ===== -->
+<section class="sec" id="works">
+  <div class="wrap">
+    <div class="shead"><span class="en">WORKS</span><h2>施工・測量実績</h2><div class="deco"></div></div>
+    <div class="works-grid">
+      <a href="#"><img src="img/catch01.jpg" alt="実績1"></a>
+      <a href="#"><img src="img/catch02.jpg" alt="実績2"></a>
+      <a href="#"><img src="img/catch03.jpg" alt="実績3"></a>
+      <a href="#"><img src="img/catch04.jpg" alt="実績4"></a>
+      <a href="#"><img src="img/catch05.jpg" alt="実績5"></a>
+      <a href="#"><img src="img/catch06.jpg" alt="実績6"></a>
+      <a href="#"><img src="img/catch01.jpg" alt="実績7"></a>
+      <a href="#"><img src="img/catch02.jpg" alt="実績8"></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== News & Recruit ===== -->
+<section class="sec bg-soft">
+  <div class="wrap two">
+    <div id="news">
+      <div class="shead left"><span class="en">NEWS</span><h2>新着情報</h2><div class="deco"></div></div>
+      <ul class="news-list">
+        <li><a href="#"><time>2026.06.01</time><span class="cat">お知らせ</span><p>夏季休業のお知らせを掲載しました</p></a></li>
+        <li><a href="#"><time>2026.05.20</time><span class="cat">実績</span><p>倉敷市内の道路改良工事の測量を完了しました ※ダミー</p></a></li>
+        <li><a href="#"><time>2026.05.08</time><span class="cat rc">求人</span><p>測量スタッフ（経験者・未経験者）募集中です</p></a></li>
+        <li><a href="#"><time>2026.04.15</time><span class="cat">お知らせ</span><p>ホームページをリニューアルしました ※ダミー</p></a></li>
+      </ul>
+      <a href="#" class="listmore">新着情報一覧を見る →</a>
+    </div>
+    <div id="recruit">
+      <div class="shead left"><span class="en">RECRUIT</span><h2>採用情報</h2><div class="deco"></div></div>
+      <ul class="news-list">
+        <li><a href="#"><time>正社員</time><span class="cat rc">測量</span><p>測量技術者（経験者優遇／資格取得支援あり）</p></a></li>
+        <li><a href="#"><time>正社員</time><span class="cat rc">管理</span><p>施工管理スタッフ（土木施工管理技士）</p></a></li>
+        <li><a href="#"><time>未経験可</time><span class="cat rc">補助</span><p>測量・現場補助スタッフ（先輩が丁寧に指導します）</p></a></li>
+      </ul>
+      <a href="#" class="listmore">求人情報一覧を見る →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Recruit band ===== -->
+<section class="sec">
+  <div class="wrap">
+    <div class="recruit">
+      <span class="en">JOIN US</span>
+      <h2>“はかる技術”で、まちの未来をつくる仲間を募集中。</h2>
+      <p>経験者の方はこれまでの技術を活かして、未経験の方は一から。社会の基盤を支える「測る」仕事を、私たちと一緒に始めませんか。</p>
+      <a href="#" class="btn btn-primary">採用情報を詳しく見る <span class="arw">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Company ===== -->
+<section class="sec bg-soft" id="company">
+  <div class="wrap">
+    <div class="shead"><span class="en">COMPANY</span><h2>会社概要</h2><div class="deco"></div></div>
+    <div class="company">
+      <table class="ctable">
+        <tr><th>会社名</th><td>株式会社 第二開発技工</td></tr>
+        <tr><th>所在地</th><td>〒710-0845　岡山県倉敷市西富井446-2</td></tr>
+        <tr><th>電話 / FAX</th><td>TEL 086-423-1899 ／ FAX 086-423-2034</td></tr>
+        <tr><th>事業内容</th><td>測量業・補償コンサルタント・一般労働者派遣事業・一般建設業</td></tr>
+        <tr><th>業務領域</th><td>測量／施工管理／土木設計／地質調査／人材派遣</td></tr>
+        <tr><th>対応エリア</th><td>岡山県全域（倉敷市を拠点）</td></tr>
+      </table>
+      <div class="map"><span class="pin">📍</span>［ Googleマップ 埋め込みエリア ］</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Contact CTA ===== -->
+<section class="contact" id="contact">
+  <span class="en">CONTACT</span>
+  <h2>測量・施工管理のご相談はお気軽に</h2>
+  <p>お見積り・ご依頼・採用に関するお問い合わせを承っております。</p>
+  <div class="contact-row">
+    <div class="bigtel"><small>お電話でのお問合せ（受付 8:30-17:30）</small><b>086-423-1899</b></div>
+    <a href="#" class="btn btn-primary">メールでお問合せ <span class="arw">→</span></a>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer class="footer">
+  <div class="footer-in">
+    <div>
+      <a href="#" class="brand"><span class="lm">技</span><span><b>第二開発技工</b><span>DAINI KAIHATSU GIKO</span></span></a>
+      <p class="fadd">〒710-0845　岡山県倉敷市西富井446-2<br>TEL 086-423-1899 ／ FAX 086-423-2034</p>
+    </div>
+    <nav class="fnav">
+      <ul><li><a href="#service">事業概要</a></li><li><a href="#reason">選ばれる理由</a></li><li><a href="#works">施工実績</a></li></ul>
+      <ul><li><a href="#news">新着情報</a></li><li><a href="#recruit">求人情報</a></li><li><a href="#company">会社概要</a></li></ul>
+      <ul><li><a href="#contact">お問合せ</a></li><li><a href="#">サイトマップ</a></li><li><a href="#">プライバシーポリシー</a></li></ul>
+    </nav>
+  </div>
+  <p class="copy">© 2013 株式会社 第二開発技工.</p>
+</footer>
+
+<a href="#" class="ptop">↑</a>
+
+</body>
+</html>
