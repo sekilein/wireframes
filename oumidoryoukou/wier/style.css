@@ -493,3 +493,10 @@ img { display: block; width: 100%; }
   .spec-2col { grid-template-columns:1fr; }
   .pdf-box { flex-wrap:wrap; }
 }
+
+/* ── 画像プレースホルダを枠いっぱいに（ラベルだけの薄帯を解消） ── */
+.card__img, .cat-card__img, .interview-card__img { position: relative; background: var(--c-bg-img); overflow: hidden; }
+.card__img > .ph, .cat-card__img > .ph, .interview-card__img > .ph { position: absolute; inset: 0; height: 100%; }
+/* FVの背景プレースホルダ（暗めにして白文字の可読性を確保） */
+.fv__bg > .ph { position: absolute; inset: 0; height: 100%; background: #222; }
+.fv__bg > .ph span { background: rgba(255,255,255,.1); color: rgba(255,255,255,.66); }

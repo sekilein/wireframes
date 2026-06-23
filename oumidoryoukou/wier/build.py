@@ -533,7 +533,7 @@ ind_body = '''
     <h2 class="section-title" style="font-size:24px;">ソフトウェアもハードウェアも自社製造で一括管理</h2>
     <p class="section-lead">高精度な計量を実現するためには、機械設備の設計・製作だけでなく、それらを制御するシステム開発が欠かせません。電気設備の設計・構築を専門とする技術電装部を抱え、機械設備の設計を行う設計部、製造を担当する製造部が連携したトータルエンジニアリングで、お客様に安心してお使いいただけるシステムをお届けしています。</p>
   </div>
-  <div>''' + ph('電子部品の組立まで自社で実施') + '''</div>
+  <div>''' + ph('電子部品の組立まで自社で実施','','aspect-ratio:4/3') + '''</div>
 </div></section>
 <section class="section section--grey"><div class="container">
   ''' + pdf_box("会社案内パンフレット 2025年版","工業分野ほか 事業・技術紹介（PDF）","assets/company-2025.pdf") + '''
@@ -613,7 +613,7 @@ delivery_body = '''
 <section class="section section--grey"><div class="container">
   <p class="section-meta">Service Area</p><h2 class="section-title">主な納入エリア</h2>
   <div class="basemap" style="margin-top:24px;">
-    <div>''' + ph('全国／海外 納入マップ（ピン表示）') + '''</div>
+    <div>''' + ph('全国／海外 納入マップ（ピン表示）','','aspect-ratio:4/3') + '''</div>
     <div>
       <p class="section-lead" style="margin-top:0;font-size:14px;">国内は北海道から九州まで全国対応。海外は中国（上海）、タイ（バンコク）、韓国に拠点展開。</p>
       <p style="font-size:12px;color:#666;margin-top:12px;line-height:2;">【国内】北海道・東北・関東・北陸・東海・近畿・中国・四国・九州・沖縄<br>【海外】中国・バンコク・韓国・アメリカ・ハンガリー</p>
@@ -710,7 +710,7 @@ company_body = '''
 <section class="section" id="servicebase"><div class="container">
   <p class="section-meta">Service Base</p><h2 class="section-title">サービス拠点</h2>
   <div class="basemap" style="margin-top:24px;">
-    <div>''' + ph('グローバル拠点マップ（国内6＋海外3）') + '''</div>
+    <div>''' + ph('グローバル拠点マップ（国内6＋海外3）','','aspect-ratio:4/3') + '''</div>
     <div class="base-list">
       <div class="base-item"><span>本社</span>滋賀県（草津）</div>
       <div class="base-item"><span>営業所</span>東京都</div>
