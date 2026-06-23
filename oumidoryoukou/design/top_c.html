@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script><script src="_firebase_comments.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>近江度量衡 — v10 TOP / C · Bleeding Machine（v8_3継承）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#D40D0D;
+  --ink:#111;
+  --paper:#fff;
+  --soft:#f4f3ee;
+  --line:rgba(17,17,17,.18);
+  --mn:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --jp:"Noto Sans JP","Hiragino Sans",system-ui,sans-serif;
+  --en:"Inter",sans-serif;
+}
+html,body{background:var(--paper);color:var(--ink);font-family:var(--en);-webkit-font-smoothing:antialiased;scroll-behavior:smooth;overflow-x:hidden}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+
+/* ── 上下バー（v8_3 完全踏襲） ── */
+.bar{position:fixed;left:0;right:0;height:8vh;background:#fff;z-index:30;display:flex;align-items:center;padding:0 36px;font-family:var(--en);font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--ink)}
+.bar.top{top:0;border-bottom:1px solid var(--line);justify-content:space-between;gap:18px}
+.bar.bot{bottom:0;border-top:1px solid var(--line);justify-content:space-between;gap:18px;color:rgba(17,17,17,.65);font-weight:500}
+.bar.top .brand{display:flex;align-items:center;gap:10px}
+.bar.top .brand img{height:30px;width:auto}
+.bar.top .nm{font-family:var(--jp);font-weight:700;letter-spacing:.16em;font-size:12px;text-transform:none;line-height:1.4}
+.bar.top .nm small{display:block;font-family:var(--en);font-size:9px;letter-spacing:.28em;color:rgba(17,17,17,.55);text-transform:uppercase;margin-top:2px;font-weight:500}
+.bar.top .c{font-family:var(--mn);font-style:italic;font-weight:500;font-size:14px;letter-spacing:.04em;text-transform:none;color:var(--ink)}
+.bar.top .c b{color:var(--red);font-weight:500}
+.bar.top .r{text-align:right;color:rgba(17,17,17,.65);line-height:1.6;font-weight:500}
+.bar.top .r b{color:var(--red);font-weight:600}
+
+.bar.bot .l{display:flex;align-items:center;gap:10px}
+.bar.bot .l .dot{width:6px;height:6px;border-radius:50%;background:var(--red);animation:bl 1.6s ease-in-out infinite}
+@keyframes bl{0%,100%{opacity:1}50%{opacity:.3}}
+.bar.bot .c{font-family:var(--mn);font-style:italic;font-weight:500;font-size:13px;letter-spacing:.04em;text-transform:none;color:var(--ink)}
+.bar.bot .c b{color:var(--red);font-weight:500}
+
+/* ── 4隅マーカー（v8_3 完全踏襲） ── */
+.mk{position:fixed;width:22px;height:22px;border:1px solid var(--ink);z-index:25;pointer-events:none}
+.mk.tl{top:calc(8vh + 14px);left:14px;border-right:0;border-bottom:0}
+.mk.tr{top:calc(8vh + 14px);right:14px;border-left:0;border-bottom:0}
+.mk.bl{bottom:calc(8vh + 14px);left:14px;border-right:0;border-top:0}
+.mk.br{bottom:calc(8vh + 14px);right:14px;border-left:0;border-top:0}
+.mk::after{content:"";position:absolute;width:5px;height:5px;background:var(--red);border-radius:50%}
+.mk.tl::after{top:-2.5px;left:-2.5px}
+.mk.tr::after{top:-2.5px;right:-2.5px}
+.mk.bl::after{bottom:-2.5px;left:-2.5px}
+.mk.br::after{bottom:-2.5px;right:-2.5px}
+
+/* ── サイド縦テキスト（v8_3 完全踏襲 / FV を過ぎたらフェードアウト） ── */
+.side{position:fixed;top:50%;font-family:var(--en);font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:rgba(17,17,17,.45);font-weight:500;white-space:nowrap;z-index:25;pointer-events:none;opacity:calc(1 - var(--fv-p, 0) * 1.4);transition:opacity .2s linear;will-change:opacity}
+.side.left{left:22px;transform:translateY(-50%) rotate(-90deg);transform-origin:center}
+.side.right{right:22px;transform:translateY(-50%) rotate(90deg);transform-origin:center}
+
+/* ── FV ── v8_3 そのまま：白基調＋機械大胆に見切れ、ただし sticky で挙動制御 ── */
+.fv-wrap{position:relative;height:160vh}
+.fv{position:sticky;top:0;height:100vh;min-height:760px;overflow:hidden;background:#fff;will-change:transform;z-index:1}
+
+/* 機械画像（横幅いっぱい / 白で区切らない） */
+.fv .bg{position:absolute;inset:0;overflow:hidden;background:#fff;z-index:0}
+.fv .bg img{position:absolute;top:-22%;left:0%;width:155%;height:auto;min-height:130%;object-fit:cover;object-position:center;filter:contrast(1.02);transition:transform .15s linear,opacity .15s linear;transform-origin:center center}
+
+/* 右上 125 — v8_3 踏襲（FV 内 absolute） */
+.fv .anniv{position:absolute;right:48px;top:calc(8vh + 32px);text-align:right;z-index:18;color:var(--ink);will-change:transform,opacity;transition:transform .15s linear,opacity .15s linear}
+.fv .anniv .l{font-family:var(--en);font-size:9px;letter-spacing:.32em;text-transform:uppercase;color:rgba(17,17,17,.5);font-weight:500;margin-bottom:6px}
+.fv .anniv .v{font-family:var(--mn);font-style:italic;font-weight:500;font-size:74px;line-height:.9;letter-spacing:-.02em;color:var(--red)}
+.fv .anniv .v sup{font-size:.4em;letter-spacing:.1em;vertical-align:top;color:var(--ink)}
+.fv .anniv .y{font-family:var(--en);font-size:9px;letter-spacing:.32em;color:rgba(17,17,17,.55);margin-top:4px;font-weight:500}
+
+/* メインコピー右下 — v8_3 踏襲（FV 内 absolute） */
+.fv .copy{position:absolute;right:48px;bottom:calc(8vh + 36px);text-align:right;z-index:18;max-width:48%;will-change:transform,opacity;transition:transform .15s linear,opacity .15s linear}
+.fv .copy .kicker{font-family:var(--en);font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:22px;display:flex;align-items:center;justify-content:flex-end;gap:10px}
+.fv .copy .kicker::before{content:"";display:inline-block;width:36px;height:1px;background:var(--red)}
+.fv .copy h1{font-family:var(--mn);font-weight:700;font-size:clamp(2rem,4.6vw,3.8rem);line-height:1.5;letter-spacing:.06em;color:var(--ink)}
+.fv .copy h1 em,.fv .copy h1 .red{color:var(--red);font-style:normal}
+.fv .copy .en{font-family:var(--en);font-style:italic;font-size:12px;letter-spacing:.22em;color:rgba(17,17,17,.5);margin-top:14px;font-weight:400}
+
+/* スクロール進捗で左右にパージ。CSS変数 --p (0〜1) で制御 */
+.fv .anniv{transform:translateX(calc(var(--p,0) * 130%));opacity:calc(1 - var(--p,0) * 1.4)}
+.fv .copy{transform:translateX(calc(var(--p,0) * 130%));opacity:calc(1 - var(--p,0) * 1.4)}
+.fv .bg img{transform:translateX(calc(var(--p,0) * -55%)) scale(calc(1 + var(--p,0) * 0.04));opacity:calc(1 - var(--p,0) * 0.55)}
+.fv::after{content:"";position:absolute;inset:0;background:#fff;opacity:calc(var(--p,0) * 0.2);pointer-events:none;z-index:2}
+
+/* ── 共通ボタン ── */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;font-family:var(--en);font-size:10px;letter-spacing:.22em;font-weight:600;text-transform:uppercase;transition:all .2s;cursor:pointer;border:1px solid var(--ink);background:transparent;color:var(--ink)}
+.btn:hover{background:var(--ink);color:#fff}
+.btn.dark{background:var(--ink);color:#fff}
+.btn.dark:hover{background:transparent;color:var(--ink)}
+.btn.red{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.red:hover{background:transparent;color:var(--red)}
+.btn.w{color:#fff;border-color:rgba(255,255,255,.55)}
+.btn.w:hover{background:#fff;color:var(--ink)}
+
+/* ── セクションラベル ── */
+.lbl-row{display:flex;align-items:baseline;gap:18px;margin-bottom:48px;border-bottom:1px solid var(--ink);padding-bottom:18px}
+.lbl-row .n{font-family:var(--mn);font-style:italic;font-weight:500;font-size:18px;color:var(--red);letter-spacing:.04em}
+.lbl-row .h{font-family:var(--jp);font-weight:700;font-size:13px;letter-spacing:.32em;color:var(--ink)}
+.lbl-row .e{font-family:var(--en);font-size:10px;letter-spacing:.32em;color:rgba(17,17,17,.45);text-transform:uppercase;font-weight:500;margin-left:auto}
+
+/* ── セクション内マーカー（4隅装飾、上下バー区切り風） ── */
+.framed{position:relative;padding:80px 60px;background:#fff}
+.framed::before,.framed::after{content:"";position:absolute;width:18px;height:18px;border:1px solid var(--ink);pointer-events:none}
+.framed::before{top:20px;left:38px;border-right:0;border-bottom:0}
+.framed::after{top:20px;right:38px;border-left:0;border-bottom:0}
+
+/* ── ② Products — FV パージ中に下から覆い上がってくる ── */
+.products{padding:140px 60px;background:#fff;position:relative;z-index:3;margin-top:-22vh;box-shadow:0 -24px 60px rgba(0,0,0,.04)}
+.products .wrap{max-width:1240px;margin:0 auto}
+.products .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--ink);position:relative}
+.products .grid::before,.products .grid::after{content:"";position:absolute;width:14px;height:14px;background:var(--red);border-radius:50%;z-index:3}
+.products .grid::before{top:-7px;left:-7px}
+.products .grid::after{bottom:-7px;right:-7px}
+.products .item{padding:40px 32px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);display:grid;grid-template-columns:120px 1fr;gap:32px;transition:background .2s;position:relative}
+.products .item:nth-child(2n){border-right:none}
+.products .item:nth-last-child(-n+2){border-bottom:none}
+.products .item:hover{background:var(--soft)}
+.products .item .lft{position:relative}
+.products .item .lft .num{font-family:var(--mn);font-style:italic;font-weight:500;font-size:46px;color:var(--red);line-height:.9;letter-spacing:-.02em}
+.products .item .lft .cat{font-family:var(--en);font-size:9px;letter-spacing:.32em;color:rgba(17,17,17,.5);font-weight:600;margin-top:14px;text-transform:uppercase}
+.products .item .lft .ph{margin-top:18px;aspect-ratio:1;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.32);font-family:var(--en);font-size:9px;letter-spacing:.32em;text-transform:uppercase;font-weight:500}
+.products .item:nth-child(1) .lft .ph{background:linear-gradient(180deg,#5a6d4c 0%,#1e2818 100%)}
+.products .item:nth-child(2) .lft .ph{background:linear-gradient(180deg,#a89971 0%,#3c3320 100%)}
+.products .item:nth-child(3) .lft .ph{background:linear-gradient(180deg,#3a4756 0%,#0a121c 100%)}
+.products .item:nth-child(4) .lft .ph{background:linear-gradient(180deg,#7a4a30 0%,#1e1209 100%)}
+.products .item h3{font-family:var(--mn);font-weight:700;font-size:22px;letter-spacing:.06em;color:var(--ink);margin-bottom:10px;line-height:1.5}
+.products .item p{font-family:var(--jp);font-size:13px;color:rgba(17,17,17,.65);line-height:1.95;font-weight:400}
+.products .item .link{display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:var(--en);font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--ink);border-bottom:1px solid var(--ink);padding-bottom:2px}
+.products .actions{margin-top:40px;display:flex;gap:14px;flex-wrap:wrap}
+
+/* ── ③ Delivery — 罫線で括ったボックス、赤ドット ── */
+.delivery{padding:0 60px;background:#fff}
+.delivery .wrap{max-width:1240px;margin:0 auto;border:1px solid var(--ink);padding:60px;display:grid;grid-template-columns:auto 1fr auto;gap:60px;align-items:center;position:relative}
+.delivery .wrap::before,.delivery .wrap::after{content:"";position:absolute;width:14px;height:14px;background:var(--red);border-radius:50%}
+.delivery .wrap::before{top:-7px;left:-7px}
+.delivery .wrap::after{bottom:-7px;right:-7px}
+.delivery .stat{text-align:center}
+.delivery .stat .big{font-family:var(--mn);font-style:italic;font-weight:500;font-size:84px;color:var(--ink);line-height:.85;letter-spacing:-.02em}
+.delivery .stat .big sup{font-size:.4em;color:var(--red);vertical-align:top}
+.delivery .stat .lbl{font-family:var(--en);font-size:10px;color:rgba(17,17,17,.55);letter-spacing:.28em;margin-top:14px;font-weight:500;text-transform:uppercase}
+.delivery .stat .lbl small{display:block;font-family:var(--en);font-size:9px;color:rgba(17,17,17,.35);margin-top:4px;letter-spacing:.16em}
+.delivery .body .eye{font-family:var(--en);font-size:10px;color:var(--red);letter-spacing:.32em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.delivery .body h2{font-family:var(--mn);font-weight:700;font-size:32px;line-height:1.55;letter-spacing:.06em;color:var(--ink);margin-bottom:14px}
+.delivery .body h2 em{font-style:normal;color:var(--red)}
+.delivery .body p{font-family:var(--jp);font-size:14px;color:rgba(17,17,17,.62);line-height:1.95;font-weight:400;margin-bottom:22px}
+.delivery .body .row{display:flex;gap:14px;flex-wrap:wrap}
+
+/* ── ④ Statement — 機械見切れ写真ブロック ── */
+.statement{padding:160px 60px;background:#fff;position:relative}
+.statement::before{content:"";position:absolute;top:60px;left:60px;width:100px;height:1px;background:var(--red)}
+.statement .wrap{max-width:1240px;margin:0 auto}
+.statement .grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:start;margin-bottom:60px}
+.statement .eye{font-family:var(--en);font-size:10px;letter-spacing:.42em;color:var(--red);text-transform:uppercase;font-weight:600;margin-bottom:32px}
+.statement h2{font-family:var(--mn);font-weight:700;font-size:clamp(2.4rem,5vw,4.4rem);line-height:1.5;letter-spacing:.06em;color:var(--ink)}
+.statement h2 em{font-style:normal;color:var(--red)}
+.statement .lead{font-family:var(--mn);font-weight:500;font-size:15px;letter-spacing:.06em;color:rgba(17,17,17,.7);line-height:2.2;margin-top:32px}
+.statement .ph{position:relative;aspect-ratio:4/5;background:#fff;overflow:hidden;border:1px solid var(--ink)}
+.statement .ph img{position:absolute;top:-12%;left:-18%;width:140%;height:130%;object-fit:cover;object-position:center;filter:contrast(1.02)}
+.statement .ph::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 100% at 50% 100%,rgba(212,13,13,.16) 0%,transparent 60%),linear-gradient(180deg,rgba(0,0,0,.1) 0%,rgba(0,0,0,0) 30%,rgba(0,0,0,0) 60%,rgba(0,0,0,.55) 100%);z-index:1;pointer-events:none}
+.statement .ph .lab{position:absolute;left:24px;bottom:24px;z-index:3;font-family:var(--en);font-size:10px;letter-spacing:.36em;text-transform:uppercase;color:rgba(255,255,255,.9);font-weight:500;line-height:1.8}
+.statement .ph .lab b{display:block;font-family:var(--jp);font-weight:700;font-size:14px;letter-spacing:.14em;color:#fff;text-transform:none;margin-bottom:4px}
+/* 4隅マーカー */
+.statement .ph::before,.statement .ph::after{content:"";position:absolute;width:18px;height:18px;border:1px solid #fff;z-index:5;pointer-events:none}
+.statement .ph::before{top:14px;left:14px;border-right:0;border-bottom:0}
+.statement .ph::after{bottom:14px;right:14px;border-left:0;border-top:0}
+.values{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink)}
+.values .v{padding:32px 28px;border-right:1px solid var(--ink);transition:background .2s}
+.values .v:last-child{border-right:none}
+.values .v:hover{background:var(--soft)}
+.values .v .n{font-family:var(--mn);font-style:italic;font-weight:500;font-size:34px;color:var(--red);line-height:.9;margin-bottom:14px}
+.values .v h3{font-family:var(--jp);font-weight:700;font-size:18px;letter-spacing:.16em;color:var(--ink);margin-bottom:10px}
+.values .v p{font-family:var(--jp);font-size:12px;color:rgba(17,17,17,.65);line-height:1.95;font-weight:400}
+.statement .actions{margin-top:40px;display:flex;gap:14px;flex-wrap:wrap}
+
+/* ── ⑤ History — 白基調＋細罫タイムライン ── */
+.history{padding:140px 60px;background:var(--soft);position:relative;overflow:hidden}
+.history::after{content:"126";position:absolute;right:-6%;bottom:-15%;font-family:var(--mn);font-style:italic;font-weight:500;font-size:48vw;color:rgba(17,17,17,.035);line-height:.8;letter-spacing:-.04em;pointer-events:none}
+.history .wrap{position:relative;z-index:2;max-width:1240px;margin:0 auto;display:grid;grid-template-columns:380px 1fr;gap:80px;align-items:start}
+.history .lab{position:sticky;top:120px}
+.history .eye{font-family:var(--en);font-size:10px;letter-spacing:.42em;color:var(--red);text-transform:uppercase;font-weight:600;margin-bottom:22px}
+.history h2{font-family:var(--mn);font-weight:700;font-size:46px;line-height:1.4;letter-spacing:.06em;color:var(--ink)}
+.history h2 em{font-style:italic;font-weight:500;color:var(--red)}
+.history .lead{font-family:var(--jp);font-size:13px;color:rgba(17,17,17,.6);line-height:2;margin-top:24px;font-weight:400}
+.history .lab .btn{margin-top:28px}
+.tl{list-style:none}
+.tl li{display:grid;grid-template-columns:170px 1fr;gap:36px;padding:24px 0;border-top:1px solid var(--line);position:relative}
+.tl li:last-child{border-bottom:1px solid var(--line)}
+.tl li::before{content:"";position:absolute;left:-6px;top:32px;width:12px;height:12px;background:#fff;border:1px solid var(--ink);border-radius:50%;transition:background .2s,border-color .2s}
+.tl li:hover::before{background:var(--red);border-color:var(--red)}
+.tl .yr{font-family:var(--mn);font-style:italic;font-weight:500;font-size:18px;color:var(--red);letter-spacing:.04em}
+.tl .yr small{display:block;font-family:var(--en);font-size:10px;color:rgba(17,17,17,.4);letter-spacing:.24em;margin-top:4px;text-transform:uppercase}
+.tl .t{font-family:var(--jp);font-weight:700;font-size:18px;color:var(--ink);line-height:1.55;margin-bottom:8px}
+.tl .b{font-family:var(--jp);font-size:13px;color:rgba(17,17,17,.6);line-height:1.95;font-weight:400}
+
+/* ── ⑥ Recruit — 4隅マーカー＋罫線カード ── */
+.recruit{padding:140px 60px;background:#fff;position:relative}
+.recruit::before,.recruit::after{content:"";position:absolute;width:20px;height:20px;border:1px solid var(--ink)}
+.recruit::before{top:30px;left:14px;border-right:0;border-bottom:0}
+.recruit::after{top:30px;right:14px;border-left:0;border-bottom:0}
+.recruit .wrap{max-width:1240px;margin:0 auto}
+.recruit .head{display:grid;grid-template-columns:1.1fr 1fr;gap:60px;align-items:end;margin-bottom:60px;border-bottom:1px solid var(--ink);padding-bottom:48px}
+.recruit .eye{font-family:var(--en);font-size:10px;letter-spacing:.42em;color:var(--red);text-transform:uppercase;font-weight:600;margin-bottom:28px}
+.recruit h2{font-family:var(--mn);font-weight:700;font-size:clamp(2.6rem,5vw,4.2rem);line-height:1.4;letter-spacing:.05em;color:var(--ink)}
+.recruit h2 em{font-style:normal;color:var(--red)}
+.recruit .lead{font-family:var(--jp);font-size:14px;color:rgba(17,17,17,.62);line-height:2;font-weight:400;margin-bottom:24px}
+.recruit .actions{display:flex;gap:14px;flex-wrap:wrap}
+.recruit .note{font-family:var(--en);font-size:10px;color:rgba(17,17,17,.4);margin-top:14px;letter-spacing:.12em;font-weight:500}
+.recruit .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink)}
+.recruit .cards .card{padding:40px 28px;border-right:1px solid var(--ink);transition:background .2s}
+.recruit .cards .card:last-child{border-right:none}
+.recruit .cards .card:hover{background:var(--soft)}
+.recruit .cards .card .tag{font-family:var(--en);font-size:10px;letter-spacing:.32em;color:var(--red);text-transform:uppercase;font-weight:600;margin-bottom:16px}
+.recruit .cards .card h3{font-family:var(--mn);font-weight:700;font-size:20px;letter-spacing:.06em;color:var(--ink);line-height:1.5;margin-bottom:14px}
+.recruit .cards .card p{font-family:var(--jp);font-size:13px;color:rgba(17,17,17,.62);line-height:1.95;font-weight:400}
+.recruit .cards .card .link{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font-family:var(--en);font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;border-bottom:1px solid var(--ink);padding-bottom:2px}
+
+/* ── ⑦ People — 4隅マーカー付き ── */
+.people{padding:140px 60px;background:var(--soft)}
+.people .wrap{max-width:1240px;margin:0 auto}
+.people .top{display:flex;justify-content:space-between;align-items:end;margin-bottom:48px;gap:32px;flex-wrap:wrap}
+.people .top h2{font-family:var(--mn);font-weight:700;font-size:32px;line-height:1.5;letter-spacing:.06em;color:var(--ink);margin-bottom:12px}
+.people .top .eye{font-family:var(--en);font-size:10px;letter-spacing:.42em;color:var(--red);text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.people .top .lead{font-family:var(--jp);font-size:14px;color:rgba(17,17,17,.6);line-height:1.9;font-weight:400}
+.people-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--ink);background:#fff}
+.people .card{padding:0;border-right:1px solid var(--ink);transition:background .2s}
+.people .card:last-child{border-right:none}
+.people .card:hover{background:var(--soft)}
+.people .card .ph{aspect-ratio:1;display:flex;align-items:flex-end;padding:20px;color:#fff;font-family:var(--en);font-size:9px;letter-spacing:.32em;text-transform:uppercase;font-weight:500;position:relative;overflow:hidden;border-bottom:1px solid var(--ink)}
+.people .card:nth-child(1) .ph{background:linear-gradient(180deg,#3a3a3a 0%,#0e0e0e 100%)}
+.people .card:nth-child(2) .ph{background:linear-gradient(180deg,#384a52 0%,#0e1a22 100%)}
+.people .card:nth-child(3) .ph{background:linear-gradient(180deg,#5a4634 0%,#1e160e 100%)}
+.people .card .ph::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.5))}
+.people .card .ph span{position:relative;z-index:2}
+.people .card .body{padding:24px}
+.people .card .dept{font-family:var(--en);font-size:10px;letter-spacing:.28em;color:rgba(17,17,17,.5);text-transform:uppercase;font-weight:500;margin-bottom:8px}
+.people .card .nm{font-family:var(--mn);font-weight:700;font-size:18px;letter-spacing:.06em;color:var(--ink);margin-bottom:14px}
+.people .card blockquote{font-family:var(--mn);font-weight:500;font-size:13px;color:rgba(17,17,17,.72);line-height:1.95;letter-spacing:.04em;border-left:3px solid var(--red);padding-left:12px;margin-bottom:14px}
+.people .card .link{font-family:var(--en);font-size:10px;letter-spacing:.22em;text-transform:uppercase;font-weight:600;border-bottom:1px solid var(--ink);padding-bottom:2px;display:inline-flex;gap:6px}
+
+/* ── News ── */
+.news{padding:120px 60px;background:#fff}
+.news .wrap{max-width:1240px;margin:0 auto}
+.news .top{display:flex;justify-content:space-between;align-items:end;margin-bottom:32px;gap:24px;flex-wrap:wrap}
+.news .top .eye{font-family:var(--en);font-size:10px;letter-spacing:.42em;color:var(--red);text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.news .top h2{font-family:var(--mn);font-weight:700;font-size:32px;letter-spacing:.06em;color:var(--ink)}
+.news ul{list-style:none;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+.news li{display:grid;grid-template-columns:130px 130px 1fr 24px;gap:24px;padding:22px 0;border-bottom:1px solid var(--line);align-items:baseline;transition:all .2s}
+.news li:last-child{border-bottom:none}
+.news li:hover{background:var(--soft);padding-left:14px;padding-right:14px}
+.news .date{font-family:var(--en);font-size:12px;color:rgba(17,17,17,.5);letter-spacing:.1em;font-weight:500}
+.news .cat{font-family:var(--en);font-size:9px;color:var(--red);letter-spacing:.28em;text-transform:uppercase;font-weight:600;border:1px solid var(--red);padding:4px 10px;justify-self:start}
+.news .t{font-family:var(--jp);font-size:14px;color:var(--ink);font-weight:500;letter-spacing:.04em;line-height:1.6}
+.news .a{font-family:var(--en);font-size:16px;color:rgba(17,17,17,.45);justify-self:end;transition:all .2s}
+.news li:hover .a{color:var(--red);transform:translateX(4px)}
+
+/* ── Footer ── */
+.foot{background:var(--ink);color:#fff;padding:80px 60px calc(64px + 24px)}
+.foot .wrap{max-width:1240px;margin:0 auto}
+.foot .top{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:40px;border-bottom:1px solid rgba(255,255,255,.15);padding-bottom:48px;margin-bottom:36px}
+.foot .brand .name{font-family:var(--jp);font-weight:700;font-size:17px;letter-spacing:.14em;margin-bottom:14px}
+.foot .brand .tg{font-family:var(--mn);font-style:italic;font-weight:500;font-size:13px;color:rgba(255,255,255,.6);line-height:1.85}
+.foot .brand .tg small{display:block;font-family:var(--en);font-size:10px;color:rgba(255,255,255,.4);margin-top:8px;letter-spacing:.28em;text-transform:uppercase;font-weight:500;font-style:normal}
+.foot .col h4{font-family:var(--en);font-size:10px;letter-spacing:.32em;color:var(--red);font-weight:600;text-transform:uppercase;margin-bottom:18px}
+.foot .col ul{list-style:none}
+.foot .col li{margin-bottom:10px}
+.foot .col a{font-family:var(--jp);font-size:13px;color:rgba(255,255,255,.7);font-weight:400;transition:color .2s}
+.foot .col a:hover{color:#fff}
+.foot .bot{display:flex;justify-content:space-between;align-items:center;font-family:var(--en);font-size:10px;letter-spacing:.22em;color:rgba(255,255,255,.4);font-weight:500;text-transform:uppercase}
+
+/* セクション間隔調整（上下バー分） */
+body{padding-bottom:0}
+
+@media (max-width:960px){
+  .bar{padding:0 16px;height:56px;font-size:9px}
+  .bar.top nav,.bar.top .c{display:none}
+  .bar.top .nm{display:none}
+  .bar.top .r{display:none}
+  .bar.bot .c{display:none}
+  .side,.mk{display:none}
+  .fv{padding-top:56px;padding-bottom:56px}
+  .fv .bg{inset:56px 0 56px 0}
+  .fv .anniv{right:18px;top:calc(56px + 22px)}
+  .fv .anniv .v{font-size:42px}
+  .fv .copy{right:18px;left:18px;max-width:none;text-align:left;bottom:calc(56px + 18px)}
+  .fv .copy .kicker{justify-content:flex-start}
+  .fv .copy .kicker::before{display:none}
+  .fv .copy .ctas{justify-content:flex-start;flex-wrap:wrap}
+  .fv .badge{position:static;margin:18px;max-width:none}
+  .products,.statement,.history,.recruit,.people,.news,.foot{padding-left:20px;padding-right:20px}
+  .delivery{padding:0 20px}
+  .products .grid{grid-template-columns:1fr}
+  .products .item{grid-template-columns:1fr;border-right:none;gap:16px}
+  .products .item:nth-last-child(-n+2){border-bottom:1px solid var(--ink)}
+  .products .item:last-child{border-bottom:none}
+  .delivery .wrap{grid-template-columns:1fr;padding:36px 20px}
+  .statement .grid,.recruit .head,.history .wrap{grid-template-columns:1fr;gap:36px}
+  .history .lab{position:static}
+  .values,.recruit .cards,.people-grid{grid-template-columns:1fr;border-right:1px solid var(--ink)}
+  .values .v,.recruit .cards .card,.people .card{border-right:none;border-bottom:1px solid var(--ink)}
+  .values .v:last-child,.recruit .cards .card:last-child,.people .card:last-child{border-bottom:none}
+  .tl li{grid-template-columns:1fr;gap:8px}
+  .tl li::before{display:none}
+  .news li{grid-template-columns:1fr;gap:6px}
+  .foot .top{grid-template-columns:1fr 1fr}
+  .foot .bot{flex-direction:column;gap:10px}
+}
+</style>
+</head>
+<body>
+
+<!-- 上バー — v8_3 そのまま -->
+<header class="bar top">
+  <div class="brand">
+    <img src="logo_r.png" alt="">
+  </div>
+</header>
+
+<!-- 4隅マーカー＋サイド縦テキスト -->
+<span class="mk tl"></span>
+<span class="mk tr"></span>
+<span class="mk bl"></span>
+<span class="mk br"></span>
+<span class="side left">PRODUCTION · OMI · SHIGA</span>
+<span class="side right">EST · 1900 · MILLISTAR</span>
+
+<!-- FV — sticky で滞留させ、スクロールで左右パージ -->
+<div class="fv-wrap">
+  <section class="fv">
+    <div class="bg">
+      <img src="d5d36931-322c-4440-85b3-17843dfa17a9.png" alt="近江度量衡 計量装置">
+    </div>
+    <div class="anniv">
+      <div class="l">— Anniversary</div>
+      <div class="v">126<sup>th</sup></div>
+      <div class="y">1900 — 2026</div>
+    </div>
+    <div class="copy">
+      <div class="kicker">— Statement / A案</div>
+      <h1>「いきる」を<span class="red">は</span>かり、<br>豊かな世界へ<span class="red">。</span></h1>
+      <p class="en"><i>— A quiet challenge, from Shiga to the world.</i></p>
+    </div>
+  </section>
+</div>
+
+<!-- 下バー — v8_3 そのまま -->
+<footer class="bar bot">
+  <div class="l"><span class="dot"></span>SHIGA · FACTORY · ACTIVE</div>
+  <div class="c"><i>MilliStar <b>·</b> ±0.001g <b>·</b> Weighing Systems</i></div>
+  <div>OMI · 滋賀 → 世界</div>
+</footer>
+
+<script>
+(function(){
+  const wrap = document.querySelector('.fv-wrap');
+  const root = document.documentElement;
+  if(!wrap) return;
+  let ticking = false;
+  function update(){
+    const rect = wrap.getBoundingClientRect();
+    const total = wrap.offsetHeight - window.innerHeight;
+    const p = Math.max(0, Math.min(1, -rect.top / Math.max(1,total)));
+    wrap.style.setProperty('--p', p.toFixed(3));
+    root.style.setProperty('--fv-p', p.toFixed(3));
+    ticking = false;
+  }
+  window.addEventListener('scroll', function(){
+    if(!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+
+<!-- ② Products -->
+<section class="products">
+  <div class="wrap">
+    <div class="lbl-row">
+      <span class="n">02</span>
+      <span class="h">製品・技術</span>
+      <span class="e">Products · Technology</span>
+    </div>
+    <div class="grid">
+      <div class="item">
+        <div class="lft">
+          <div class="num">01</div>
+          <div class="cat">Agricultural</div>
+          <div class="ph">FRUIT · VEG</div>
+        </div>
+        <div>
+          <h3>農産物用<br>計量システム</h3>
+          <p>果物・野菜向けの計量・選別システム。品質管理・等級選別に対応。長野・愛媛・山形など全国の選果場で稼働中。</p>
+          <a class="link" href="#">詳しく見る →</a>
+        </div>
+      </div>
+      <div class="item">
+        <div class="lft">
+          <div class="num">02</div>
+          <div class="cat">Weighing / Grain</div>
+          <div class="ph">RICE · BEAN</div>
+        </div>
+        <div>
+          <h3>穀類用<br>計量システム</h3>
+          <p>米・大豆などの穀類計量システム。全国約2,000施設のカントリーエレベーターへの納入実績。</p>
+          <a class="link" href="#">詳しく見る →</a>
+        </div>
+      </div>
+      <div class="item">
+        <div class="lft">
+          <div class="num">03</div>
+          <div class="cat">Industry</div>
+          <div class="ph">STEEL · CHEM</div>
+        </div>
+        <div>
+          <h3>工業用<br>計量システム</h3>
+          <p>ガラス・鉄鋼・肥料・化学など7カテゴリに対応する計量ソリューション。プラント計量にも対応。</p>
+          <a class="link" href="#">詳しく見る →</a>
+        </div>
+      </div>
+      <div class="item">
+        <div class="lft">
+          <div class="num">04</div>
+          <div class="cat">Special Use</div>
+          <div class="ph">LIVE · ANIMAL</div>
+        </div>
+        <div>
+          <h3>その他・<br>特殊用途</h3>
+          <p>家畜・競走馬向け動物計量など、特殊用途の計量システム。一品オーダーの設計に強み。</p>
+          <a class="link" href="#">詳しく見る →</a>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn dark" href="#">製品一覧を見る →</a>
+      <a class="btn" href="#">製品についてお問い合わせ →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ③ Delivery -->
+<section class="delivery">
+  <div class="wrap">
+    <div class="stat">
+      <div class="big">2,000<sup>+</sup></div>
+      <div class="lbl">累計納入施設数<small>Total Installations</small></div>
+    </div>
+    <div class="body">
+      <div class="eye">— Delivery / Performance</div>
+      <h2>導入事例・<em>納入実績</em></h2>
+      <p>農産物選果場・米麦カントリーエレベーター・工場ラインなど、多岐にわたる現場への納入実績をご紹介します。</p>
+      <div class="row">
+        <a class="btn dark" href="#">納入実績を見る →</a>
+        <a class="btn" href="#">海外実績 →</a>
+      </div>
+    </div>
+    <div class="stat">
+      <div class="big">9</div>
+      <div class="lbl">国内外サービス拠点<small>JP 6 · OVERSEAS 3</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- ④ Statement -->
+<section class="statement">
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <div class="eye">— Our Statement / 社是</div>
+        <h2>「いきる」を<em>は</em>かり、<br>豊かな世界へ<em>。</em></h2>
+        <p class="lead">1900年の創業以来、客観的に、正確に「はかる」ことを命題として歩んできた近江度量衡。農産物から工業製品まで——あらゆる現場で今も使われ続けている、現在進行形の技術力と誠実さ。「はかる」という仕事を通じて、日本と世界の社会を確かに支え続けること。それが、126年間変わらない私たちの使命です。</p>
+      </div>
+      <div class="ph">
+        <img src="d5d36931-322c-4440-85b3-17843dfa17a9.png" alt="MilliStar 計量装置">
+        <div class="lab"><b>BLEEDING MACHINE</b>MilliStar — 計量の現場</div>
+      </div>
+    </div>
+    <div class="values">
+      <div class="v">
+        <div class="n">01</div>
+        <h3>社会への貢献</h3>
+        <p>企業を通じた社会貢献と、従業員の生活向上。126年間、地域とともに歩んできた誠実さを守り続ける。</p>
+      </div>
+      <div class="v">
+        <div class="n">02</div>
+        <h3>技術の公用</h3>
+        <p>技術発展と優良品の製造。「測る」を通じて、確かさを社会に届けるための研鑽を絶やさない。</p>
+      </div>
+      <div class="v">
+        <div class="n">03</div>
+        <h3>互助の精神</h3>
+        <p>職場の繁栄に向けた互助・協力。一人ひとりが支え合いながら、確かなものづくりを実現する。</p>
+      </div>
+    </div>
+    <div class="actions">
+      <a class="btn dark" href="#">会社案内を見る →</a>
+      <a class="btn" href="#">126年のあゆみ →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ⑤ History -->
+<section class="history">
+  <div class="wrap">
+    <div class="lab">
+      <div class="eye">— 126 Years History</div>
+      <h2>明治から令和へ。<br><em>測り続けた、</em><br><em>126年。</em></h2>
+      <p class="lead">1900年の創業から現在まで、時代とともに進化してきた近江度量衡の歩みをダイジェストでご紹介します。</p>
+      <a class="btn" href="#">126年ヒストリーを見る →</a>
+    </div>
+    <ul class="tl">
+      <li><div class="yr">1900<small>明治33</small></div><div><div class="t">創業</div><div class="b">滋賀県にて計量器の製造・販売を開始。農産物の取引計量を支える地域の職人集団として出発。</div></div></li>
+      <li><div class="yr">1950s<small>昭和中期</small></div><div><div class="t">農業機械化の波に乗り、選果機需要が急拡大</div><div class="b">高度経済成長期、農協向け選果・計量システムの供給体制を確立。全国への展開が始まる。</div></div></li>
+      <li><div class="yr">2000<small>平成12</small></div><div><div class="t">ISO 9001 品質マネジメントシステム認証取得</div><div class="b">品質保証体制を国際規格で整備。全数検査・精度管理の仕組みを標準化。</div></div></li>
+      <li><div class="yr">2010s<small>海外展開</small></div><div><div class="t">海外展開開始（上海・バンコク・韓国）</div><div class="b">アジアの農産物・食品産業の成長とともに海外3拠点を設立。技術と誇りを海外へ。</div></div></li>
+      <li><div class="yr">2025<small>令和7</small></div><div><div class="t">創業126周年</div><div class="b">国内6拠点・海外3拠点・累計2,000施設への納入実績。次の126年へ向けたWebリニューアル進行中。</div></div></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ⑥ Recruit -->
+<section class="recruit" id="recruit">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eye">— Recruitment</div>
+        <h2>「いきる」の単位とは、<br>なんだろう<em>。</em></h2>
+      </div>
+      <div>
+        <p class="lead">地に足のついた仕事のリアル・職場環境・社員の声——飾らず正直に。あなたの確かな仕事で、豊かな未来を担う力になる。</p>
+        <div class="actions">
+          <a class="btn dark" href="#">採用サイトTOPへ →</a>
+          <a class="btn red" href="#">2027年度 エントリー →</a>
+        </div>
+        <p class="note">※ エントリーは採用サイト（/recruit/entry/）にて受付</p>
+      </div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="tag">— Vision &amp; Values</div>
+        <h3>ステートメントと<br>採用コンセプト</h3>
+        <p>「いきる」をはかり、豊かな世界へ。ミッション・ビジョン・バリューと採用コンセプトをお伝えします。</p>
+        <a class="link" href="#">ビジョンを見る →</a>
+      </div>
+      <div class="card">
+        <div class="tag">— New Graduate</div>
+        <h3>新卒採用</h3>
+        <p>「未来を、ここからはかる。」着実にものをつくる誠実さに共感できる人を求めています。</p>
+        <a class="link" href="#">新卒採用を見る →</a>
+      </div>
+      <div class="card">
+        <div class="tag">— Mid-Career</div>
+        <h3>中途採用</h3>
+        <p>「培った経験を、126年の精度に加えてください。」年齢・業界不問。</p>
+        <a class="link" href="#">中途採用を見る →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑦ People -->
+<section class="people">
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="eye">— People</div>
+        <h2>技術と誇りを持って働く、<br>近江の現場のことば。</h2>
+        <p class="lead">現場・設計・営業——それぞれの視点で語る、近江度量衡の仕事。</p>
+      </div>
+      <a class="btn" href="#">インタビュー一覧 →</a>
+    </div>
+    <div class="people-grid">
+      <div class="card">
+        <div class="ph"><span>PORTRAIT · 01 — FIELD</span></div>
+        <div class="body">
+          <div class="dept">— 製造部 / 入社〇年目（20代）</div>
+          <div class="nm">山田 〇〇</div>
+          <blockquote>毎回違う課題に向き合うから、技術者として本当に成長できる。誇りを持てる仕事です。</blockquote>
+          <a class="link" href="#">インタビューを読む →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph"><span>PORTRAIT · 02 — DESIGN</span></div>
+        <div class="body">
+          <div class="dept">— 設計部 / 入社〇年目（30代）</div>
+          <div class="nm">鈴木 〇〇</div>
+          <blockquote>図面通りにつくるのではなく、現場に合わせてつくる。グローバルな現場を支える実感があります。</blockquote>
+          <a class="link" href="#">インタビューを読む →</a>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph"><span>PORTRAIT · 03 — SALES</span></div>
+        <div class="body">
+          <div class="dept">— 営業部 / 入社〇年目（30代）</div>
+          <div class="nm">田中 〇〇</div>
+          <blockquote>お客様の現場を見て、何が必要か考える。「いきる」をはかるという仕事の意味がここにあります。</blockquote>
+          <a class="link" href="#">インタビューを読む →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⑧ News -->
+<section class="news">
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <div class="eye">— News</div>
+        <h2>新着情報</h2>
+      </div>
+      <a class="btn" href="#">一覧を見る →</a>
+    </div>
+    <ul>
+      <li><span class="date">2025.06.01</span><span class="cat">— Info</span><a class="t" href="#">北海道営業所を開設しました</a><span class="a">→</span></li>
+      <li><span class="date">2025.03.01</span><span class="cat">— Info</span><a class="t" href="#">会社設立126周年を達成しました</a><span class="a">→</span></li>
+      <li><span class="date">2025.04.01</span><span class="cat">— Recruit</span><a class="t" href="#">2027年度採用エントリー受付開始のご案内</a><span class="a">→</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="foot">
+  <div class="wrap">
+    <div class="top">
+      <div class="brand">
+        <div class="name">近江度量衡株式会社</div>
+        <div class="tg">「いきる」をはかり、豊かな世界へ。<small>Founded 1900 · MilliStar Edition</small></div>
+      </div>
+      <div class="col"><h4>Company</h4><ul><li><a href="#">会社案内</a></li><li><a href="#">126年ヒストリー</a></li><li><a href="#">新着情報</a></li></ul></div>
+      <div class="col"><h4>Products</h4><ul><li><a href="#">製品・技術紹介</a></li><li><a href="#">サービス案内</a></li><li><a href="#">納入実績</a></li></ul></div>
+      <div class="col"><h4>Recruit</h4><ul><li><a href="#">採用TOP</a></li><li><a href="#">新卒採用</a></li><li><a href="#">中途採用</a></li><li><a href="#">エントリー 2027</a></li></ul></div>
+    </div>
+    <div class="bot">
+      <span>© 近江度量衡株式会社 All Rights Reserved.</span>
+      <span>v10 — TOP · C / Bleeding Machine</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

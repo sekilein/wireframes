@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script><script src="_firebase_comments.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>近江度量衡 — v10 TOP / d_1 · Graduation（目盛り／物差し）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Inter:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0b0c0e;
+  --paper:#f3f1ea;
+  --red:#c01f1f;
+  --mn:"Shippori Mincho","Hiragino Mincho ProN","Yu Mincho",serif;
+  --jp:"Noto Sans JP","Hiragino Sans",system-ui,sans-serif;
+  --en:"Inter",sans-serif;
+}
+html,body{background:var(--ink);color:var(--paper);font-family:var(--en)}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+
+/* ── ヘッダー：透過・中央ロゴ・左右ナビ ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:30;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:26px 40px;color:#fff}
+.nav .n{display:flex;gap:26px;font-family:var(--en);font-size:10.5px;letter-spacing:.26em;text-transform:uppercase;font-weight:500;color:rgba(255,255,255,.82)}
+.nav .n.right{justify-content:flex-end}
+.nav .n a{transition:color .2s}.nav .n a:hover{color:#fff}
+.nav .logo{text-align:center;line-height:1.2}
+.nav .logo b{font-family:var(--mn);font-weight:700;font-size:18px;letter-spacing:.18em;color:#fff;display:block}
+.nav .logo span{font-family:var(--en);font-size:9px;letter-spacing:.34em;color:rgba(255,255,255,.6);text-transform:uppercase}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:660px;overflow:hidden;background:#0b0c0e}
+.hero__bg{position:absolute;inset:0;z-index:0;overflow:hidden;background:#0b0c0e}
+.hero__bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.92)}
+/* 上下ヴィネット＋全体の軽い暗幕（白文字の可読性確保） */
+.hero__bg::after{content:"";position:absolute;inset:0;background:
+  linear-gradient(180deg, rgba(0,0,0,.55) 0%, rgba(0,0,0,.15) 24%, rgba(0,0,0,.15) 58%, rgba(0,0,0,.72) 100%);}
+
+/* 主役ビジュアル（中央・縦長：計量器/分銅の切り抜き想定） */
+.hero__product{position:absolute;top:50%;left:50%;transform:translate(-50%,-48%);z-index:1;
+  width:clamp(180px,20vw,300px);height:clamp(360px,62vh,620px);
+  border:1px dashed rgba(255,255,255,.28);
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+  display:flex;align-items:center;justify-content:center;text-align:center}
+.hero__product span{font-family:var(--en);font-size:10px;letter-spacing:.22em;color:rgba(255,255,255,.5);text-transform:uppercase;line-height:1.9;padding:0 14px}
+
+/* 見出し：左上 / 中央 / 右下 に分割して主役を囲む */
+.hero__title{position:absolute;inset:0;z-index:2;pointer-events:none}
+.hero__title span{position:absolute;font-family:var(--mn);color:#fff;letter-spacing:.04em;line-height:1.1;text-shadow:0 2px 40px rgba(0,0,0,.45)}
+.t1{top:21%;left:7%;font-weight:700;font-size:clamp(2.4rem,6vw,5.4rem)}
+.t2{top:45%;left:50%;transform:translateX(-50%);font-weight:600;font-style:italic;font-size:clamp(2.6rem,6.6vw,6rem);white-space:nowrap}
+.t2::after{content:"";position:absolute;left:8%;right:8%;bottom:-.12em;height:2px;background:var(--red);opacity:.9}
+.t3{top:60%;right:7%;font-weight:700;font-size:clamp(2.4rem,6vw,5.4rem)}
+
+/* 左下：ムービーチップ＋キャプション */
+.hero__chip{position:absolute;left:40px;bottom:40px;z-index:3;display:flex;align-items:flex-end;gap:14px}
+.hero__chip .thumb{width:148px;aspect-ratio:16/10;border:1px solid rgba(255,255,255,.35);
+  background:linear-gradient(135deg,#2a2722,#0e0d0b);display:flex;align-items:center;justify-content:center;
+  font-family:var(--en);font-size:9px;letter-spacing:.2em;color:rgba(255,255,255,.5);text-transform:uppercase}
+.hero__chip figcaption{font-family:var(--en);font-size:10px;letter-spacing:.2em;color:rgba(255,255,255,.7);text-transform:uppercase;line-height:1.8}
+.hero__chip figcaption b{display:block;font-family:var(--jp);font-size:12px;letter-spacing:.08em;color:#fff;font-weight:500;text-transform:none;margin-top:4px}
+
+/* 右下：説明文＋リンク */
+.hero__intro{position:absolute;right:40px;bottom:44px;z-index:3;max-width:320px;text-align:right}
+.hero__intro p{font-family:var(--jp);font-size:12px;line-height:2;color:rgba(255,255,255,.72);font-weight:400}
+.hero__intro a{display:inline-flex;align-items:center;gap:10px;margin-top:16px;font-family:var(--en);font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;font-weight:600;color:#fff;border-bottom:1px solid rgba(255,255,255,.6);padding-bottom:3px}
+.hero__intro a:hover{border-color:var(--red);color:var(--red)}
+
+/* CTA：採用（右上寄りの小バッジ） */
+.hero__recruit{position:absolute;top:96px;right:40px;z-index:3;font-family:var(--en);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:#fff;border:1px solid var(--red);background:rgba(192,31,31,.18);padding:9px 16px;font-weight:600}
+.hero__recruit:hover{background:var(--red)}
+
+/* SCROLL */
+.scroll{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:3;font-family:var(--en);font-size:9px;letter-spacing:.32em;color:rgba(255,255,255,.6);text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:8px}
+.scroll::after{content:"";width:1px;height:30px;background:linear-gradient(rgba(255,255,255,.6),transparent)}
+
+/* ハンバーガー（モバイルのみ） */
+.burger{display:none;position:fixed;top:18px;right:20px;z-index:31;width:34px;height:26px;background:transparent;border:none;cursor:pointer;flex-direction:column;justify-content:center;gap:6px}
+.burger span{display:block;height:1.5px;background:#fff}
+
+@media (max-width:900px){
+  .nav{grid-template-columns:1fr;justify-items:center;padding:16px 20px}
+  .nav .n{display:none}
+  .nav .logo b{white-space:nowrap}
+  .burger{display:flex}
+  .hero__recruit{display:none}
+  .hero__product{width:160px;height:320px;transform:translate(-50%,-52%)}
+  .t1{top:17%;left:6%;font-size:clamp(2.2rem,9vw,3.2rem)}
+  .t2{top:43%;font-size:clamp(2.4rem,10vw,3.4rem)}
+  .t3{top:56%;right:6%;font-size:clamp(2.2rem,9vw,3.2rem)}
+  .hero__chip{left:20px;bottom:20px}
+  .hero__chip .thumb{width:108px}
+  .hero__intro{right:20px;bottom:118px;max-width:210px}
+}
+@media (max-width:560px){
+  .hero{min-height:640px}
+  .hero__product,.bg-label,.scroll{display:none}
+  .hero__title{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:0 22px;gap:.15em}
+  .hero__title span{position:static;transform:none;white-space:nowrap}
+  .t1,.t3{font-size:2.5rem}.t2{font-size:2.7rem}.t2::after{left:0;right:auto;width:62%}
+  .hero__chip{left:22px;bottom:22px}
+  .hero__intro{position:absolute;left:22px;right:22px;bottom:118px;max-width:none;text-align:left}
+}
+
+/* ===== FX d_1: 目盛り／物差し（Graduation） ===== */
+.fx-tag{position:absolute;left:50%;bottom:56px;transform:translateX(-50%);z-index:4;font:500 9px/1 var(--en);letter-spacing:.24em;color:rgba(255,255,255,.42);text-transform:uppercase}
+.grad-ruler{position:absolute;top:100px;right:26px;bottom:64px;width:40px;z-index:4;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end}
+.grad-ruler .t{height:1px;background:rgba(255,255,255,.26);width:10px}
+.grad-ruler .t.M{width:22px;background:rgba(255,255,255,.5);position:relative}
+.grad-ruler .t.M::after{content:attr(data-n);position:absolute;right:28px;top:-6px;font:500 9px/1 var(--en);letter-spacing:.16em;color:rgba(255,255,255,.5)}
+.measure-x{position:absolute;left:7%;top:38.5%;width:44%;height:1px;z-index:4;pointer-events:none}
+.measure-x .mline{position:absolute;left:0;top:0;height:1px;background:rgba(255,255,255,.5);width:0;animation:d1mx 1.7s .5s cubic-bezier(.2,.7,.2,1) forwards}
+.measure-x .mline::before,.measure-x .mline::after{content:"";position:absolute;top:-4px;width:1px;height:9px;background:rgba(255,255,255,.6)}
+.measure-x .mline::before{left:0}.measure-x .mline::after{right:0}
+@keyframes d1mx{to{width:100%}}
+.measure-x .cal{position:absolute;top:-26px;left:0;transform:translateX(-50%);text-align:center;animation:d1cal 1.7s .5s cubic-bezier(.2,.7,.2,1) forwards}
+.measure-x .cal i{display:block;width:1px;height:30px;background:var(--red);margin:0 auto}
+.measure-x .cal b{font:600 11px/1 var(--en);letter-spacing:.1em;color:#fff;background:var(--red);padding:3px 7px;display:inline-block;margin-bottom:2px}
+@keyframes d1cal{from{left:0}to{left:100%}}
+.corner{position:absolute;width:16px;height:16px;border:solid rgba(255,255,255,.4);z-index:4}
+.ct-tl{top:90px;left:30px;border-width:1px 0 0 1px}
+.ct-tr{top:90px;right:30px;border-width:1px 1px 0 0}
+.cb-bl{bottom:30px;left:30px;border-width:0 0 1px 1px}
+.cb-br{bottom:30px;right:30px;border-width:0 1px 1px 0}
+@media(prefers-reduced-motion:reduce){.measure-x .mline{animation:none;width:100%}.measure-x .cal{animation:none;left:100%}}
+@media(max-width:560px){.grad-ruler,.measure-x{display:none}}
+
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <nav class="n left"><a href="#">製品・技術</a><a href="#">サービス案内</a><a href="#">納入実績</a></nav>
+  <div class="logo"><b>近江度量衡</b><span>OMISCALE — Since 1900</span></div>
+  <nav class="n right"><a href="#">会社案内</a><a href="#">126年ヒストリー</a><a href="#">採用情報</a><a href="#">JP / EN</a></nav>
+</header>
+<button class="burger" aria-label="メニュー"><span></span><span></span><span></span></button>
+
+<section class="hero">
+  <div class="hero__bg"><video autoplay muted loop playsinline src="home.mp4"></video></div>
+
+  <a class="hero__recruit" href="#">Recruit 2027 ↗</a>
+
+  <div class="hero__product"><span>主役ビジュアル<br>計量器・分銅などの<br>製品切り抜き</span></div>
+
+  <h1 class="hero__title">
+    <span class="t1">「いきる」を</span>
+    <span class="t2">はかり、</span>
+    <span class="t3">豊かな世界へ。</span>
+  </h1>
+
+  <figure class="hero__chip">
+    <div class="thumb">MOVIE</div>
+    <figcaption>OUR FIELD<b>はかる現場の映像</b></figcaption>
+  </figure>
+
+  <div class="hero__intro">
+    <p>1900年の創業以来、「はかる」を通じて農産物から工業製品まで——あらゆる現場の確かさを支えてきた近江度量衡。126年の技術と誇りを、次の世界へ。</p>
+    <a href="#">私たちの歩み — Discover →</a>
+  </div>
+
+  <div class="grad-ruler" id="d1ruler"></div>
+  <div class="measure-x"><span class="mline"></span><span class="cal"><b>126</b><i></i></span></div>
+  <span class="corner ct-tl"></span><span class="corner ct-tr"></span><span class="corner cb-bl"></span><span class="corner cb-br"></span>
+  <div class="fx-tag">FX · 目盛り / 物差し — Graduation</div>
+  <div class="scroll">Scroll</div>
+</section>
+
+<script>
+(function(){var g=document.getElementById('d1ruler');if(!g)return;
+for(var i=0;i<=20;i++){var t=document.createElement('div');var M=(i%5===0);t.className='t'+(M?' M':'');if(M)t.setAttribute('data-n',String(100-i*5));g.appendChild(t);} })();
+</script>
+</body>
+</html>
