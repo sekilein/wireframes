@@ -312,7 +312,8 @@ img { display: block; width: 100%; }
 
 /* ── CASE（納入実績） ── */
 .case { border:1px solid var(--c-border); display:grid; grid-template-columns:340px 1fr; }
-.case__img { aspect-ratio:4/3; height:100%; }
+.case__img { position:relative; min-height:260px; background:var(--c-bg-img); }
+.case__img > .ph { position:absolute; inset:0; height:100%; }
 .case__body { padding:28px; }
 .case__cat { font-size:10px; letter-spacing:.12em; color:var(--c-muted); text-transform:uppercase; }
 .case__title { font-size:20px; font-weight:700; margin:6px 0 16px; }
