@@ -376,29 +376,174 @@ def product_detail(slug_en, name, desc, features, uses, assets_note=""):
 </div></div>
 '''
 
-page("products-agricultural.html","農産物用計量システム｜近江度量衡株式会社",
-  product_detail("AGRICULTURAL","農産物用計量システム",
-    "柑橘類・トマト・キンカン・玉ねぎ・根菜類など農産物の種類に応じた選別・計量システム。農協・産地の現場に合わせた一品一様設計。",
-    ["重量・外観・糖度・酸度など多項目の同時計測","選果ライン全体の設計・製造・保守を一貫提供","カメラ・センサーによる外観検査機能","農協・産地向けカスタマイズ対応","ISO 9001準拠の品質管理"],
-    ["果物選果場（JA・農協）","野菜集出荷施設","食品加工ライン","輸出向け仕分けライン"],
-    "1F2F3F.jpg（D_納入実績/農産物計量システム）／Calistar.jpg・Milister.jpg（B_製品）"),
+def pdf_box(title, meta, href):
+    return ('<div class="pdf-box"><div class="pdf-box__ic">PDF</div>'
+      '<div class="pdf-box__body"><div class="pdf-box__title">'+title+'</div>'
+      '<div class="pdf-box__meta">'+meta+'</div></div>'
+      '<div class="pdf-box__btns"><a class="btn btn--dark btn--sm" href="'+href+'" target="_blank">PDFを開く</a>'
+      '<a class="btn btn--outline btn--sm" href="'+href+'" download>ダウンロード</a></div></div>')
+
+def machine(en, jp, target, bullets, imglabel):
+    b = "".join('<li>'+x+'</li>' for x in bullets)
+    return ('<div class="case" style="margin-top:24px;"><div class="case__img">'+ph(imglabel)+'</div>'
+      '<div class="case__body"><div class="machine-meta">'+en+'</div>'
+      '<div class="case__title" style="margin:0;">'+jp+'</div>'
+      '<div class="machine-target">'+target+'</div>'
+      '<ul class="feature-list" style="margin-top:4px;">'+b+'</ul></div></div>')
+
+# ===== B1 農産物用：OMI STAR シリーズ（2021 STARパンフレット反映） =====
+agri_body = '''
+<header class="page-header"><div class="page-header__inner">
+  <p class="page-header__meta">AGRICULTURAL</p>
+  <h1 class="page-header__title">農産物用計量システム</h1>
+  <p class="page-header__lead">選別機の新星「OMI STAR シリーズ」が「はかる」技術をさらに加速。柑橘から小粒農産物・根菜類まで、農産物を選ばない 3ライン＋α でお応えします。</p>
+</div></header>
+<section class="section"><div class="container">
+  <p class="section-meta">STAR Series</p>
+  <h2 class="section-title">画期的な技術を結集した高精度の選果システム</h2>
+  <p class="section-lead">農産物選果は新しい時代へ。重量・外観を高精度に「はかる」3つの選別機（Rollerstar／Millistar／Calistar）＋ 柑橘選果システム（＋α）で、産地・農協の現場に一品一様で対応します。''' + todo('製品写真：Calistar.jpg / Millister.jpg / Rollerster.jpg（Drive B_製品）') + '''</p>
+</div></section>
+<section class="section section--grey"><div class="container">
+  <p class="section-meta">3 Lines</p><h2 class="section-title">STAR シリーズ 3機種</h2>
+''' + machine("Rollerstar ／ ローラスター","柑橘・落葉果実・トマト などの農産物の選別に最適",
+      "対応：柑橘・落葉果実・トマト",
+      ["二個乗りを防ぐ独自の整列機構","1グラム単位で正確に重量を測定できる「はかる」技術","最大16個／秒／条を正確に選別仕分けできる高能力を実現"],
+      "Rollerstar 製品写真") + machine("Millistar ／ ミリスター","ミニトマト・キンカン など小粒農産物を選別仕分け",
+      "対応：ミニトマト・キンカン・小粒農作物",
+      ["25個／秒／条で農産物を選別仕分けする能力","二個乗りを確実に防ぐ整列コンベアが選果能力をアシスト","1つのワークを8面画像認識し形状や色彩を見分ける Advanced Vision 搭載","低騒音で働く人にやさしい作業環境を実現"],
+      "Millistar 製品写真") + machine("Calistar ／ キャリスター","根菜類・パプリカ・玉ねぎ・柑橘 など農産物を選ばないオールランダー",
+      "対応：根菜類・パプリカ・玉ねぎ・柑橘 ほか",
+      ["吊り下げ方式搬送体が更に高精度な重量測定を実現","小さなものから大きなものまで確実にホールドできるクリッパー","吊り下げ方式の搬送体だから実現できる低落差","根菜類など土モノの土砂の影響を受けない安心構造"],
+      "Calistar 製品写真") + '''
+  <div class="cms-note">＋α：高精度・高性能の「柑橘選果システム」もラインアップ。</div>
+</div></section>
+<section class="section"><div class="container">
+  <p class="section-meta">Case Study</p><h2 class="section-title">導入事例</h2>
+  <div class="grid-3" style="margin-top:24px;">
+    <div class="card"><div class="card__img">''' + ph('JA熊本うき 宇城柑橘選果場') + '''</div><div class="card__body"><div class="card__title">JA熊本うき 宇城柑橘選果場様</div><p class="card__text">世界初、温州みかんを予冷から同一ラインで選果可能にした大型プラント。</p></div></div>
+    <div class="card"><div class="card__img">''' + ph('奄美市 奄美大島選果場') + '''</div><div class="card__body"><div class="card__title">奄美市 奄美大島選果場様</div><p class="card__text">高精度の内部・外部品質管理を実現した、奄美タンカン選果ライン。</p></div></div>
+    <div class="card"><div class="card__img">''' + ph('有限会社さもと農園') + '''</div><div class="card__body"><div class="card__title">三重県 有限会社さもと農園様</div><p class="card__text">機能を絞った小規模プラントにも対応。</p></div></div>
+  </div>
+  ''' + pdf_box("2021 STAR シリーズ パンフレット","農産物選別機 Rollerstar／Millistar／Calistar（PDF）","assets/star-series.pdf") + '''
+</div></section>
+<div class="recruit-banner" style="background:#222;"><div class="recruit-banner__inner">
+  <div class="recruit-banner__text"><h2 style="font-size:24px;">農産物用計量システムについてのお問い合わせ</h2></div>
+  <div class="recruit-banner__cta"><a class="btn btn--white" href="contact.html">お問い合わせ</a></div>
+</div></div>
+'''
+page("products-agricultural.html","農産物用計量システム｜近江度量衡株式会社", agri_body,
   active="products.html", crumbs=[("TOP","top.html"),("製品・技術紹介","products.html"),("農産物用",None)])
 PAGES.append(("B1","農産物用計量システム","/products/agricultural/","products-agricultural.html","corp",True))
 
-page("products-weighing.html","穀類用計量システム｜近江度量衡株式会社",
-  product_detail("GRAIN","穀類用計量システム",
-    "連続流量計・サテライトスケール・全自動紐袋結束装置・粒子全自動給袋装置など穀類専用システム。全国約2,000施設への納入実績。フルオートドライヤーシステムにも対応。",
-    ["精度の高いホッパー計量・袋詰めシステム","米麦カントリーエレベーター向け一貫設計","受入・乾燥・袋詰めの全工程をシステム化","IoT連携による生産管理・記録システム","大量処理・高速計量への対応","全国保守ネットワーク対応"],
-    ["米麦カントリーエレベーター","ライスセンター・精米工場","食糧倉庫・貯蔵施設","農協集荷場"],
-    "フルオートドライヤーシステム_JPEG（B_製品：image_main / image_3D / image_panel 他）／OMI TOTAL FULL-AUTOMATIC DRYER SYSTEM_print.pdf"),
+# ===== B2 穀類用：フルオートドライヤーシステム（DRYER SYSTEM反映） =====
+grain_body = '''
+<header class="page-header"><div class="page-header__inner">
+  <p class="page-header__meta">GRAIN</p>
+  <h1 class="page-header__title">穀類用計量システム</h1>
+  <p class="page-header__lead">全国約2,000施設への納入実績。サンプル全自動自主検査「フルオートドライヤーシステム」で、穀類の自主検査工程を効率化します。</p>
+</div></header>
+<section class="section"><div class="container grid-2" style="align-items:start;">
+  <div>''' + ph('フルオートドライヤーシステム 本体（CFD-120）','','aspect-ratio:4/3') + todo('製品写真：image_main / image_3D / image_panel（Drive B_製品 フルオートドライヤー）') + '''</div>
+  <div>
+    <p class="section-meta">OMI Total Full-Automatic Dryer System</p>
+    <h2 class="section-title" style="font-size:24px;">フルオートドライヤーシステム</h2>
+    <p class="section-lead" style="margin-top:12px;">業界初のサンプル全自動自主検査装置が、さらなる高効率化を実現してフルモデルチェンジ。200年以上の穀類フルオートドライヤー納入で培ったノウハウを結集し、現代のプラント設備に求められる性能を高い完成度で実現した新型システムです。<strong>米・麦・大豆の3品目兼用。</strong></p>
+  </div>
+</div></section>
+<section class="section section--grey"><div class="container">
+  <p class="section-meta">Feature</p><h2 class="section-title">特長</h2>
+  <div class="feat-grid">
+    <div class="feat-item"><div class="no">01</div><h4>省人化</h4><p>計量・乾燥・検査の全工程をオートメーション化。</p></div>
+    <div class="feat-item"><div class="no">02</div><h4>省エネ</h4><p>乾燥精度をたもつ消費電力の抑え込み制御。</p></div>
+    <div class="feat-item"><div class="no">03</div><h4>省スペース</h4><p>約64%削減したコンパクトなサイズ。</p></div>
+    <div class="feat-item"><div class="no">04</div><h4>3品目兼用</h4><p>米・大豆・麦の3品目兼用が可能。</p></div>
+    <div class="feat-item"><div class="no">05</div><h4>トータルコスト</h4><p>更新時の据置工程を統合しトータルコスト削減。</p></div>
+  </div>
+</div></section>
+<section class="section"><div class="container">
+  <p class="section-meta">Flow</p><h2 class="section-title">工程</h2>
+  <div class="process" style="margin-top:24px;">
+    <div class="process-step"><div class="process-step__num">01</div><div class="process-step__title">投入</div></div>
+    <div class="process-step"><div class="process-step__num">02</div><div class="process-step__title">計量</div></div>
+    <div class="process-step"><div class="process-step__num">03</div><div class="process-step__title">サンプル抽出</div></div>
+    <div class="process-step"><div class="process-step__num">04</div><div class="process-step__title">乾燥</div></div>
+    <div class="process-step"><div class="process-step__num">05</div><div class="process-step__title">検査</div></div>
+  </div>
+  <div class="grid-3" style="margin-top:32px;">
+    <div class="value-item"><div class="value-item__title" style="font-size:15px;">搬送部</div><p class="value-item__body">搬送用ロボットアーム・昇降エレベーター・定量供給で、サンプルを確実に搬送。</p></div>
+    <div class="value-item"><div class="value-item__title" style="font-size:15px;">サンプルボックス</div><p class="value-item__body">10ボックス×6段×2テーブル、計120サンプルを管理。</p></div>
+    <div class="value-item"><div class="value-item__title" style="font-size:15px;">オートチェッカー</div><p class="value-item__body">抽出したサンプルを自動で検査し、自主検査工程を全自動化。</p></div>
+  </div>
+</div></section>
+<section class="section section--grey" id="spec"><div class="container">
+  <p class="section-meta">Spec &amp; Dimension</p><h2 class="section-title">仕様・寸法図（ドライヤー本体）</h2>
+  <div class="spec-2col">
+    <figure class="dim-figure"><img src="assets/dryer-dimension.png" alt="フルオートドライヤーシステム 寸法図"><figcaption>DIMENSION 寸法図（裏表紙より）</figcaption></figure>
+    <table class="info-table" style="background:#fff;">
+      <tr><th>型式</th><td>CFD-120</td></tr>
+      <tr><th>対象物</th><td>穀類（米・麦・大豆）</td></tr>
+      <tr><th>本体寸法（出荷時）</th><td>幅 2,020 × 高さ 1,800 × 奥行 700（mm）</td></tr>
+      <tr><th>処理量</th><td>120サンプル（10ボックス×6段×2テーブル）</td></tr>
+      <tr><th>操作部</th><td>7インチ型タッチパネル</td></tr>
+      <tr><th>塗装色</th><td>マンセル 5Y7/1</td></tr>
+      <tr><th>サンプルボックス最大投入量</th><td>約 800g（粉）</td></tr>
+      <tr><th>機器重量</th><td>850kg</td></tr>
+      <tr><th>消費電力</th><td>200V 約3.6kW 4.2KVA 18A</td></tr>
+      <tr><th>消費エアー量</th><td>25L/min</td></tr>
+      <tr><th>排風量</th><td>12㎥/min（50Hz）／14㎥/min（60Hz）</td></tr>
+      <tr><th>備考</th><td>最大4台での連結可能／ヒーター自動温度制御／セーフティスイッチ／機内照明搭載</td></tr>
+    </table>
+  </div>
+  ''' + pdf_box("フルオートドライヤーシステム 製品資料","OMI TOTAL FULL-AUTOMATIC DRYER SYSTEM（特長・工程・仕様・寸法図／PDF）","assets/dryer-system.pdf") + '''
+</div></section>
+<div class="recruit-banner" style="background:#222;"><div class="recruit-banner__inner">
+  <div class="recruit-banner__text"><h2 style="font-size:24px;">穀類用計量システムについてのお問い合わせ</h2></div>
+  <div class="recruit-banner__cta"><a class="btn btn--white" href="contact.html">お問い合わせ</a></div>
+</div></div>
+'''
+page("products-weighing.html","穀類用計量システム｜近江度量衡株式会社", grain_body,
   active="products.html", crumbs=[("TOP","top.html"),("製品・技術紹介","products.html"),("穀類用",None)])
 PAGES.append(("B2","穀類用計量システム","/products/weighing/","products-weighing.html","corp",True))
 
-page("products-industry.html","工業用計量システム｜近江度量衡株式会社",
-  product_detail("INDUSTRIAL","工業用計量システム",
-    "原料計量配合システム・トラック計量システムなど、工場ラインの業務効率化を実現するソリューション。",
-    ["高精度・高耐久の工場ライン向け計量システム","7カテゴリ（ガラス・鉄鋼・肥料・化学・飼料・建材・その他）に対応","爆発性環境・高温環境への対応","PLC・SCADA連携による自動化・可視化","グローバル対応（海外拠点での現地サポート）"],
-    ["ガラス・セラミック製造ライン","鉄鋼・金属加工工場","化学・肥料プラント","飼料・建材製造"]),
+# ===== B3 工業用：工業分野（会社案内2025 工業ページ反映） =====
+ind_body = '''
+<header class="page-header"><div class="page-header__inner">
+  <p class="page-header__meta">INDUSTRY</p>
+  <h1 class="page-header__title">工業用計量システム</h1>
+  <p class="page-header__lead">あらゆる工業分野で品質を支える「はかる」技術。</p>
+</div></header>
+<section class="section"><div class="container grid-2" style="align-items:center;">
+  <div>
+    <p style="font-size:14px;color:#444;line-height:2;">工業用ゴム、樹脂、ガラス、金属、化学薬品など、近江度量衡には様々な工業製品の原料や薬品の計量配合プラントの納入実績があります。液体、粉体、ペレット、顆粒状など様々な形状の原料をはかるノウハウで、産業分野を超えてお客様のニーズに応えます。</p>
+  </div>
+  <div>''' + ph('計量配合プラント 全体イメージ','','aspect-ratio:16/10') + '''</div>
+</div></section>
+<section class="section section--grey"><div class="container">
+  <p class="section-meta">Products</p>
+  <h2 class="section-title">一台の計量機から製造ライン全体まで。</h2>
+  <p class="section-lead">高精度、高生産性の装置でものづくり現場を支えます。</p>
+  <div class="grid-2" style="margin-top:28px;">
+    <div class="card" style="background:#fff;"><div class="card__img">''' + ph('粉体原料用ホッパースケール') + '''</div><div class="card__body"><div class="card__title">粉体原料計量システム</div><p class="card__text">ガラス製品の製造工程では、計量だけでなく、原料の貯蔵・自動調合・ミキシング・定量供給装置など、製造工程のほとんどのプロセスの装置とシステムを手掛けます。流動性に優れた構造で、硬質素材と摩耗対策により高い耐久性を備えた高能力のシステムを提供しています。</p></div></div>
+    <div class="card" style="background:#fff;"><div class="card__img">''' + ph('ゴム混練設備計量機') + '''</div><div class="card__body"><div class="card__title">タイヤ・工業用ゴム計量システム</div><p class="card__text">プラント全体における上流工程の原料計量設備、下流工程の完成品計量設備、その間の各ライン設備を設計・製作。さらに完全自動化のための生産管理統合システムを提供し、安定した精度を保ち、生産性向上と品質の保証に大きく寄与しています。</p></div></div>
+  </div>
+</div></section>
+<section class="section"><div class="container grid-2" style="align-items:center;">
+  <div>
+    <p class="section-meta">Total Engineering</p>
+    <h2 class="section-title" style="font-size:24px;">ソフトウェアもハードウェアも自社製造で一括管理</h2>
+    <p class="section-lead">高精度な計量を実現するためには、機械設備の設計・製作だけでなく、それらを制御するシステム開発が欠かせません。電気設備の設計・構築を専門とする技術電装部を抱え、機械設備の設計を行う設計部、製造を担当する製造部が連携したトータルエンジニアリングで、お客様に安心してお使いいただけるシステムをお届けしています。</p>
+  </div>
+  <div>''' + ph('電子部品の組立まで自社で実施') + '''</div>
+</div></section>
+<section class="section section--grey"><div class="container">
+  ''' + pdf_box("会社案内パンフレット 2025年版","工業分野ほか 事業・技術紹介（PDF）","assets/company-2025.pdf") + '''
+</div></section>
+<div class="recruit-banner" style="background:#222;"><div class="recruit-banner__inner">
+  <div class="recruit-banner__text"><h2 style="font-size:24px;">工業用計量システムについてのお問い合わせ</h2></div>
+  <div class="recruit-banner__cta"><a class="btn btn--white" href="contact.html">お問い合わせ</a></div>
+</div></div>
+'''
+page("products-industry.html","工業用計量システム｜近江度量衡株式会社", ind_body,
   active="products.html", crumbs=[("TOP","top.html"),("製品・技術紹介","products.html"),("工業用",None)])
 PAGES.append(("B3","工業用計量システム","/products/industry/","products-industry.html","corp",True))
 

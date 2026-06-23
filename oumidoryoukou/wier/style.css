@@ -459,3 +459,36 @@ img { display: block; width: 100%; }
   .footer-cta__btns { flex-direction: column; }
   .footer-cta__btns .btn { text-align: center; }
 }
+
+/* ==========================================
+   製品ページ拡充（PDF反映：機種/特長/SPEC/寸法/PDF添付）
+   ========================================== */
+.machine-meta { font-size:12px; color:var(--c-omi-red); font-weight:700; letter-spacing:.04em; margin-bottom:6px; }
+.machine-target { font-size:12px; color:var(--c-mid); margin:6px 0 14px; }
+
+/* FEATURE グリッド */
+.feat-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-top:24px; }
+.feat-item { border:1px solid var(--c-border); padding:20px 16px; background:#fff; }
+.feat-item .no { font-size:11px; color:var(--c-omi-red); font-weight:700; letter-spacing:.12em; }
+.feat-item h4 { font-size:14px; font-weight:700; margin:8px 0 6px; }
+.feat-item p { font-size:11px; color:var(--c-mid); line-height:1.7; }
+
+/* SPEC＋寸法 2カラム */
+.spec-2col { display:grid; grid-template-columns:240px 1fr; gap:32px; align-items:start; margin-top:24px; }
+.dim-figure { border:1px solid var(--c-border); background:#fff; padding:12px; }
+.dim-figure img { width:100%; height:auto; }
+.dim-figure figcaption { font-size:11px; color:var(--c-muted); text-align:center; margin-top:8px; }
+
+/* PDF 添付ボックス */
+.pdf-box { display:flex; align-items:center; gap:20px; border:1px solid var(--c-border); padding:20px 24px; background:var(--c-bg-light); margin-top:28px; }
+.pdf-box__ic { width:50px; height:62px; background:var(--c-omi-red); color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; font-weight:700; letter-spacing:.06em; flex-shrink:0; }
+.pdf-box__body { flex:1; }
+.pdf-box__title { font-size:14px; font-weight:700; }
+.pdf-box__meta { font-size:11px; color:var(--c-muted); margin-top:4px; }
+.pdf-box__btns { display:flex; gap:10px; flex-shrink:0; }
+
+@media (max-width:920px){
+  .feat-grid { grid-template-columns:1fr 1fr; }
+  .spec-2col { grid-template-columns:1fr; }
+  .pdf-box { flex-wrap:wrap; }
+}
