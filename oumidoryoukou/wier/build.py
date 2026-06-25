@@ -1213,6 +1213,132 @@ page("recruit-entry-2027-career.html","2027 中途採用エントリー｜近江
   active="", recruit=True, crumbs=RC+[("2027 中途エントリー",None)])
 PAGES.append(("G7-2","2027年度 中途エントリーLP","/recruit/entry/2027/career/","recruit-entry-2027-career.html","recruit",False))
 
+# ======================= テンプレート検証サンプル（記事内容で差を出す5ページ） =======================
+def a_lead(t): return '<p class="article-lead">'+t+'</p>'
+def a_p(t): return '<p class="article-p">'+t+'</p>'
+def a_h(t): return '<h2 class="article-h">'+t+'</h2>'
+def a_fig(label, cap='', ar='16/9'):
+    caphtml = '<figcaption>'+cap+'</figcaption>' if cap else ''
+    return '<figure class="article-fig">'+ph(label,'','aspect-ratio:'+ar)+caphtml+'</figure>'
+def a_ul(items): return '<ul class="article-ul">'+''.join('<li>'+x+'</li>' for x in items)+'</ul>'
+def a_table(rows): return '<table class="info-table" style="margin:24px 0;">'+''.join('<tr><th>'+k+'</th><td>'+v+'</td></tr>' for k,v in rows)+'</table>'
+def a_quote(t, by=''):
+    c = '<cite>'+by+'</cite>' if by else ''
+    return '<blockquote class="article-quote">'+t+c+'</blockquote>'
+def a_link(t, href='#'): return '<p><a class="article-extlink" href="'+href+'">'+t+' ↗</a></p>'
+
+def article(filename, win_title, date, cat, title, blocks, related, active="news.html", recruit=False, crumbs=None):
+    back = 'recruit-news.html' if recruit else 'news.html'
+    rel = ''.join('<li class="news-item"><span class="news-item__date">'+d+'</span><a class="news-item__title" href="'+h+'">'+t+'</a></li>' for d,t,h in related)
+    body = ('<section class="section"><div class="container"><article class="article">'
+      '<p class="article__meta">'+date+'　<span class="article__cat">'+cat+'</span></p>'
+      '<h1 class="article__title">'+title+'</h1>'
+      + ''.join(blocks) +
+      '</article></div></section>'
+      '<section class="section section--grey"><div class="container" style="max-width:760px;">'
+      '<h2 class="section-title" style="font-size:20px;">関連記事</h2>'
+      '<ul class="news-list" style="margin-top:16px;">'+rel+'</ul>'
+      '<a class="btn btn--outline btn--sm" href="'+back+'" style="margin-top:24px;">一覧へ戻る</a>'
+      '</div></section>')
+    page(filename, win_title, body, active=active, recruit=recruit, crumbs=crumbs)
+
+NEWS_REL = [("2025.03.01","創業126周年を迎え、新ブランドビジョンを発表","verify-news-2.html"),
+            ("2025.05.10","日刊工業新聞に掲載されました","verify-news-3.html"),
+            ("2025.06.01","北海道営業所を開設しました","verify-news-1.html")]
+NC = [("TOP","top.html"),("新着情報","news.html"),("記事詳細",None)]
+
+# ① 短いお知らせ（最小コンテンツ）
+article("verify-news-1.html","北海道営業所を開設しました｜新着情報｜近江度量衡株式会社",
+  "2025.06.01","お知らせ","北海道営業所を開設しました",
+  [ a_lead("このたび、北海道帯広市に新たな営業所を開設いたしました。"),
+    a_p("道内のお客様へのサービス・保守体制をさらに強化してまいります。今後とも近江度量衡をよろしくお願い申し上げます。") ],
+  NEWS_REL, active="news.html", crumbs=NC)
+PAGES.append(("①","検証：短いお知らせ","/news/sample-short/","verify-news-1.html","verify",True))
+
+# ② 長文プレスリリース（見出し・画像・引用・箇条書き・表）
+article("verify-news-2.html","創業126周年 新ブランドビジョン発表｜近江度量衡株式会社",
+  "2025.03.01","プレスリリース","創業126周年を迎え、新ブランドビジョン「いきる」をはかり、豊かな世界へ。を発表",
+  [ a_fig("プレスリリース メイン画像（126周年キービジュアル）","新ブランドステートメントのキービジュアル"),
+    a_lead("近江度量衡株式会社（本社：滋賀県草津市、代表取締役社長：小谷 俊彦）は、創業126周年を迎えるにあたり、新たなブランドビジョン「『いきる』をはかり、豊かな世界へ。」を策定し、Webサイトを全面リニューアルいたします。"),
+    a_h("背景"),
+    a_p("1900年の創業以来、当社は農産物・穀類・工業製品など、あらゆる現場の「はかる」を支えてまいりました。社会と産業の変化が加速するなか、次の100年に向けて、企業としての存在意義をあらためて言語化する必要があると考え、本ビジョンを策定しました。"),
+    a_p("「はかる」とは、単に数値を知ることではありません。品質を見極め、価値を創り、未来への可能性を拓くこと。その想いを、新ブランドステートメントに込めています。"),
+    a_h("新ステートメント"),
+    a_quote("「いきる」をはかり、豊かな世界へ。","近江度量衡株式会社 ブランドステートメント"),
+    a_p("策定にあたり、代表取締役社長 小谷 俊彦は次のように述べています。"),
+    a_quote("私たちが本当に大切にしているのは、数字そのものではありません。その先にある、お客様の安心や喜び、そして未来です。未来を測り、未来を創る。それが私たちの変わらぬ使命です。","代表取締役社長　小谷 俊彦"),
+    a_h("126周年 記念施策"),
+    a_ul(["新ブランドビジョンに基づくコーポレートサイト・採用サイトの全面リニューアル","「数字で見る近江度量衡」など、技術と実績を可視化するコンテンツの拡充","採用ブランド「OMISCALE RECRUIT 2027」の始動","国内6拠点・海外3拠点のサービス網の強化"]),
+    a_fig("記念施策イメージ（社員・現場）",""),
+    a_h("会社概要"),
+    a_table([("会社名","近江度量衡株式会社（OMISCALE CO.,LTD.）"),("設立","1900年（明治33年）"),("代表者","代表取締役社長　小谷 俊彦"),("所在地","〒525-0054 滋賀県草津市東矢倉三丁目11番70号"),("事業内容","計量システムの設計・制御・製造・販売・保守")]),
+    a_p("本件に関するお問い合わせは、広報窓口（info@omiscale.co.jp）までご連絡ください。") ],
+  NEWS_REL, active="news.html", crumbs=NC)
+PAGES.append(("②","検証：長文プレスリリース","/news/sample-long/","verify-news-2.html","verify",True))
+
+# ③ メディア掲載（引用・外部リンク・写真）
+article("verify-news-3.html","日刊工業新聞に掲載されました｜近江度量衡株式会社",
+  "2025.05.10","メディア掲載","日刊工業新聞に「フルオートドライヤーシステム」が掲載されました",
+  [ a_lead("2025年5月10日付の日刊工業新聞に、当社のサンプル全自動自主検査装置「フルオートドライヤーシステム」が掲載されました。"),
+    a_p("記事では、米・麦・大豆の3品目兼用に対応し、検査工程の省人化・省エネ・省スペース（従来比 約64%削減）を実現した点が紹介されています。"),
+    a_quote("業界初のサンプル全自動自主検査装置として、穀類検査の現場の人手不足に応える。","日刊工業新聞 2025年5月10日付"),
+    a_fig("掲載紙面イメージ（許諾範囲で掲載）","",'4/3'),
+    a_link("掲載記事（外部サイト）を見る","#"),
+    a_p("今後も「はかる」技術で、お客様の現場の課題解決に貢献してまいります。") ],
+  NEWS_REL, active="news.html", crumbs=NC)
+PAGES.append(("③","検証：メディア掲載","/news/sample-media/","verify-news-3.html","verify",True))
+
+# ④ フル長文インタビュー（採用テーマ・FV＋プロフィール＋長いQ&A）
+verify_interview_qa = ''.join('<div class="qa"><div class="qa__q">'+q+'</div><div class="qa__a">'+a+'</div></div>' for q,a in [
+  ("近江度量衡を選んだ理由を教えてください。",
+   "大学では機械工学を学んでいて、「形に残るものづくり」がしたいと考えていました。就職活動で当社の選果システムを見たとき、一台一台がお客様の現場に合わせた“一品一様”だと知って驚いたんです。同じものを大量に作るのではなく、現場ごとに考えてつくる。そこに技術者としてのやりがいを感じて入社を決めました。"),
+  ("現在担当している業務内容を教えてください。",
+   "選果システムの組立から、現地での据付・調整までを担当しています。工場で組み上げた設備を産地の選果場まで運び、実際にラインを動かしながらミリ単位で調整していきます。農繁期に間に合わせる必要があるので、現場のチームと連携してスケジュール通りに立ち上げるのが腕の見せどころです。"),
+  ("仕事のやりがい・難しさを教えてください。",
+   "毎回、現場が違うので“同じ仕事”が一つもありません。果物の品種、建屋の形、お客様の運用——条件が変わるたびに最適解を考え直します。難しさはそのまま面白さで、立ち上げたラインが農繁期にトラブルなく動き続けているのを見ると、本当に報われた気持ちになります。1グラムのずれも許されない世界なので、緊張感もありますね。"),
+  ("印象に残っているエピソードはありますか。",
+   "入社3年目に、北海道の玉葱選果場の大型プロジェクトを任されました。4ヶ所に分散していた選果場を1施設に統合する案件で、規模も大きく不安でしたが、先輩や設計部と何度も議論を重ねて無事に稼働させることができました。お客様から「歩留まりが上がった」と直接言っていただけたのは忘れられません。"),
+  ("就活生へのメッセージをお願いします。",
+   "理系・工学系だけでなく、「現場で考えること」が好きな人に向いている仕事だと思います。入社後は想像以上に任せてもらえますし、わからないことは先輩がとことん付き合ってくれます。ものづくりで社会の“確かさ”を支えたい人は、ぜひ一度現場を見にきてください。") ])
+verify_interview_body = '''
+<section class="fv" style="min-height:440px;"><div class="fv__bg">''' + ph('社員メイン写真（現場で働く様子）') + '''</div>
+  <div class="fv__content"><p class="fv__eyebrow">PEOPLE — 製造部 / 入社8年目（30代）</p>
+  <h1 class="fv__title" style="font-size:30px;line-height:1.5;">「毎回違う課題に向き合うから、<br>技術者として本当に成長できる。」</h1>
+  <p class="fv__sub">製造部　山田 太郎</p></div>
+</section>
+<section class="section"><div class="container"><div class="article">
+  <table class="info-table" style="margin-bottom:36px;">
+    <tr><th>出身・学歴</th><td>滋賀県出身／〇〇大学 工学部 機械工学科 卒業</td></tr>
+    <tr><th>入社年</th><td>2018年入社（新卒）</td></tr>
+    <tr><th>現在の担当業務</th><td>選果システムの組立・現地据付・調整</td></tr>
+  </table>
+  ''' + a_fig("インタビューカット①（現場）","") + verify_interview_qa + a_fig("インタビューカット②（チーム）","") + '''
+  <a class="btn btn--outline btn--sm" href="recruit-interview.html" style="margin-top:32px;">インタビュー一覧へ戻る</a>
+</div></div></section>
+'''
+page("verify-interview.html","社員インタビュー｜製造部 山田太郎｜近江度量衡 採用", verify_interview_body,
+  active="recruit-interview.html", recruit=True, crumbs=RC+[("社員インタビュー","recruit-interview.html"),("詳細",None)])
+PAGES.append(("④","検証：長文インタビュー詳細","/recruit/interview/sample/","verify-interview.html","verify",True))
+
+# ⑤ 採用ニュース詳細（説明会：情報テーブル＋当日の流れ＋アクセス＋CTA）
+article("verify-recruit-news.html","2027新卒 合同会社説明会のご案内｜近江度量衡 採用",
+  "2026.04.10","説明会","2027年度 新卒向け 合同会社説明会のご案内（5月開催）",
+  [ a_lead("2027年度新卒採用に向けて、合同会社説明会を開催します。計量システムづくりの現場や、社員のリアルな声を直接お伝えします。ぜひお気軽にご参加ください。"),
+    a_h("開催概要"),
+    a_table([("日時","2026年5月17日（土）13:00〜16:00（受付 12:30〜）"),("会場","近江度量衡 本社 ショールーム"),("住所","〒525-0054 滋賀県草津市東矢倉三丁目11番70号"),("対象","2027年3月卒業見込みの方（学部・学科不問）"),("定員","30名（先着順）"),("参加費","無料"),("申込締切","2026年5月10日（金）")]),
+    a_h("当日の流れ"),
+    a_ul(["会社・事業紹介（「はかる」技術と126年の歩み）","製品・現場のショールーム見学","若手社員との座談会","個別質問・選考のご案内"]),
+    a_fig("ショールーム／座談会イメージ",""),
+    a_h("アクセス"),
+    a_p("JR琵琶湖線「南草津駅」よりバス約10分。お車でお越しの場合は専用駐車場をご利用いただけます。"),
+    a_fig("会場アクセスマップ","",'16/9'),
+    '<div style="text-align:center;margin-top:32px;"><a class="btn btn--red" href="contact.html" style="background:#9e1a1a;color:#fff;">説明会に申し込む</a></div>' ],
+  [("2026.04.01","機械設計エンジニア・営業職の中途採用募集を開始","recruit-news.html"),
+   ("2026.03.01","2027年度新卒エントリー受付を開始","recruit-news.html"),
+   ("2026.02.10","京都大学工学部との連携インターンシップ参加者募集","recruit-news.html")],
+  active="recruit-news.html", recruit=True, crumbs=RC+[("採用ニュース","recruit-news.html"),("記事詳細",None)])
+PAGES.append(("⑤","検証：採用ニュース詳細（説明会）","/recruit/news/sample/","verify-recruit-news.html","verify",True))
+
 # ======================= index（ワイヤー一覧ハブ） =======================
 def index_rows(group):
     out = ""
@@ -1241,6 +1367,7 @@ index_html = '''<!DOCTYPE html>
   .section-label{font-size:11px;font-weight:700;letter-spacing:.14em;padding:8px 12px;margin:24px 0 8px;}
   .section-label--corp{background:#456489;color:#fff;}
   .section-label--recruit{background:#9e1a1a;color:#fff;}
+  .section-label--verify{background:#2f6b3d;color:#fff;}
   table{width:100%;border-collapse:collapse;font-size:12px;}
   th{background:#111;color:#fff;padding:7px 12px;text-align:left;font-weight:600;letter-spacing:.04em;white-space:nowrap;}
   td{padding:6px 12px;border-bottom:1px solid #ebebeb;vertical-align:middle;line-height:1.4;}
@@ -1250,6 +1377,7 @@ index_html = '''<!DOCTYPE html>
   td.name-main{font-weight:700;font-size:12px;}
   td.name-main.corp{background:#eef3f8;}
   td.name-main.recruit{background:#fdf0f0;}
+  td.name-main.verify{background:#eef6ef;}
   td.name-sub{padding-left:22px;color:#444;}
   td.name-sub3{padding-left:40px;color:#666;font-size:11px;}
   a.wf-link{color:#111;text-decoration:underline;font-size:11px;font-family:monospace;}
@@ -1265,6 +1393,9 @@ index_html = '''<!DOCTYPE html>
 
 <div class="section-label section-label--recruit">▼ RECRUITMENT SITE　採用サイト（同ドメイン / /recruit/ 以下・独立UI）</div>
 <table><thead><tr><th>No.</th><th>ページ名</th><th>URL</th><th>WFファイル</th></tr></thead><tbody>''' + index_rows("recruit") + '''</tbody></table>
+
+<div class="section-label section-label--verify">▼ TEMPLATE CHECK　テンプレート検証サンプル（記事内容の差で崩れないか確認）</div>
+<table><thead><tr><th>No.</th><th>ページ名</th><th>URL</th><th>WFファイル</th></tr></thead><tbody>''' + index_rows("verify") + '''</tbody></table>
 </body></html>'''
 with open(os.path.join(OUT,"index.html"),"w",encoding="utf-8") as f:
     f.write(index_html)
