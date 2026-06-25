@@ -500,23 +500,3 @@ img { display: block; width: 100%; }
 /* FVの背景プレースホルダ（暗めにして白文字の可読性を確保） */
 .fv__bg > .ph { position: absolute; inset: 0; height: 100%; background: #222; }
 .fv__bg > .ph span { background: rgba(255,255,255,.1); color: rgba(255,255,255,.66); }
-
-/* ==========================================
-   記事テンプレート（テンプレート検証サンプル）
-   ========================================== */
-.article { max-width: 760px; margin: 0 auto; }
-.article__meta { font-size: 12px; color: var(--c-muted); letter-spacing: .06em; }
-.article__cat { border: 1px solid var(--c-border); padding: 1px 8px; margin-left: 2px; }
-.article__title { font-size: 30px; font-weight: 700; line-height: 1.55; margin: 16px 0 8px; }
-.article-lead { font-size: 16px; line-height: 2; color: #222; font-weight: 500; margin: 24px 0; }
-.article-p { font-size: 15px; line-height: 2; color: #333; margin: 16px 0; }
-.article-h { font-size: 20px; font-weight: 700; margin: 40px 0 14px; padding-left: 14px; border-left: 3px solid var(--c-omi-red); }
-.article-fig { margin: 24px 0; }
-.article-fig figcaption { font-size: 12px; color: var(--c-muted); margin-top: 8px; text-align: center; }
-.article-ul { list-style: none; margin: 16px 0; }
-.article-ul li { position: relative; padding: 6px 0 6px 22px; font-size: 15px; line-height: 1.9; }
-.article-ul li::before { content: ''; position: absolute; left: 2px; top: 15px; width: 8px; height: 8px; background: var(--c-omi-red); }
-.article-quote { border-left: 3px solid var(--c-omi-red); padding: 10px 0 10px 20px; margin: 24px 0; font-size: 17px; color: #333; line-height: 1.9; }
-.article-quote cite { display: block; font-style: normal; font-size: 12px; color: var(--c-muted); margin-top: 10px; }
-.article-extlink { border-bottom: 1px solid var(--c-dark); font-size: 14px; }
-@media (max-width:600px){ .article__title { font-size: 24px; } }
