@@ -41,28 +41,78 @@ def _nav(items, active):
         out += f'<a href="{u}"{cls}>{n}</a>'
     return out
 
+# ── d_3 グローバルナビ定義（TOPと同テイスト：メガメニュー＋ハンバーガー） ──
+# key, ラベル, 直リンク, メガ種別('cards'|'links'|None), 子項目[(名称,URL)]
+NAV_GROUPS = [
+    ("products", "製品・技術", "products.html", "cards", [
+        ("農産物用計量システム", "products-agricultural.html"),
+        ("穀類用計量システム", "products-weighing.html"),
+        ("工業用計量システム", "products-industry.html"),
+        ("その他・特殊用途", "products-other.html"),
+    ]),
+    ("service", "サービス案内", "service.html", "links", [
+        ("保守・定期点検", "service.html"), ("校正・検査", "service.html"),
+        ("導入・設置サポート", "service.html"), ("修理・オーバーホール", "service.html"),
+    ]),
+    ("delivery", "納入実績", "delivery.html", None, []),
+    ("company", "会社案内", "company.html", "links", [
+        ("企業理念", "company.html"), ("会社概要", "company.html"),
+        ("沿革", "history.html"), ("アクセス", "company.html"),
+    ]),
+    ("history", "126年ヒストリー", "history.html", None, []),
+    ("recruit", "採用情報", "recruit.html", "links", [
+        ("新卒採用", "recruit-jobs-graduate.html"), ("キャリア採用", "recruit-jobs-career.html"),
+        ("社員インタビュー", "recruit-interview.html"), ("募集要項", "recruit-jobs.html"),
+    ]),
+]
+NAV_EN = {"products":"Products","service":"Service","company":"Company","recruit":"Recruit"}
+
+def _active_key(active):
+    a = active or ""
+    if a.startswith("products"): return "products"
+    if a == "service.html": return "service"
+    if a == "delivery.html": return "delivery"
+    if a == "company.html": return "company"
+    if a == "history.html": return "history"
+    if a.startswith("recruit"): return "recruit"
+    return ""
+
 def header(active="", recruit=False, overlay=False):
-    ocls = " site-header--overlay" if overlay else ""
-    if recruit:
-        nav = _nav(RECRUIT_NAV, active)
-        return f'''<header class="site-header{ocls}">
-  <div class="inner">
-    <a href="recruit.html" class="logo">近江度量衡 <span>RECRUIT — OMISCALE CO.,LTD.</span></a>
-    <nav class="site-nav">{nav}<a href="top.html">コーポレート ↗</a></nav>
-    <a href="recruit-entry-2027-graduate.html" class="header-cta header-cta--recruit">エントリー</a>
-  </div>
-</header>'''
-    nav = _nav(CORP_NAV, active)
-    return f'''<header class="site-header{ocls}">
-  <div class="inner">
-    <a href="top.html" class="logo">近江度量衡株式会社 <span>OMISCALE CO.,LTD. — Founded 1900</span></a>
-    <nav class="site-nav">{nav}</nav>
-    <div class="header-ctas">
-      <a href="contact.html" class="header-cta">お問い合わせ</a>
-      <a href="recruit.html" class="header-cta header-cta--recruit">採用情報</a>
-    </div>
-  </div>
-</header>'''
+    akey = _active_key(active)
+    items_html = ""
+    sp_html = ""
+    for key, label, url, mega, children in NAV_GROUPS:
+        is_active = " is-active" if key == akey else ""
+        if not mega:
+            items_html += f'<div class="gnav__item{is_active}"><a class="gnav__link" href="{url}">{label}</a></div>'
+            sp_html += f'<a class="spmenu__single" href="{url}">{label}</a>'
+            continue
+        en = NAV_EN.get(key, label)
+        if mega == "cards":
+            cards = "".join(
+                f'<a class="mega__card" href="{cu}"><span class="mega__thumb">Image</span>'
+                f'<span class="mega__cap">{cn}<i>›</i></span></a>' for cn, cu in children)
+            panel = f'<div class="mega__cards">{cards}</div>'
+        else:
+            links = "".join(f'<li><a href="{cu}">{cn}<i>›</i></a></li>' for cn, cu in children)
+            panel = f'<ul class="mega__links">{links}</ul>'
+        items_html += (
+            f'<div class="gnav__item{is_active}" data-mega>'
+            f'<a class="gnav__link" href="{url}">{label}</a>'
+            f'<div class="mega"><div class="mega__inner">'
+            f'<div class="mega__lead"><span class="mega__en">{en}</span>'
+            f'<span class="mega__jp">{label}</span>'
+            f'<a class="mega__more" href="{url}">詳しく見る →</a></div>'
+            f'{panel}</div></div></div>')
+        sub = "".join(f'<a href="{cu}">{cn}</a>' for cn, cu in children)
+        sp_html += (f'<div class="spmenu__group"><button class="spmenu__top" aria-expanded="false">{label}</button>'
+                    f'<div class="spmenu__sub">{sub}</div></div>')
+    return f'''<header class="nav">
+  <a class="logo" href="top.html"><span class="logo-mark">近江度量衡</span><span class="logo-en">125th SINCE 1900</span></a>
+  <nav class="gnav">{items_html}</nav>
+</header>
+<button class="burger" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+<div class="spmenu" id="spmenu" aria-hidden="true"><nav class="spmenu__nav">{sp_html}</nav></div>'''
 
 def breadcrumb(items):
     parts = []
@@ -74,97 +124,55 @@ def breadcrumb(items):
     return '<nav class="breadcrumb"><div class="inner">' + '<span>›</span>'.join(parts) + '</div></nav>'
 
 def footer(recruit=False):
-    # 一番下：大きな採用動線バナー（採用ページではエントリーへ）
-    if recruit:
-        cta_btns = ('<a class="btn btn--white" href="recruit-entry-2027-graduate.html">2027 新卒エントリー</a>'
-                    '<a class="btn btn--white" href="recruit-entry-2027-career.html">中途エントリー</a>'
-                    '<a class="btn btn--red" href="recruit.html" style="background:#9e1a1a;color:#fff;border-color:#9e1a1a;">採用TOPへ</a>')
-    else:
-        cta_btns = ('<a class="btn btn--white" href="recruit-jobs-graduate.html">新卒採用</a>'
-                    '<a class="btn btn--white" href="recruit-jobs-career.html">中途採用</a>'
-                    '<a class="btn btn--red" href="recruit.html" style="background:#9e1a1a;color:#fff;border-color:#9e1a1a;">採用情報TOP ↗</a>')
-
-    prefooter = '''
-<section class="prefooter">
-  <div class="prefooter__inner">
-    <a class="fbanner" href="contact.html">
-      <div class="fbanner__en">CONTACT</div>
-      <div class="fbanner__jp">お問い合わせ</div>
-      <p class="fbanner__desc">製品・サービス・採用に関するご相談はこちら。</p>
-      <span class="fbanner__arrow">→</span>
-    </a>
-    <a class="fbanner" href="contact.html">
-      <div class="fbanner__en">DOWNLOAD</div>
-      <div class="fbanner__jp">資料・カタログ請求</div>
-      <p class="fbanner__desc">製品カタログ・会社案内をご請求いただけます。</p>
-      <span class="fbanner__arrow">→</span>
-    </a>
-    <a class="fbanner" href="company.html">
-      <div class="fbanner__en">ACCESS</div>
-      <div class="fbanner__jp">会社案内・アクセス</div>
-      <p class="fbanner__desc">本社（滋賀・草津）および国内外9拠点のご案内。</p>
-      <span class="fbanner__arrow">→</span>
-    </a>
-  </div>
-</section>'''
-
-    cols = '''
-    <div class="footer-nav"><h4>製品・技術</h4><ul>
-      <li><a href="products.html">製品・技術紹介</a></li>
-      <li><a href="products-agricultural.html">農産物用計量システム</a></li>
-      <li><a href="products-weighing.html">穀類用計量システム</a></li>
-      <li><a href="products-industry.html">工業用計量システム</a></li>
-      <li><a href="products-other.html">その他・特殊用途</a></li>
-      <li><a href="service.html">サービス案内</a></li>
-      <li><a href="delivery.html">納入実績</a></li></ul></div>
-    <div class="footer-nav"><h4>企業情報</h4><ul>
-      <li><a href="company.html">会社案内</a></li>
-      <li><a href="history.html">126年ヒストリー</a></li>
-      <li><a href="news.html">新着情報</a></li>
-      <li><a href="contact.html">お問い合わせ</a></li>
-      <li><a href="privacy.html">プライバシーポリシー</a></li></ul></div>
-    <div class="footer-nav"><h4>採用情報</h4><ul>
-      <li><a href="recruit.html">採用TOP</a></li>
-      <li><a href="recruit-interview.html">社員インタビュー</a></li>
-      <li><a href="recruit-news.html">採用ニュース</a></li>
-      <li><a href="recruit-jobs.html">募集要項</a></li>
-      <li><a href="recruit-jobs-graduate.html">新卒採用</a></li>
-      <li><a href="recruit-jobs-career.html">中途採用</a></li></ul></div>'''
-
-    big = f'''
-<section class="footer-cta">
-  <div class="footer-cta__bg">{ph('採用キービジュアル（現場・社員）の全幅写真／動画枠')}</div>
-  <div class="footer-cta__inner">
-    <p class="footer-cta__en">RECRUITMENT 2027</p>
-    <h2 class="footer-cta__copy">「いきる」の単位とは、<br>なんだろう。</h2>
-    <p class="footer-cta__lead">126年の技術と誇りを、次の世代へ。新卒・中途、いずれも積極採用中です。</p>
-    <div class="footer-cta__btns">{cta_btns}</div>
-  </div>
-</section>'''
-
-    return f'''{prefooter}
-<footer class="site-footer site-footer--thick">
-  <div class="inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="name">近江度量衡株式会社</div>
-        <div class="tagline">OMISCALE CO.,LTD.<br>「いきる」をはかり、豊かな世界へ。</div>
-        <div class="footer-info">
-          〒525-0054 滋賀県草津市東矢倉三丁目11番70号<br>
-          TEL 077-562-7111／受付 平日 9:00〜17:00<br>
-          国内6拠点＋海外3拠点（上海・バンコク・韓国）
-        </div>
-      </div>{cols}
+    # d_3 トーンのフッター（ブランド＋3カラム＋著作権バー）。TOPと統一。
+    return '''
+<footer class="foot">
+  <div class="foot__cols">
+    <div class="foot__brand">
+      <span class="foot__logo">近江度量衡株式会社</span>
+      <p class="foot__tagline"><b>OMISCALE CO.,LTD.</b>「いきる」をはかり、豊かな世界へ。</p>
+      <div class="foot__info">
+        〒525-0054　滋賀県草津市東矢倉三丁目11番70号<br>
+        TEL 077-562-7111／受付 平日 9:00〜17:00<br>
+        国内6拠点＋海外3拠点（上海・バンコク・韓国）
+      </div>
+    </div>
+    <div class="foot__col">
+      <h4>製品・技術</h4>
+      <ul>
+        <li><a href="products.html">製品・技術紹介</a></li>
+        <li><a href="products-agricultural.html">農産物用計量システム</a></li>
+        <li><a href="products-weighing.html">穀類用計量システム</a></li>
+        <li><a href="products-industry.html">工業用計量システム</a></li>
+        <li><a href="products-other.html">その他・特殊用途</a></li>
+        <li><a href="service.html">サービス案内</a></li>
+        <li><a href="delivery.html">納入実績</a></li>
+      </ul>
+    </div>
+    <div class="foot__col">
+      <h4>企業情報</h4>
+      <ul>
+        <li><a href="company.html">会社案内</a></li>
+        <li><a href="history.html">126年ヒストリー</a></li>
+        <li><a href="news.html">新着情報</a></li>
+        <li><a href="contact.html">お問い合わせ</a></li>
+        <li><a href="privacy.html">プライバシーポリシー</a></li>
+      </ul>
+    </div>
+    <div class="foot__col">
+      <h4>採用情報</h4>
+      <ul>
+        <li><a href="recruit.html">採用TOP</a></li>
+        <li><a href="recruit-interview.html">社員インタビュー</a></li>
+        <li><a href="recruit-news.html">採用ニュース</a></li>
+        <li><a href="recruit-jobs.html">募集要項</a></li>
+        <li><a href="recruit-jobs-graduate.html">新卒採用</a></li>
+        <li><a href="recruit-jobs-career.html">中途採用</a></li>
+      </ul>
     </div>
   </div>
-</footer>
-{big}
-<div class="footer-copy">
-  <div class="footer-copy__inner">
-    <span>© 2026 OMISCALE CO.,LTD. All Rights Reserved.</span>
-    <span>ワイヤーフレーム（wier）／構成検討用</span>
-  </div>
-</div>'''
+  <div class="foot__bar"><a href="privacy.html">Privacy Policy</a><span>© 2026 OMISCALE CO.,LTD. All Rights Reserved.</span></div>
+</footer>'''
 
 def page(filename, title, body, active="", recruit=False, crumbs=None, overlay=False):
     bc = breadcrumb(crumbs) if crumbs else ""
@@ -176,6 +184,9 @@ def page(filename, title, body, active="", recruit=False, crumbs=None, overlay=F
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -183,6 +194,7 @@ def page(filename, title, body, active="", recruit=False, crumbs=None, overlay=F
 {bc}
 {body}
 {footer(recruit)}
+<script src="_nav.js"></script>
 </body>
 </html>'''
     with open(os.path.join(OUT, filename), "w", encoding="utf-8") as f:
@@ -222,22 +234,20 @@ top_body = '''
       <a class="card" href="products-industry.html"><div class="card__img">''' + ph('工場ラインイメージ') + '''</div><div class="card__body"><div class="card__title">工業用計量システム</div><p class="card__text">ガラス・鉄鋼・肥料・化学など7カテゴリに対応する計量ソリューション。</p></div></a>
       <a class="card" href="products-other.html"><div class="card__img">''' + ph('特殊用途イメージ') + '''</div><div class="card__body"><div class="card__title">その他・特殊用途</div><p class="card__text">家畜・競走馬向け動物計量など、特殊用途の計量システム。</p></div></a>
     </div>
-    <div class="numbers-grid numbers-grid--dark" style="margin-top:40px;grid-template-columns:repeat(2,1fr);">
-      <div class="number-card"><div class="number-card__num">2,000<span class="number-card__unit">+</span></div><div class="number-card__label">累計納入施設数</div></div>
-      <div class="number-card"><div class="number-card__num">9<span class="number-card__unit">拠点</span></div><div class="number-card__label">国内外サービス拠点（国内6＋海外3）''' + todo('資料間で9/12表記ゆれ・要確認') + '''</div></div>
-    </div>
   </div>
 </section>
 
 <!-- ④ 納入実績テザー -->
 <section class="section section--grey">
-  <div class="container grid-2" style="align-items:center;">
-    <div>''' + ph('導入現場 写真（選果場／カントリーエレベーター／工場ライン）','','aspect-ratio:4/3') + '''</div>
-    <div>
-      <p class="section-meta">Delivery Record</p>
-      <h2 class="section-title">導入事例・納入実績</h2>
-      <p class="section-lead">農産物選果場・米麦カントリーエレベーター・工場ラインなど、多岐にわたる現場への納入実績をご紹介します。</p>
-      <a class="btn btn--outline btn--sm" href="delivery.html" style="margin-top:24px;">納入実績を見る</a>
+  <div class="container">
+    <div class="grid-2" style="align-items:center;">
+      <div>''' + ph('導入現場 写真（選果場／カントリーエレベーター／工場ライン）','','aspect-ratio:4/3') + '''</div>
+      <div>
+        <p class="section-meta">Delivery Record</p>
+        <h2 class="section-title">導入事例・納入実績</h2>
+        <p class="section-lead">農産物選果場・米麦カントリーエレベーター・工場ラインなど、多岐にわたる現場への納入実績をご紹介します。</p>
+        <a class="btn btn--outline btn--sm" href="delivery.html" style="margin-top:24px;">納入実績を見る</a>
+      </div>
     </div>
   </div>
 </section>
@@ -280,8 +290,8 @@ top_body = '''
     <h2 class="statement__main" style="text-align:left;color:#fff;">「いきる」の単位とは、なんだろう。</h2>
     <p class="section-lead" style="color:#cbb;">地に足のついた仕事のリアル・職場環境・社員の声——飾らず正直に。あなたの確かな仕事で、豊かな未来を担う力になる。</p>
     <div class="entry-split" style="margin-top:40px;">
-      <div class="entry-card"><div class="entry-card__label">NEW GRADUATE 新卒採用</div><div class="entry-card__copy">「未来を、ここからはかる。」</div><p class="entry-card__desc">理系・工学系だけじゃない。着実にものをつくる誠実さに共感できる人を求めています。</p><a class="btn btn--red" href="recruit-jobs-graduate.html" style="background:#9e1a1a;color:#fff;">新卒採用を見る</a></div>
-      <div class="entry-card"><div class="entry-card__label">MID-CAREER 中途採用</div><div class="entry-card__copy">「培った経験を、126年の精度に加えてください。」</div><p class="entry-card__desc">年齢・業界不問。あなたの経験が、次の100年の基盤になる。</p><a class="btn btn--red" href="recruit-jobs-career.html" style="background:#9e1a1a;color:#fff;">中途採用を見る</a></div>
+      <div class="entry-card"><div class="entry-card__label">NEW GRADUATE 新卒採用</div><div class="entry-card__copy">「未来を、ここからはかる。」</div><p class="entry-card__desc">理系・工学系だけじゃない。着実にものをつくる誠実さに共感できる人を求めています。</p><a class="btn btn--red" href="recruit-jobs-graduate.html" style="background:#111315;color:#fff;">新卒採用を見る</a></div>
+      <div class="entry-card"><div class="entry-card__label">MID-CAREER 中途採用</div><div class="entry-card__copy">「培った経験を、126年の精度に加えてください。」</div><p class="entry-card__desc">年齢・業界不問。あなたの経験が、次の100年の基盤になる。</p><a class="btn btn--red" href="recruit-jobs-career.html" style="background:#111315;color:#fff;">中途採用を見る</a></div>
     </div>
   </div>
 </section>
@@ -316,7 +326,10 @@ top_body = '''
   </div>
 </section>
 '''
-page("top.html", "近江度量衡株式会社｜「いきる」をはかり、豊かな世界へ。", top_body, active="", overlay=True)
+# 【TOP は別管理】TOPページは d_3 デザインベースの専用HTML（モノトーン・ダミー、自己完結のCSS/JS）を
+#   手管理しているため、build.py では top.html を生成・上書きしない。
+#   （旧ワイヤーTOPの top_body は未使用。レイアウト参考として残置）
+# page("top.html", "近江度量衡株式会社｜「いきる」をはかり、豊かな世界へ。", top_body, active="", overlay=True)
 PAGES.append(("A","トップページ","/","top.html","corp",False))
 
 # ======================= B. 製品・技術紹介 =======================
@@ -648,7 +661,7 @@ delivery_body = '''
       <div class="case__points"><span class="case__point">リアルタイム可視化</span><span class="case__point">配合精度改善</span><span class="case__point">トレーサビリティ確保</span></div>
     </div>
   </div>
-  <div class="cms-note">◯ 事例は投稿で追加更新（年0〜1件）。事例追加により「選果機 導入事例」等のSEO強化。''' + cms('CMS更新') + '''</div>
+  <div class="cms-note">固定ページ。事例は更新頻度が低い（年0〜1件）ため、追加・修正は制作側で対応。</div>
 </div></section>
 
 <div class="recruit-banner" style="background:#222;"><div class="recruit-banner__inner">
@@ -658,7 +671,7 @@ delivery_body = '''
 '''
 page("delivery.html","納入実績｜近江度量衡株式会社", delivery_body, active="delivery.html",
      crumbs=[("TOP","top.html"),("納入実績",None)])
-PAGES.append(("D","納入実績","/deliveryrecord/","delivery.html","corp",True))
+PAGES.append(("D","納入実績","/deliveryrecord/","delivery.html","corp",False))
 
 # ======================= E. 会社案内 =======================
 company_body = '''
@@ -810,7 +823,7 @@ history_body = '''
 </div></section>
 <div class="recruit-banner"><div class="recruit-banner__inner">
   <div class="recruit-banner__text"><h2>次の100年へ。ともに歩む人を募集中。</h2><p>126年の技術と誇りを受け継ぎ、更なる進化を担う仲間を求めています。</p></div>
-  <div class="recruit-banner__cta"><a class="btn btn--red" href="recruit.html" style="background:#9e1a1a;color:#fff;">採用情報 ↗</a></div>
+  <div class="recruit-banner__cta"><a class="btn btn--red" href="recruit.html" style="background:#111315;color:#fff;">採用情報 ↗</a></div>
 </div></div>
 '''
 page("history.html","126年ヒストリー｜近江度量衡株式会社", history_body, active="history.html",
@@ -936,7 +949,7 @@ recruit_body = '''
     <p class="fv__eyebrow">OMISCALE RECRUIT 2027</p>
     <h1 class="fv__title"><span>「いきる」の単位とは、</span><span>なんだろう。</span></h1>
     <p class="fv__sub">「働く人を大切にする」という理念のもと、あなたの確かな仕事で、豊かな未来を担う力になる。</p>
-    <div class="fv__cta"><a class="btn btn--red" href="recruit-jobs.html" style="background:#9e1a1a;color:#fff;">募集要項を見る</a><a class="btn btn--white" href="recruit-interview.html">社員インタビュー</a></div>
+    <div class="fv__cta"><a class="btn btn--red" href="recruit-jobs.html" style="background:#111315;color:#fff;">募集要項を見る</a><a class="btn btn--white" href="recruit-interview.html">社員インタビュー</a></div>
   </div>
 </section>
 <nav class="page-nav"><div class="inner">
@@ -1135,7 +1148,7 @@ def job_detail(copy, desc, rows, flow):
   <table class="info-table" style="margin-top:20px;">''' + tr + '''</table>
   <h2 class="section-title" style="font-size:22px;margin-top:48px;">選考フロー</h2>
   <div class="process" style="margin-top:20px;">''' + steps + '''</div>
-  <div style="margin-top:40px;text-align:center;"><a class="btn btn--red" href="recruit-entry-2027-graduate.html" style="background:#9e1a1a;color:#fff;">エントリーする</a></div>
+  <div style="margin-top:40px;text-align:center;"><a class="btn btn--red" href="recruit-entry-2027-graduate.html" style="background:#111315;color:#fff;">エントリーする</a></div>
 </div></section>
 '''
 page("recruit-jobs-graduate.html","新卒採用 募集要項｜近江度量衡 採用2027",
@@ -1177,7 +1190,7 @@ def entry_lp(copy, intro, stats, jobs, jobs_link):
   <div class="fv__content"><p class="fv__eyebrow">OMISCALE RECRUIT 2027</p>
   <h1 class="fv__title" style="font-size:40px;">''' + copy + '''</h1>
   <p class="fv__sub">''' + intro + '''</p>
-  <div class="fv__cta"><a class="btn btn--red" href="#entry" style="background:#9e1a1a;color:#fff;">エントリーする</a></div></div>
+  <div class="fv__cta"><a class="btn btn--red" href="#entry" style="background:#111315;color:#fff;">エントリーする</a></div></div>
 </section>
 <section class="section"><div class="container">
   <p class="section-meta">About</p><h2 class="section-title">近江度量衡とは</h2>
@@ -1192,7 +1205,7 @@ def entry_lp(copy, intro, stats, jobs, jobs_link):
 <section class="section section--dark theme-recruit" id="entry" style="background:#1a0d0d;"><div class="container statement">
   <h2 class="statement__main" style="color:#fff;">''' + copy + '''</h2>
   <p class="statement__body" style="color:#cbb;">エントリーは専用フォームより受け付けています。</p>
-  <div style="margin-top:24px;"><a class="btn btn--red" href="contact.html" style="background:#9e1a1a;color:#fff;">エントリーフォームへ</a></div>
+  <div style="margin-top:24px;"><a class="btn btn--red" href="contact.html" style="background:#111315;color:#fff;">エントリーフォームへ</a></div>
 </div></section>
 '''
 page("recruit-entry-2027-graduate.html","2027 新卒採用エントリー｜近江度量衡",
@@ -1234,13 +1247,13 @@ index_html = '''<!DOCTYPE html>
   *{box-sizing:border-box;margin:0;padding:0;}
   body{padding:32px 40px;max-width:1040px;margin:0 auto;font-family:'Hiragino Sans','Yu Gothic',sans-serif;color:#222;}
   h1{font-size:16px;font-weight:700;margin-bottom:6px;padding-bottom:12px;border-bottom:2px solid #111;letter-spacing:.04em;}
-  .badge{display:inline-block;background:#9e1a1a;color:#fff;font-size:10px;padding:1px 8px;letter-spacing:.06em;margin-right:8px;vertical-align:middle;}
+  .badge{display:inline-block;background:#111315;color:#fff;font-size:10px;padding:1px 8px;letter-spacing:.06em;margin-right:8px;vertical-align:middle;}
   .meta{font-size:12px;color:#666;margin:10px 0 8px;line-height:1.9;}
   .legend{font-size:11px;color:#888;margin-bottom:20px;}
   .legend span{background:#e8f4ea;color:#2f6b3d;border:1px solid #5a9e6a;font-size:9px;padding:0 5px;border-radius:2px;}
   .section-label{font-size:11px;font-weight:700;letter-spacing:.14em;padding:8px 12px;margin:24px 0 8px;}
   .section-label--corp{background:#456489;color:#fff;}
-  .section-label--recruit{background:#9e1a1a;color:#fff;}
+  .section-label--recruit{background:#111315;color:#fff;}
   table{width:100%;border-collapse:collapse;font-size:12px;}
   th{background:#111;color:#fff;padding:7px 12px;text-align:left;font-weight:600;letter-spacing:.04em;white-space:nowrap;}
   td{padding:6px 12px;border-bottom:1px solid #ebebeb;vertical-align:middle;line-height:1.4;}
