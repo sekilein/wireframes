@@ -6,11 +6,8 @@
 import os
 OUT = os.path.dirname(os.path.abspath(__file__))
 
-# 共有プレビュー用の認証＋コメントSDK（GitHub Pages公開時）
-AUTH_HEAD = ('<script src="_auth.js"></script>'
-  '<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>'
-  '<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>'
-  '<script src="_firebase_comments.js"></script>')
+# 共有プレビュー用の認証（GitHub Pages公開時）※コメント機能は廃止
+AUTH_HEAD = '<script src="_auth.js"></script>'
 
 # ---------- 共通パーツ ----------
 def ph(label, cls="", style=""):
@@ -1244,7 +1241,7 @@ def index_rows(group):
     return out
 
 index_html = '''<!DOCTYPE html>
-<html lang="ja"><head><script src="_auth.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script><script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script><script src="_firebase_comments.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html lang="ja"><head><script src="_auth.js"></script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ワイヤーフレーム一覧｜近江度量衡 Webリニューアル（wier）</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0;}
