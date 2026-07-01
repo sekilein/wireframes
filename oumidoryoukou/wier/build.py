@@ -806,12 +806,6 @@ history_body = '''
   <p class="page-header__lead">1900年創業から126年の歩みと、2,000施設以上への納入実績。</p>
 </div></header>
 <section class="section"><div class="container">
-  <div class="numbers-grid" style="grid-template-columns:repeat(4,1fr);">
-    <div class="number-card"><div class="number-card__num">126<span class="number-card__unit">年</span></div><div class="number-card__label">創業からの歴史（1900〜2026）</div></div>
-    <div class="number-card"><div class="number-card__num">2,000<span class="number-card__unit">+</span></div><div class="number-card__label">累計納入施設数</div></div>
-    <div class="number-card"><div class="number-card__num">9<span class="number-card__unit">拠点</span></div><div class="number-card__label">国内6＋海外3 サービス網</div></div>
-    <div class="number-card"><div class="number-card__num">3<span class="number-card__unit">カ国</span></div><div class="number-card__label">海外展開（上海・バンコク・韓国）</div></div>
-  </div>
   ''' + history_eras() + '''
   <!-- 証言ブロック -->
   <div class="grid-2" style="margin-top:56px;">
