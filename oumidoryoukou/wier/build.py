@@ -50,19 +50,17 @@ NAV_GROUPS = [
         ("工業用計量システム", "products-industry.html"),
         ("その他・特殊用途", "products-other.html"),
     ]),
-    ("service", "サービス案内", "service.html", "links", [
-        ("保守・定期点検", "service.html"), ("校正・検査", "service.html"),
-        ("導入・設置サポート", "service.html"), ("修理・オーバーホール", "service.html"),
-    ]),
+    ("service", "サービス案内", "service.html", None, []),
     ("delivery", "納入実績", "delivery.html", None, []),
     ("company", "会社案内", "company.html", "links", [
-        ("企業理念", "company.html"), ("会社概要", "company.html"),
-        ("沿革", "history.html"), ("アクセス", "company.html"),
+        ("企業理念", "company.html#concept"), ("代表挨拶", "company.html#greeting"),
+        ("サービス拠点", "company.html#servicebase"), ("会社概要", "company.html#profile"),
     ]),
     ("history", "126年ヒストリー", "history.html", None, []),
     ("recruit", "採用情報", "recruit.html", "links", [
-        ("新卒採用", "recruit-jobs-graduate.html"), ("キャリア採用", "recruit-jobs-career.html"),
-        ("社員インタビュー", "recruit-interview.html"), ("募集要項", "recruit-jobs.html"),
+        ("社員インタビュー", "recruit-interview.html"), ("採用ニュース", "recruit-news.html"),
+        ("募集要項", "recruit-jobs.html"), ("新卒採用", "recruit-jobs-graduate.html"),
+        ("中途採用", "recruit-jobs-career.html"),
     ]),
 ]
 NAV_EN = {"products":"Products","service":"Service","company":"Company","recruit":"Recruit"}
