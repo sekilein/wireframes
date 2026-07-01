@@ -106,7 +106,7 @@ def header(active="", recruit=False, overlay=False):
         sp_html += (f'<div class="spmenu__group"><button class="spmenu__top" aria-expanded="false">{label}</button>'
                     f'<div class="spmenu__sub">{sub}</div></div>')
     return f'''<header class="nav">
-  <a class="logo" href="top.html"><span class="logo-mark">近江度量衡</span><span class="logo-en">125th SINCE 1900</span></a>
+  <a class="logo" href="top.html"><span class="logo-mark">近江度量衡</span><span class="logo-en">126th SINCE 1900</span></a>
   <nav class="gnav">{items_html}</nav>
 </header>
 <button class="burger" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -799,16 +799,110 @@ def history_eras():
         out += f'''<div style="margin-top:48px;"><p class="eyebrow">{era}</p><p class="section-lead" style="margin-top:0;margin-bottom:16px;">{intro}</p><div class="timeline">{items}</div></div>'''
     return out
 
-history_body = '''
+# 126年ヒストリー：奥行きトンネル型の透視スクロール（遠い過去→手前へ迫る／時代を進むごとに通り抜ける）
+_hc_panels = ""
+_hc_n = 0
+for _era, _intro, _rows in HISTORY:
+    for _e, _n, _h, _b, _asset in _rows:
+        _photo = ('<div class="hc-panel__photo">当時の写真：' + _asset + '</div>') if _asset else ''
+        _hc_panels += ('<article class="hc-panel" data-year="' + _n + '" data-era="' + _era + '">'
+            '<p class="hc-panel__era">' + _era + '</p>'
+            '<h3 class="hc-panel__year"><small>' + _e + '</small>' + _n + '</h3>'
+            '<p class="hc-panel__title">' + _h + '</p>'
+            '<p class="hc-panel__desc">' + _b + '</p>' + _photo + '</article>')
+        _hc_n += 1
+
+HC_STYLE = '''<style>
+.hc-scene{position:relative;background:var(--c-black);color:#fff;}
+.hc-pin{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1200px;perspective-origin:50% 46%;}
+.hc-bg{position:absolute;inset:0;pointer-events:none;background:
+  radial-gradient(58% 54% at 50% 46%, rgba(255,255,255,.07), rgba(0,0,0,0) 70%),
+  repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0 1px, transparent 1px 3px);}
+.hc-stage{position:absolute;inset:0;transform-style:preserve-3d;}
+.hc-panel{position:absolute;left:50%;top:50%;width:min(660px,86vw);transform:translate(-50%,-50%);
+  will-change:transform,opacity;text-align:center;padding:40px 40px 44px;
+  border:1px solid rgba(255,255,255,.28);background:rgba(17,19,21,.66);}
+.hc-panel.is-active{border-color:rgba(255,255,255,.85);}
+.hc-panel__era{font-family:var(--font-en);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--c-muted);}
+.hc-panel__year{font-family:var(--font-mn);font-weight:700;font-size:clamp(46px,8.4vw,96px);line-height:1;letter-spacing:.02em;margin-top:6px;}
+.hc-panel__year small{display:block;font-family:var(--font-en);font-weight:500;font-size:12px;letter-spacing:.22em;color:var(--c-muted);margin-bottom:8px;}
+.hc-panel__title{font-family:var(--font-mn);font-weight:700;font-size:clamp(17px,2vw,24px);margin-top:16px;line-height:1.55;}
+.hc-panel__desc{font-family:var(--font-ja);font-size:13px;line-height:2;color:rgba(255,255,255,.78);margin:14px auto 0;max-width:500px;}
+.hc-panel__photo{display:inline-block;margin-top:16px;font-family:var(--font-en);font-size:10px;letter-spacing:.14em;color:var(--c-muted);border:1px dashed rgba(255,255,255,.28);padding:7px 12px;}
+.hc-hud{position:absolute;left:40px;top:96px;z-index:6;pointer-events:none;}
+.hc-hud__era{font-family:var(--font-en);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.55);}
+.hc-progress{position:absolute;left:40px;right:40px;bottom:52px;height:1px;background:rgba(255,255,255,.18);z-index:6;}
+.hc-progress__fill{position:absolute;left:0;top:0;height:100%;width:0;background:#fff;}
+.hc-progress::before{content:"1900";position:absolute;left:0;top:10px;font:500 10px/1 var(--font-en);letter-spacing:.16em;color:var(--c-muted);}
+.hc-progress::after{content:"2026";position:absolute;right:0;top:10px;font:500 10px/1 var(--font-en);letter-spacing:.16em;color:var(--c-muted);}
+.hc-scroll{position:absolute;left:50%;bottom:72px;transform:translateX(-50%);z-index:6;font-family:var(--font-en);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.5);}
+@media(max-width:640px){.hc-hud{left:20px;top:76px;}.hc-progress{left:20px;right:20px;}.hc-panel{padding:28px 22px;}}
+/* reduced-motion フォールバック：通常の縦積み */
+.hc--static .hc-pin{position:static;height:auto;overflow:visible;perspective:none;padding:60px 0;}
+.hc--static .hc-stage{position:static;transform:none;}
+.hc--static .hc-bg,.hc--static .hc-progress,.hc--static .hc-scroll,.hc--static .hc-hud{display:none;}
+.hc--static .hc-panel{position:relative;left:auto;top:auto;transform:none!important;opacity:1!important;width:min(680px,90vw);margin:0 auto 18px;}
+</style>'''
+
+HC_SCRIPT = '''<script>
+(function(){
+  var scene=document.querySelector('.hc-scene'); if(!scene) return;
+  var panels=[].slice.call(scene.querySelectorAll('.hc-panel'));
+  var fill=scene.querySelector('.hc-progress__fill');
+  var eraHud=scene.querySelector('.hc-hud__era');
+  var scroll=scene.querySelector('.hc-scroll');
+  if(!panels.length) return;
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches){ scene.classList.add('hc--static'); return; }
+  var N=panels.length, STEP=720, PMAX=720;
+  function cl(v,a,b){a=(a==null?0:a);b=(b==null?1:b);return v<a?a:(v>b?b:v);}
+  var ticking=false;
+  function upd(){
+    var vh=window.innerHeight, max=scene.offsetHeight-vh;
+    var r=scene.getBoundingClientRect();
+    var p= max>0 ? cl(-r.top,0,max)/max : 0;
+    var pf=p*(N-1), active=Math.round(pf);
+    for(var i=0;i<N;i++){
+      var el=panels[i], d=i-pf, z=-d*STEP;
+      if(z>PMAX) z=PMAX;
+      var y = d>=0 ? -d*34 : -d*46;                 // 未来は上へ受け、通過は下へ抜ける
+      var op = d>=0 ? cl(1-d/2.6) : cl(1+d/1.0);    // 手前1〜2枚だけを明瞭に
+      el.style.transform='translate(-50%,-50%) translateY('+y+'px) translateZ('+z+'px)';
+      el.style.opacity=String(op);
+      el.style.zIndex=String(2000-Math.round(Math.abs(d)*12));
+      var act=(i===active);
+      if(act!==el._act){ el.classList.toggle('is-active',act); el._act=act; }
+    }
+    if(fill) fill.style.width=(p*100)+'%';
+    if(eraHud){ var ap=panels[active]; if(ap) eraHud.textContent=ap.getAttribute('data-era'); }
+    if(scroll) scroll.style.opacity=String(cl(1-p*6));
+    ticking=false;
+  }
+  window.addEventListener('scroll',function(){ if(!ticking){requestAnimationFrame(upd);ticking=true;} },{passive:true});
+  window.addEventListener('resize',upd);
+  upd();
+})();
+</script>'''
+
+history_body = ('''
 <header class="page-header"><div class="page-header__inner">
   <p class="page-header__meta">126 YEARS HISTORY</p>
   <h1 class="page-header__title">明治から令和へ。</h1>
-  <p class="page-header__lead">1900年創業から126年の歩みと、2,000施設以上への納入実績。</p>
+  <p class="page-header__lead">1900年創業から126年の歩み。スクロールするごとに、時代が過去から手前へと進みます。</p>
 </div></header>
+''' + HC_STYLE + '''
+<section class="hc-scene" style="height:calc(46vh * ''' + str(_hc_n) + ''' + 70vh);">
+  <div class="hc-pin">
+    <div class="hc-bg"></div>
+    <div class="hc-hud"><p class="hc-hud__era"></p></div>
+    <div class="hc-stage">''' + _hc_panels + '''</div>
+    <div class="hc-progress"><span class="hc-progress__fill"></span></div>
+    <div class="hc-scroll">Scroll — 1900 → 2026</div>
+  </div>
+</section>
+''' + HC_SCRIPT + '''
+<!-- 証言ブロック -->
 <section class="section"><div class="container">
-  ''' + history_eras() + '''
-  <!-- 証言ブロック -->
-  <div class="grid-2" style="margin-top:56px;">
+  <div class="grid-2">
     <div class="value-item" style="background:var(--c-bg-light);"><p style="font-size:16px;font-weight:700;line-height:1.8;">「計量とは、人と人の信頼を結ぶ仕事だ。一グラムのずれも、嘘をつく。」</p><p style="font-size:12px;color:#888;margin-top:12px;">元社員・昭和40年代入社 ''' + todo('本番用原稿に差し替え') + '''</p></div>
     <div class="value-item" style="background:var(--c-bg-light);"><p style="font-size:16px;font-weight:700;line-height:1.8;">「一品一様というのは、ただ特注を作るということではない。お客様の現場を理解し、最適な精度で答えることだ。」</p><p style="font-size:12px;color:#888;margin-top:12px;">現役エンジニア ''' + todo('本番用原稿に差し替え') + '''</p></div>
   </div>
@@ -817,7 +911,7 @@ history_body = '''
   <div class="recruit-banner__text"><h2>次の100年へ。ともに歩む人を募集中。</h2><p>126年の技術と誇りを受け継ぎ、更なる進化を担う仲間を求めています。</p></div>
   <div class="recruit-banner__cta"><a class="btn btn--red" href="recruit.html" style="background:#111315;color:#fff;">採用情報 ↗</a></div>
 </div></div>
-'''
+''')
 page("history.html","126年ヒストリー｜近江度量衡株式会社", history_body, active="history.html",
      crumbs=[("TOP","top.html"),("126年ヒストリー",None)])
 PAGES.append(("F","126年ヒストリー","/history/","history.html","corp",False))
