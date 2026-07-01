@@ -575,7 +575,7 @@ service_body = '''
 <section class="section"><div class="container">
   <div class="grid-2" style="gap:1px;background:var(--c-border);border:1px solid var(--c-border);">
     <div class="value-item" style="border:none;background:#fff;"><div class="value-item__num">01</div><div class="value-item__title">企画・エンジニアリング</div><p class="value-item__body">計量対象の特性や仕様条件について事前調査とヒアリングを実施。豊富な実績から類似事例を紹介し、現場に合った最適なシステムをご提案します。</p></div>
-    <div class="value-item" style="border:none;background:#fff;"><div class="value-item__num">02</div><div class="value-item__title">設計</div><p class="value-item__body">ソフトウエアとハード製作の連携を重視。複数のデザインレビューを経て品質と精度を保証する高品質な設計を実現します。</p></div>
+    <div class="value-item" style="border:none;background:#fff;"><div class="value-item__num">02</div><div class="value-item__title">設計・制御・開発</div><p class="value-item__body">ソフトウェアとハードウェアともすべて自社で設計・開発をして品質と精度を保証する高品質な設計を実現します。</p></div>
     <div class="value-item" style="border:none;background:#fff;"><div class="value-item__num">03</div><div class="value-item__title">製作・施工</div><p class="value-item__body">合理性を追求しニュープロダクト・システムを採用。コストパフォーマンスの高いシステムを製作・施工します。</p></div>
     <div class="value-item" style="border:none;background:#fff;"><div class="value-item__num">04</div><div class="value-item__title">メンテナンス・アフターサービス</div><p class="value-item__body">納入後も営業・技術サービス員が定期巡回。機器を最良の状態で維持するサポートを継続的に提供します。</p></div>
   </div>
@@ -654,11 +654,11 @@ delivery_body = '''
   </div>
 
   <div class="case" style="margin-top:24px;">
-    <div class="case__img">''' + ph('工業プラント計量') + '''</div>
-    <div class="case__body"><div class="case__cat">CASE 03 / 工業用計量システム</div><div class="case__title">〇〇化学工業 肥料製造ライン高精度化 ''' + todo('実案件待ち') + '''</div>
-      <table class="case__meta"><tr><th>導入先</th><td>〇〇化学工業株式会社（〇〇県）</td></tr><tr><th>導入年</th><td>〇〇年</td></tr><tr><th>規模</th><td>計量ポイント〇箇所／24時間連続稼働</td></tr>
-      <tr><th>内容</th><td>既設SCADAとのOPC-UA通信連携を実現し、リアルタイムデータ可視化と高精度計量でトレーサビリティを確保。</td></tr></table>
-      <div class="case__points"><span class="case__point">リアルタイム可視化</span><span class="case__point">配合精度改善</span><span class="case__point">トレーサビリティ確保</span></div>
+    <div class="case__img">''' + ph('薬品計量装置') + '''</div>
+    <div class="case__body"><div class="case__cat">CASE 03 / 工業用計量システム</div><div class="case__title">薬品計量装置</div>
+      <table class="case__meta"><tr><th>導入先</th><td>日本国内ゴムメーカー</td></tr><tr><th>形式</th><td>電子天秤・ロードセル式台秤</td></tr><tr><th>仕様</th><td>秤量：1kg〜30kg／最小目量：0.1g〜5g／容器材質：SUS304・ポリコンテナ式</td></tr>
+      <tr><th>内容</th><td>多くの薬品をコンパクト且つ安価に収納し、簡単な操作で重大な人為的ミスを未然に防止します。</td></tr></table>
+      <div class="case__points"><span class="case__point">柔軟なレイアウトで限られたスペースを有効活用</span><span class="case__point">集塵機搭載で作業環境にも配慮</span></div>
     </div>
   </div>
   <div class="cms-note">固定ページ。事例は更新頻度が低い（年0〜1件）ため、追加・修正は制作側で対応。</div>
@@ -741,7 +741,7 @@ company_body = '''
   <table class="info-table" style="margin-top:24px;background:#fff;">
     <tr><th>会社名</th><td>近江度量衡株式会社（OMISCALE CO.,LTD.）</td></tr>
     <tr><th>設立</th><td>1900年（明治33年）</td></tr>
-    <tr><th>資本金</th><td>200,000,000円 ''' + todo('現行サイト記載値を確認') + '''</td></tr>
+    <tr><th>資本金</th><td>200,000,000円</td></tr>
     <tr><th>代表者</th><td>代表取締役社長　小谷 俊彦 ''' + todo('確認') + '''</td></tr>
     <tr><th>従業員数</th><td>約150名 ''' + todo('最新の人数を確認') + '''</td></tr>
     <tr><th>事業内容</th><td>計量システムの設計・制御・製造・販売・保守</td></tr>
@@ -846,7 +846,7 @@ news_body_top = '''
 </div></header>
 <section class="section"><div class="container">'''
 fil, items = news_list(["すべて","お知らせ","製品情報","採用","プレスリリース"],
-  [("2025.06.01","お知らせ","北海道営業所を開設しました"),
+  [("2026.08","お知らせ","札幌営業所を移転しました"),
    ("2025.03.01","お知らせ","会社設立126周年を達成しました"),
    ("2025.04.01","採用","2027年度採用エントリー受付開始のご案内")])
 news_body = news_body_top + '<div style="margin-bottom:24px;">' + fil + '</div><ul class="news-list">' + items + '''</ul>
@@ -859,8 +859,8 @@ PAGES.append(("I","新着情報","/news/","news.html","corp",True))
 # I1 記事詳細
 news_detail_body = '''
 <section class="section"><div class="container" style="max-width:760px;">
-  <p style="font-size:12px;color:#888;letter-spacing:.06em;">2025.06.01　<span style="border:1px solid var(--c-border);padding:1px 8px;">お知らせ</span></p>
-  <h1 style="font-size:30px;font-weight:700;line-height:1.5;margin:16px 0 8px;">北海道営業所を開設しました ''' + cms('CMS更新') + '''</h1>
+  <p style="font-size:12px;color:#888;letter-spacing:.06em;">2026.08　<span style="border:1px solid var(--c-border);padding:1px 8px;">お知らせ</span></p>
+  <h1 style="font-size:30px;font-weight:700;line-height:1.5;margin:16px 0 8px;">札幌営業所を移転しました ''' + cms('CMS更新') + '''</h1>
   <div style="margin:24px 0;">''' + ph('記事メイン画像（任意）','','aspect-ratio:16/9') + '''</div>
   <p style="font-size:15px;line-height:2;color:#333;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇''' + todo('記事ごとに入力') + '''</p>
   <p style="font-size:15px;line-height:2;color:#333;margin-top:16px;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</p>
@@ -908,7 +908,7 @@ contact_body = '''
     <div style="border:1px solid var(--c-border);padding:28px;">
       <h3 style="font-size:16px;font-weight:700;margin-bottom:16px;">本社</h3>
       <p style="font-size:13px;line-height:2;color:#444;">〒525-0054<br>滋賀県草津市東矢倉三丁目11番70号<br>TEL 077-562-7111<br>受付時間：平日 9:00〜17:00</p>
-      <p style="font-size:12px;color:#888;margin-top:16px;line-height:1.8;">東京・大阪・名古屋など、全国の拠点が対応します。最寄りの拠点へ直接お問い合わせも可能です。</p>
+      <p style="font-size:12px;color:#888;margin-top:16px;line-height:1.8;">北海道・東京・九州など全国6拠点が対応します。最寄りの拠点へ直接お問い合わせも可能です。</p>
     </div>
   </div>
 </div></section>
@@ -933,8 +933,8 @@ privacy_body = '''
 </div></header>
 <section class="section"><div class="container" style="max-width:800px;">''' + priv + '''
   <div style="margin-top:32px;"><h2 style="font-size:18px;font-weight:700;border-left:3px solid var(--c-omi-red);padding-left:12px;">6. お問い合わせ窓口</h2>
-    <p style="font-size:14px;color:#444;line-height:2;margin-top:12px;">近江度量衡株式会社 個人情報管理責任者<br>〒525-0054 滋賀県草津市東矢倉三丁目11番70号<br>Mail：info@omiscale.co.jp ''' + todo('メールアドレスを確認') + '''</p></div>
-  <p style="font-size:12px;color:#888;margin-top:32px;">本ポリシーは〇〇年〇〇月〇〇日に制定し、必要に応じて改定します。''' + todo('制定日を記入') + '''</p>
+    <p style="font-size:14px;color:#444;line-height:2;margin-top:12px;">近江度量衡株式会社 個人情報管理責任者<br>〒525-0054 滋賀県草津市東矢倉三丁目11番70号<br>Mail：omi-info@omiscale.co.jp</p></div>
+  <p style="font-size:12px;color:#888;margin-top:32px;">本ポリシーは2026年3月21日に制定し、必要に応じて改定します。</p>
 </div></section>
 '''
 page("privacy.html","プライバシーポリシー｜近江度量衡株式会社", privacy_body, active="",
