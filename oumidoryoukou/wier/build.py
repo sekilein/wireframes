@@ -1161,21 +1161,123 @@ QA = [
  ("就活生・転職希望者へのメッセージをお願いします。","〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇"),
 ]
 qahtml = "".join(f'<div class="qa"><div class="qa__q">{q}</div><div class="qa__a">{a}</div></div>' for q,a in QA)
-interview_detail_body = '''
+# インタビュー詳細：Q&A（写真枠を挟む）＋1日のスケジュール＋関連社員＋関連製品
+def _qa(i):
+    return f'<div class="qa"><div class="qa__q">{QA[i][0]}</div><div class="qa__a">{QA[i][1]}</div></div>'
+
+ISCHED_STYLE = '''<style>
+.ischedule{border-top:1px solid var(--c-border);}
+.ischedule__row{display:flex;gap:22px;padding:15px 0;border-bottom:1px solid var(--c-border);}
+.ischedule__time{flex:0 0 62px;font-family:var(--font-en);font-weight:600;font-size:15px;letter-spacing:.04em;color:var(--c-black);padding-top:2px;}
+.ischedule__body b{display:block;font-family:var(--font-ja);font-size:14px;font-weight:700;}
+.ischedule__body p{font-size:12.5px;color:var(--c-mid);line-height:1.7;margin-top:4px;}
+</style>'''
+
+_SCHED = [
+ ("8:00","出社・朝礼","一日の作業予定と安全確認をチームで共有。"),
+ ("8:30","段取り・設備点検","担当ラインを点検し、計量精度をチェックします。"),
+ ("10:00","製造・組立作業","図面をもとに計量システムの組立・配線を進めます。"),
+ ("12:00","昼休憩",""),
+ ("13:00","打ち合わせ","設計・営業と仕様をすり合わせ。現場目線で意見を出します。"),
+ ("15:00","検査・調整","完成した装置の計量精度を全数チェック・微調整。"),
+ ("17:00","記録・翌日の準備","作業記録をまとめ、翌日の段取りを確認します。"),
+ ("17:30","退社",""),
+]
+_sched_rows = "".join(
+    f'<div class="ischedule__row"><span class="ischedule__time">{t}</span>'
+    f'<div class="ischedule__body"><b>{h}</b>' + (f'<p>{b}</p>' if b else '') + '</div></div>'
+    for t,h,b in _SCHED)
+
+_related_members = "".join(
+    f'<a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img">'
+    + ph('社員写真') +
+    f'</div><div class="interview-card__body"><div class="interview-card__dept">{d}</div>'
+    f'<div class="interview-card__name">{n}</div><p class="interview-card__quote">{q}</p>'
+    f'<span class="interview-card__link">インタビューを読む →</span></div></a>'
+    for d,n,q in [
+        ("設計部 / 入社〇年目（30代）","鈴木 〇〇","図面通りにつくるのではなく、現場に合わせてつくる。"),
+        ("営業部 / 入社〇年目（30代）","田中 〇〇","お客様の現場を見て、何が必要か考える。"),
+        ("制御・技術電装部 / 入社〇年目（20代）","佐藤 〇〇","ソフトも自社。だから面白い。"),
+    ])
+
+_related_products = "".join(
+    f'<a class="card" href="{u}"><div class="card__img">' + ph(label) +
+    f'</div><div class="card__body"><div class="card__title">{title}</div>'
+    f'<p class="card__text">{desc}</p><span class="card__link">製品を見る →</span></div></a>'
+    for label,title,desc,u in [
+        ("穀類施設イメージ","穀類用計量システム","この社員が組立・検査を担当する主力システム。","products-weighing.html"),
+        ("農産物 選果イメージ","農産物用計量システム","選果・計量ラインの現場を支える。","products-agricultural.html"),
+        ("工場ラインイメージ","工業用計量システム","計量配合プラントの製造にも携わる。","products-industry.html"),
+    ])
+
+interview_detail_body = ('''
 <section class="fv" style="min-height:420px;"><div class="fv__bg">''' + ph('社員メイン写真（現場）','','height:100%') + '''</div>
   <div class="fv__content"><p class="fv__eyebrow">PEOPLE — 製造部 / 入社〇年目（20代）''' + todo('社員ごとに入力') + '''</p>
   <h1 class="fv__title" style="font-size:32px;">「（その社員の引用文）」</h1>
   <p class="fv__sub">山田 〇〇</p></div>
 </section>
-<section class="section"><div class="container" style="max-width:820px;">
-  <table class="info-table" style="margin-bottom:40px;">
+''' + ISCHED_STYLE + '''
+<section class="section"><div class="container" style="max-width:900px;">
+  <table class="info-table" style="margin-bottom:36px;">
     <tr><th>出身・学歴</th><td>〇〇大学 〇〇学部 卒業</td></tr>
     <tr><th>入社年</th><td>〇〇〇〇年入社</td></tr>
     <tr><th>現在の担当業務</th><td>〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</td></tr>
-  </table>''' + qahtml + '''
-  <a class="btn btn--outline btn--sm" href="recruit-interview.html" style="margin-top:32px;">インタビュー一覧へ戻る</a>
+  </table>
+
+  <p class="section-meta">About Job</p>
+  <h2 class="section-title" style="font-size:24px;margin-bottom:14px;">「（仕事を象徴するキャッチコピー）」''' + todo('社員ごとに入力') + '''</h2>
+  <p class="section-lead" style="margin-top:0;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</p>
+
+  <!-- 本文写真①（ワイド） -->
+  <div style="margin:32px 0;">''' + ph('インタビュー写真①：働く様子（ワイド）','','aspect-ratio:16/9') + '''</div>
+
+  ''' + _qa(0) + _qa(1) + '''
+
+  <!-- 写真②③（2枚組：手元・設備／チーム） -->
+  <div class="grid-2" style="margin:28px 0;">
+    <div>''' + ph('インタビュー写真②：作業の手元','','aspect-ratio:4/3') + '''</div>
+    <div>''' + ph('インタビュー写真③：チーム・設備','','aspect-ratio:4/3') + '''</div>
+  </div>
+
+  ''' + _qa(2) + '''
+
+  <!-- 写真④（縦・ポートレート）＋Q&A横並び -->
+  <div class="grid-2" style="margin:28px 0;align-items:center;gap:32px;">
+    <div>''' + ph('インタビュー写真④：ポートレート（縦）','','aspect-ratio:3/4') + '''</div>
+    <div>''' + _qa(3) + '''</div>
+  </div>
+
+  ''' + _qa(4) + '''
 </div></section>
-'''
+
+<!-- ① 1日のスケジュール -->
+<section class="section section--grey"><div class="container" style="max-width:900px;">
+  <p class="section-meta">Schedule</p>
+  <h2 class="section-title">ある1日のスケジュール ''' + todo('社員ごとに入力') + '''</h2>
+  <div class="grid-2" style="margin-top:24px;align-items:start;gap:40px;">
+    <div class="ischedule">''' + _sched_rows + '''</div>
+    <div>''' + ph('スケジュール中の写真：現場スナップ','','aspect-ratio:3/4') + '''</div>
+  </div>
+</div></section>
+
+<!-- ② 関連社員 -->
+<section class="section"><div class="container">
+  <p class="section-meta">Other Members</p>
+  <h2 class="section-title">関連する社員インタビュー</h2>
+  <div class="grid-3" style="margin-top:24px;">''' + _related_members + '''</div>
+</div></section>
+
+<!-- ③ 関連製品 -->
+<section class="section section--grey"><div class="container">
+  <p class="section-meta">Related Products</p>
+  <h2 class="section-title">この社員が関わる製品</h2>
+  <div class="grid-3" style="margin-top:24px;">''' + _related_products + '''</div>
+</div></section>
+
+<section class="section"><div class="container" style="text-align:center;">
+  <a class="btn btn--outline btn--sm" href="recruit-interview.html">インタビュー一覧へ戻る</a>
+</div></section>
+''')
 page("recruit-interview-detail.html","社員インタビュー 詳細｜近江度量衡 採用", interview_detail_body,
      active="recruit-interview.html", recruit=True, crumbs=RC+[("社員インタビュー","recruit-interview.html"),("詳細",None)])
 PAGES.append(("G3-1","インタビュー詳細","/recruit/interview/[slug]/","recruit-interview-detail.html","recruit",True))

@@ -24,13 +24,72 @@
   <h1 class="fv__title" style="font-size:32px;">「（その社員の引用文）」</h1>
   <p class="fv__sub">山田 〇〇</p></div>
 </section>
-<section class="section"><div class="container" style="max-width:820px;">
-  <table class="info-table" style="margin-bottom:40px;">
+<style>
+.ischedule{border-top:1px solid var(--c-border);}
+.ischedule__row{display:flex;gap:22px;padding:15px 0;border-bottom:1px solid var(--c-border);}
+.ischedule__time{flex:0 0 62px;font-family:var(--font-en);font-weight:600;font-size:15px;letter-spacing:.04em;color:var(--c-black);padding-top:2px;}
+.ischedule__body b{display:block;font-family:var(--font-ja);font-size:14px;font-weight:700;}
+.ischedule__body p{font-size:12.5px;color:var(--c-mid);line-height:1.7;margin-top:4px;}
+</style>
+<section class="section"><div class="container" style="max-width:900px;">
+  <table class="info-table" style="margin-bottom:36px;">
     <tr><th>出身・学歴</th><td>〇〇大学 〇〇学部 卒業</td></tr>
     <tr><th>入社年</th><td>〇〇〇〇年入社</td></tr>
     <tr><th>現在の担当業務</th><td>〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</td></tr>
-  </table><div class="qa"><div class="qa__q">近江度量衡を選んだ理由を教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div><div class="qa"><div class="qa__q">現在担当している業務内容を教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div><div class="qa"><div class="qa__q">仕事のやりがい・難しさを教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div><div class="qa"><div class="qa__q">今後の目標・キャリアの展望を教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div><div class="qa"><div class="qa__q">就活生・転職希望者へのメッセージをお願いします。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div>
-  <a class="btn btn--outline btn--sm" href="recruit-interview.html" style="margin-top:32px;">インタビュー一覧へ戻る</a>
+  </table>
+
+  <p class="section-meta">About Job</p>
+  <h2 class="section-title" style="font-size:24px;margin-bottom:14px;">「（仕事を象徴するキャッチコピー）」<span class="todo-flag">★ 社員ごとに入力</span></h2>
+  <p class="section-lead" style="margin-top:0;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</p>
+
+  <!-- 本文写真①（ワイド） -->
+  <div style="margin:32px 0;"><div class="ph " style="aspect-ratio:16/9"><span>インタビュー写真①：働く様子（ワイド）</span></div></div>
+
+  <div class="qa"><div class="qa__q">近江度量衡を選んだ理由を教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div><div class="qa"><div class="qa__q">現在担当している業務内容を教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div>
+
+  <!-- 写真②③（2枚組：手元・設備／チーム） -->
+  <div class="grid-2" style="margin:28px 0;">
+    <div><div class="ph " style="aspect-ratio:4/3"><span>インタビュー写真②：作業の手元</span></div></div>
+    <div><div class="ph " style="aspect-ratio:4/3"><span>インタビュー写真③：チーム・設備</span></div></div>
+  </div>
+
+  <div class="qa"><div class="qa__q">仕事のやりがい・難しさを教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div>
+
+  <!-- 写真④（縦・ポートレート）＋Q&A横並び -->
+  <div class="grid-2" style="margin:28px 0;align-items:center;gap:32px;">
+    <div><div class="ph " style="aspect-ratio:3/4"><span>インタビュー写真④：ポートレート（縦）</span></div></div>
+    <div><div class="qa"><div class="qa__q">今後の目標・キャリアの展望を教えてください。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div></div>
+  </div>
+
+  <div class="qa"><div class="qa__q">就活生・転職希望者へのメッセージをお願いします。</div><div class="qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</div></div>
+</div></section>
+
+<!-- ① 1日のスケジュール -->
+<section class="section section--grey"><div class="container" style="max-width:900px;">
+  <p class="section-meta">Schedule</p>
+  <h2 class="section-title">ある1日のスケジュール <span class="todo-flag">★ 社員ごとに入力</span></h2>
+  <div class="grid-2" style="margin-top:24px;align-items:start;gap:40px;">
+    <div class="ischedule"><div class="ischedule__row"><span class="ischedule__time">8:00</span><div class="ischedule__body"><b>出社・朝礼</b><p>一日の作業予定と安全確認をチームで共有。</p></div></div><div class="ischedule__row"><span class="ischedule__time">8:30</span><div class="ischedule__body"><b>段取り・設備点検</b><p>担当ラインを点検し、計量精度をチェックします。</p></div></div><div class="ischedule__row"><span class="ischedule__time">10:00</span><div class="ischedule__body"><b>製造・組立作業</b><p>図面をもとに計量システムの組立・配線を進めます。</p></div></div><div class="ischedule__row"><span class="ischedule__time">12:00</span><div class="ischedule__body"><b>昼休憩</b></div></div><div class="ischedule__row"><span class="ischedule__time">13:00</span><div class="ischedule__body"><b>打ち合わせ</b><p>設計・営業と仕様をすり合わせ。現場目線で意見を出します。</p></div></div><div class="ischedule__row"><span class="ischedule__time">15:00</span><div class="ischedule__body"><b>検査・調整</b><p>完成した装置の計量精度を全数チェック・微調整。</p></div></div><div class="ischedule__row"><span class="ischedule__time">17:00</span><div class="ischedule__body"><b>記録・翌日の準備</b><p>作業記録をまとめ、翌日の段取りを確認します。</p></div></div><div class="ischedule__row"><span class="ischedule__time">17:30</span><div class="ischedule__body"><b>退社</b></div></div></div>
+    <div><div class="ph " style="aspect-ratio:3/4"><span>スケジュール中の写真：現場スナップ</span></div></div>
+  </div>
+</div></section>
+
+<!-- ② 関連社員 -->
+<section class="section"><div class="container">
+  <p class="section-meta">Other Members</p>
+  <h2 class="section-title">関連する社員インタビュー</h2>
+  <div class="grid-3" style="margin-top:24px;"><a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img"><div class="ph " style=""><span>社員写真</span></div></div><div class="interview-card__body"><div class="interview-card__dept">設計部 / 入社〇年目（30代）</div><div class="interview-card__name">鈴木 〇〇</div><p class="interview-card__quote">図面通りにつくるのではなく、現場に合わせてつくる。</p><span class="interview-card__link">インタビューを読む →</span></div></a><a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img"><div class="ph " style=""><span>社員写真</span></div></div><div class="interview-card__body"><div class="interview-card__dept">営業部 / 入社〇年目（30代）</div><div class="interview-card__name">田中 〇〇</div><p class="interview-card__quote">お客様の現場を見て、何が必要か考える。</p><span class="interview-card__link">インタビューを読む →</span></div></a><a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img"><div class="ph " style=""><span>社員写真</span></div></div><div class="interview-card__body"><div class="interview-card__dept">制御・技術電装部 / 入社〇年目（20代）</div><div class="interview-card__name">佐藤 〇〇</div><p class="interview-card__quote">ソフトも自社。だから面白い。</p><span class="interview-card__link">インタビューを読む →</span></div></a></div>
+</div></section>
+
+<!-- ③ 関連製品 -->
+<section class="section section--grey"><div class="container">
+  <p class="section-meta">Related Products</p>
+  <h2 class="section-title">この社員が関わる製品</h2>
+  <div class="grid-3" style="margin-top:24px;"><a class="card" href="products-weighing.html"><div class="card__img"><div class="ph " style=""><span>穀類施設イメージ</span></div></div><div class="card__body"><div class="card__title">穀類用計量システム</div><p class="card__text">この社員が組立・検査を担当する主力システム。</p><span class="card__link">製品を見る →</span></div></a><a class="card" href="products-agricultural.html"><div class="card__img"><div class="ph " style=""><span>農産物 選果イメージ</span></div></div><div class="card__body"><div class="card__title">農産物用計量システム</div><p class="card__text">選果・計量ラインの現場を支える。</p><span class="card__link">製品を見る →</span></div></a><a class="card" href="products-industry.html"><div class="card__img"><div class="ph " style=""><span>工場ラインイメージ</span></div></div><div class="card__body"><div class="card__title">工業用計量システム</div><p class="card__text">計量配合プラントの製造にも携わる。</p><span class="card__link">製品を見る →</span></div></a></div>
+</div></section>
+
+<section class="section"><div class="container" style="text-align:center;">
+  <a class="btn btn--outline btn--sm" href="recruit-interview.html">インタビュー一覧へ戻る</a>
 </div></section>
 
 
