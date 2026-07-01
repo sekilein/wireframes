@@ -814,9 +814,9 @@ for _era, _intro, _rows in HISTORY:
 
 HC_STYLE = '''<style>
 .hc-scene{position:relative;background:var(--c-black);color:#fff;}
-.hc-pin{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1200px;perspective-origin:50% 46%;}
+.hc-pin{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1200px;perspective-origin:64% 42%;}
 .hc-bg{position:absolute;inset:0;pointer-events:none;background:
-  radial-gradient(58% 54% at 50% 46%, rgba(255,255,255,.07), rgba(0,0,0,0) 70%),
+  radial-gradient(56% 52% at 66% 40%, rgba(255,255,255,.07), rgba(0,0,0,0) 70%),
   repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0 1px, transparent 1px 3px);}
 .hc-stage{position:absolute;inset:0;transform-style:preserve-3d;}
 .hc-panel{position:absolute;left:50%;top:50%;width:min(660px,86vw);transform:translate(-50%,-50%);
@@ -864,9 +864,10 @@ HC_SCRIPT = '''<script>
     for(var i=0;i<N;i++){
       var el=panels[i], d=i-pf, z=-d*STEP;
       if(z>PMAX) z=PMAX;
-      var y = d>=0 ? -d*34 : -d*46;                 // 未来は上へ受け、通過は下へ抜ける
+      var x = d*210;                                // 右奥→左手前の動線：未来=右、手前=左
+      var y = -d*54;                                // 未来=奥(上)、手前=前(下)
       var op = d>=0 ? cl(1-d/2.6) : cl(1+d/1.0);    // 手前1〜2枚だけを明瞭に
-      el.style.transform='translate(-50%,-50%) translateY('+y+'px) translateZ('+z+'px)';
+      el.style.transform='translate(-50%,-50%) translate('+x+'px,'+y+'px) translateZ('+z+'px)';
       el.style.opacity=String(op);
       el.style.zIndex=String(2000-Math.round(Math.abs(d)*12));
       var act=(i===active);
