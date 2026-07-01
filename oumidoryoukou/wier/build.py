@@ -1200,16 +1200,6 @@ _related_members = "".join(
         ("制御・技術電装部 / 入社〇年目（20代）","佐藤 〇〇","ソフトも自社。だから面白い。"),
     ])
 
-_related_products = "".join(
-    f'<a class="card" href="{u}"><div class="card__img">' + ph(label) +
-    f'</div><div class="card__body"><div class="card__title">{title}</div>'
-    f'<p class="card__text">{desc}</p><span class="card__link">製品を見る →</span></div></a>'
-    for label,title,desc,u in [
-        ("穀類施設イメージ","穀類用計量システム","この社員が組立・検査を担当する主力システム。","products-weighing.html"),
-        ("農産物 選果イメージ","農産物用計量システム","選果・計量ラインの現場を支える。","products-agricultural.html"),
-        ("工場ラインイメージ","工業用計量システム","計量配合プラントの製造にも携わる。","products-industry.html"),
-    ])
-
 interview_detail_body = ('''
 <section class="fv" style="min-height:420px;"><div class="fv__bg">''' + ph('社員メイン写真（現場）','','height:100%') + '''</div>
   <div class="fv__content"><p class="fv__eyebrow">PEOPLE — 製造部 / 入社〇年目（20代）''' + todo('社員ごとに入力') + '''</p>
@@ -1267,11 +1257,19 @@ interview_detail_body = ('''
   <div class="grid-3" style="margin-top:24px;">''' + _related_members + '''</div>
 </div></section>
 
-<!-- ③ 関連製品 -->
+<!-- ③ 関連製品（1製品を横長で） -->
 <section class="section section--grey"><div class="container">
-  <p class="section-meta">Related Products</p>
+  <p class="section-meta">Related Product</p>
   <h2 class="section-title">この社員が関わる製品</h2>
-  <div class="grid-3" style="margin-top:24px;">''' + _related_products + '''</div>
+  <a class="case" href="products-weighing.html" style="margin-top:24px;background:#fff;">
+    <div class="case__img">''' + ph('穀類施設イメージ') + '''</div>
+    <div class="case__body">
+      <div class="case__cat">GRAIN / 穀類用計量システム</div>
+      <div class="case__title">フルオートドライヤーシステムの組立・検査を担当</div>
+      <p style="font-size:14px;color:#444;line-height:1.95;">この社員が日々向き合う主力システム。全国約2,000施設に納入された穀類計量の要となる設備を、組立から精度検査まで一貫して手がけています。</p>
+      <span class="card__link" style="margin-top:18px;">製品ページを見る →</span>
+    </div>
+  </a>
 </div></section>
 
 <section class="section"><div class="container" style="text-align:center;">
