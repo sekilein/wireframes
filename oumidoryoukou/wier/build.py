@@ -888,7 +888,7 @@ history_body = ('''
 <header class="page-header"><div class="page-header__inner">
   <p class="page-header__meta">126 YEARS HISTORY</p>
   <h1 class="page-header__title">明治から令和へ。</h1>
-  <p class="page-header__lead">1900年創業から126年の歩み。スクロールするごとに、時代が過去から手前へと進みます。</p>
+  <p class="page-header__lead">1900年、草津の小さな工房から始まった物語。時代とともに移りゆく景色を、ひとつずつ辿ってください。</p>
 </div></header>
 ''' + HC_STYLE + '''
 <section class="hc-scene" style="height:calc(46vh * ''' + str(_hc_n) + ''' + 70vh);">
