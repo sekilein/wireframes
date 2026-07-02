@@ -54,7 +54,8 @@ NAV_GROUPS = [
     ("delivery", "納入実績", "delivery.html", None, []),
     ("company", "会社案内", "company.html", "links", [
         ("企業理念", "company.html#concept"), ("代表挨拶", "company.html#greeting"),
-        ("サービス拠点", "company.html#servicebase"), ("会社概要", "company.html#profile"),
+        ("サービス拠点", "company.html#servicebase"), ("取引実績", "company.html#clients"),
+        ("会社概要", "company.html#profile"),
     ]),
     ("history", "126年ヒストリー", "history.html", None, []),
     ("recruit", "採用情報", "recruit.html", "links", [
@@ -606,18 +607,17 @@ delivery_body = '''
   <p class="page-header__lead">農産物選果場・穀類施設・工業ラインなど、多岐にわたる現場への納入実績。</p>
 </div></header>
 
-<!-- ② 統計フィーチャー -->
+<!-- ② 統計フィーチャー（アグリゲートのみ・個別特定なし） -->
 <section class="section"><div class="container">
-  <div class="numbers-grid" style="grid-template-columns:repeat(5,1fr);">
+  <div class="numbers-grid" style="grid-template-columns:repeat(4,1fr);">
     <div class="number-card"><div class="number-card__num">2,000<span class="number-card__unit">+</span></div><div class="number-card__label">累計納入施設数</div></div>
-    <div class="number-card"><div class="number-card__num">126<span class="number-card__unit">年</span></div><div class="number-card__label">創業からの歴史</div></div>
-    <div class="number-card"><div class="number-card__num">6<span class="number-card__unit">箇所</span></div><div class="number-card__label">国内サービス拠点</div></div>
-    <div class="number-card"><div class="number-card__num">3<span class="number-card__unit">箇所</span></div><div class="number-card__label">海外サービス拠点</div></div>
-    <div class="number-card"><div class="number-card__num">152<span class="number-card__unit">件</span></div><div class="number-card__label">選果機納入実績（1981〜2016年）</div></div>
+    <div class="number-card"><div class="number-card__num">1,000<span class="number-card__unit">+</span></div><div class="number-card__label">穀類施設への納入</div></div>
+    <div class="number-card"><div class="number-card__num">9<span class="number-card__unit">拠点</span></div><div class="number-card__label">国内外サービス網（国内6＋海外3）</div></div>
+    <div class="number-card"><div class="number-card__num">3<span class="number-card__unit">分野</span></div><div class="number-card__label">農産物・穀類・工業</div></div>
   </div>
 </div></section>
 
-<!-- ③ 全国マップ（ver3：数字フィーチャー＋全国マップ形式） -->
+<!-- ③ 全国マップ -->
 <section class="section section--grey"><div class="container">
   <p class="section-meta">Service Area</p><h2 class="section-title">主な納入エリア</h2>
   <div class="basemap" style="margin-top:24px;">
@@ -629,41 +629,32 @@ delivery_body = '''
   </div>
 </div></section>
 
-<!-- ④⑤⑥ CASE -->
+<!-- ④ 分野別の納入実績（一品一様のため個別設備の詳細・社名・導入年月は非掲載） -->
 <section class="section"><div class="container">
-  <p class="section-meta">Case Study</p><h2 class="section-title">導入事例</h2>''' + todo('クライアントより実際の案件名・詳細を提供') + '''
-
-  <div class="case" style="margin-top:24px;">
-    <div class="case__img">''' + ph('ふらの農協 玉葱選果場') + '''</div>
-    <div class="case__body"><div class="case__cat">CASE 01 / 農産物用計量システム</div><div class="case__title">玉葱選果場の再編・統合（AIカメラ選別）</div>
-      <table class="case__meta"><tr><th>導入先</th><td>ふらの農業協同組合（北海道）</td></tr><tr><th>導入年</th><td>2023年</td></tr><tr><th>規模</th><td>玉葱選別設備3系列／一日処理量 約400トン</td></tr>
-      <tr><th>内容</th><td>既存の4ヶ所に分散していた玉葱選果場を再編・統合し1施設へ集約。AIカメラ選別システムで外観・内部品質を高精度判定。1玉ごとの重量計測で箱詰め時の入れ目ロスを低減し歩留まり向上に貢献。</td></tr></table>
-      <div class="case__points"><span class="case__point">キャリスター（ハンガー式搬送体選別装置）</span><span class="case__point">AI画像処理装置による省人化</span><span class="case__point">1玉毎の重量計測で歩留まり向上</span></div>
-    </div>
+  <p class="section-meta">Field Record</p><h2 class="section-title">分野別の納入実績</h2>
+  <p class="section-lead">計量システムはすべて一品一様のオーダーメイド。これまでに納入してきた代表的な分野と、対象となる現場・施設をご紹介します。</p>
+  <div class="grid-3" style="margin-top:28px;">
+    <div class="card"><div class="card__img">''' + ph('農産物 選果イメージ') + '''</div><div class="card__body"><div class="card__tag">AGRICULTURAL</div><div class="card__title">農産物用</div><p class="card__text">選果場・青果市場・農協施設など。玉葱・柑橘・りんご等の重量選別・計量ラインを全国に納入。</p><a class="card__link" href="products-agricultural.html">製品を見る →</a></div></div>
+    <div class="card"><div class="card__img">''' + ph('穀類施設イメージ') + '''</div><div class="card__body"><div class="card__tag">GRAIN</div><div class="card__title">穀類用</div><p class="card__text">カントリーエレベーター・ライスセンター・穀物備蓄施設など。累計1,000施設超への納入実績。</p><a class="card__link" href="products-weighing.html">製品を見る →</a></div></div>
+    <div class="card"><div class="card__img">''' + ph('工場ラインイメージ') + '''</div><div class="card__body"><div class="card__tag">INDUSTRIAL</div><div class="card__title">工業用</div><p class="card__text">タイヤ・ゴム、ガラス、鉄鋼、肥料・化学、食品加工などのプラント。原料計量・自動配合設備を設計・製作。</p><a class="card__link" href="products-industry.html">製品を見る →</a></div></div>
   </div>
+</div></section>
 
-  <div class="case" style="margin-top:24px;">
-    <div class="case__img">''' + ph('カントリーエレベーター') + '''</div>
-    <div class="case__body"><div class="case__cat">CASE 02 / 穀類用計量システム</div><div class="case__title">〇〇カントリーエレベーター 全工程刷新 ''' + todo('実案件待ち') + '''</div>
-      <table class="case__meta"><tr><th>導入先</th><td>〇〇農産株式会社（〇〇県）</td></tr><tr><th>導入年</th><td>〇〇年</td></tr><tr><th>規模</th><td>受入ピット〇系統／袋詰めライン〇系統</td></tr>
-      <tr><th>内容</th><td>受入から袋詰めまでの全工程をシステム化し、処理能力を従来比で大幅向上。タッチパネル操作で新任オペレーターも即日稼働可能に。</td></tr></table>
-      <div class="case__points"><span class="case__point">処理能力向上</span><span class="case__point">品質管理自動化</span><span class="case__point">即日稼働可能</span></div>
+<!-- ⑤ 掲載方針＋取引実績（会社案内）への導線 -->
+<section class="section section--grey"><div class="container">
+  <div class="grid-2" style="align-items:center;gap:40px;">
+    <div>
+      <p class="section-meta">Our Policy</p>
+      <h2 class="section-title" style="font-size:24px;">個別の設備詳細は、あえて掲載していません。</h2>
+      <p class="section-lead" style="margin-top:14px;">計量システムは一品一様のため、個別の設備仕様・導入時期・導入先名は、機密保持およびお客様（元請け・エンドユーザー）への配慮から掲載を控えています。主要な取引先・取引実績は、会社案内にてご紹介しています。</p>
+      <a class="btn btn--outline btn--sm" href="company.html#clients" style="margin-top:20px;">取引実績を見る（会社案内）→</a>
     </div>
+    <div>''' + ph('現場イメージ（分野横断／社名・設備が特定されないカット）','','aspect-ratio:4/3') + '''</div>
   </div>
-
-  <div class="case" style="margin-top:24px;">
-    <div class="case__img">''' + ph('薬品計量装置') + '''</div>
-    <div class="case__body"><div class="case__cat">CASE 03 / 工業用計量システム</div><div class="case__title">薬品計量装置</div>
-      <table class="case__meta"><tr><th>導入先</th><td>日本国内ゴムメーカー</td></tr><tr><th>形式</th><td>電子天秤・ロードセル式台秤</td></tr><tr><th>仕様</th><td>秤量：1kg〜30kg／最小目量：0.1g〜5g／容器材質：SUS304・ポリコンテナ式</td></tr>
-      <tr><th>内容</th><td>多くの薬品をコンパクト且つ安価に収納し、簡単な操作で重大な人為的ミスを未然に防止します。</td></tr></table>
-      <div class="case__points"><span class="case__point">柔軟なレイアウトで限られたスペースを有効活用</span><span class="case__point">集塵機搭載で作業環境にも配慮</span></div>
-    </div>
-  </div>
-  <div class="cms-note">固定ページ。事例は更新頻度が低い（年0〜1件）ため、追加・修正は制作側で対応。</div>
 </div></section>
 
 <div class="recruit-banner" style="background:#222;"><div class="recruit-banner__inner">
-  <div class="recruit-banner__text"><h2 style="font-size:24px;">掲載以外の実績についてお問い合わせください</h2><p>2,000施設以上の実績あり。詳細はお気軽にお問い合わせください。</p></div>
+  <div class="recruit-banner__text"><h2 style="font-size:24px;">掲載以外の実績についてお問い合わせください</h2><p>2,000施設以上の実績あり。分野・ご要望に近い実績をご案内します。</p></div>
   <div class="recruit-banner__cta"><a class="btn btn--white" href="contact.html">お問い合わせ</a></div>
 </div></div>
 '''
@@ -678,7 +669,7 @@ company_body = '''
   <h1 class="page-header__title">会社案内</h1>
 </div></header>
 <nav class="page-nav"><div class="inner">
-  <a href="#concept">企業理念</a><a href="#greeting">代表挨拶</a><a href="#servicebase">サービス拠点</a><a href="#profile">会社概要</a>
+  <a href="#concept">企業理念</a><a href="#greeting">代表挨拶</a><a href="#servicebase">サービス拠点</a><a href="#clients">取引実績</a><a href="#profile">会社概要</a>
 </div></nav>
 
 <!-- ② 企業理念 -->
@@ -731,6 +722,18 @@ company_body = '''
       <div class="base-item base-item--ov"><span>海外</span>韓国</div>
     </div>
   </div>
+</div></section>
+
+<!-- ⑤b 取引実績（納入実績ページの方針に対応：社名は業種表記・元請け経由はエンドユーザー非掲載） -->
+<section class="section" id="clients"><div class="container">
+  <p class="section-meta">Track Record</p><h2 class="section-title">取引実績</h2>
+  <p class="section-lead">創業以来、農産・穀類・工業の各分野で全国の企業・団体にご採用いただいています。（分野別・順不同）</p>
+  <div class="grid-3" style="margin-top:24px;">
+    <div class="value-item"><div class="value-item__title" style="font-size:16px;">農産・食品</div><p class="value-item__body">全国の農業協同組合（JA）・選果場運営団体／青果市場／食品加工メーカー ほか</p></div>
+    <div class="value-item"><div class="value-item__title" style="font-size:16px;">穀類・流通</div><p class="value-item__body">米麦カントリーエレベーター運営各社／ライスセンター／穀物商社・倉庫会社 ほか</p></div>
+    <div class="value-item"><div class="value-item__title" style="font-size:16px;">工業・プラント</div><p class="value-item__body">タイヤ・ゴム／ガラス・鉄鋼・化学プラント／プラントエンジニアリング元請各社 ほか</p></div>
+  </div>
+  <div class="cms-note" style="background:#fff7ec;border-left-color:#e0a030;">★ 掲載する取引先名はクライアント確認のうえ決定。元請け（プラントメーカー等）経由の案件はエンドユーザー名を伏せ、業種表記とする。ロゴ掲載可否も併せて確認。''' + todo('掲載可能な取引先名・ロゴを確認') + '''</div>
 </div></section>
 
 <!-- ⑥ 会社概要 -->
@@ -932,12 +935,61 @@ news_body_top = '''
   <p class="page-header__lead">近江度量衡の最新ニュース・お知らせ・プレスリリース</p>
 </div></header>
 <section class="section"><div class="container">'''
-fil, items = news_list(["すべて","お知らせ","製品情報","採用","プレスリリース"],
-  [("2026.08","お知らせ","札幌営業所を移転しました"),
+import calendar as _cal
+def _news_cal(year, month, marked):
+    _cal.setfirstweekday(6)  # 日曜始まり
+    head = "".join(f'<span class="news-cal__wd">{w}</span>' for w in ["日","月","火","水","木","金","土"])
+    body = ""
+    for week in _cal.monthcalendar(year, month):
+        for day in week:
+            if day == 0:
+                body += '<span class="news-cal__day news-cal__day--empty">&nbsp;</span>'
+            else:
+                mk = ' news-cal__day--news' if day in marked else ''
+                body += f'<span class="news-cal__day{mk}">{day}</span>'
+    return head + body
+
+NEWS_STYLE = '''<style>
+.news-cal{border:1px solid var(--c-border);padding:16px;background:#fff;}
+.news-cal__head{display:flex;justify-content:space-between;align-items:center;font-family:var(--font-en);font-weight:600;font-size:14px;margin-bottom:12px;}
+.news-cal__grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center;}
+.news-cal__wd{font-size:10px;color:var(--c-muted);padding:4px 0;}
+.news-cal__day{font-size:12px;padding:6px 0;color:#333;border-radius:2px;}
+.news-cal__day--empty{color:transparent;}
+.news-cal__day--news{font-weight:700;background:var(--c-black);color:#fff;}
+.news-archive{list-style:none;}
+.news-archive li{border-bottom:1px solid var(--c-border);}
+.news-archive a{display:block;padding:9px 4px;font-size:13px;color:#333;}
+</style>'''
+
+fil, items = news_list(["すべて","お知らせ","プレスリリース","製品情報","休業案内","採用"],
+  [("2026.08.13","お知らせ","札幌営業所を移転しました"),
+   ("2026.08.10","休業案内","夏季休業のお知らせ（8/13〜8/16）"),
+   ("2026.07.15","プレスリリース","新型フルオートドライヤーシステムを発表しました"),
    ("2025.03.01","お知らせ","会社設立126周年を達成しました"),
    ("2025.04.01","採用","2027年度採用エントリー受付開始のご案内")])
-news_body = news_body_top + '<div style="margin-bottom:24px;">' + fil + '</div><ul class="news-list">' + items + '''</ul>
-  <div class="cms-note">◯ 日刊工業新聞等メディア掲載・プレスリリースを中心に更新（月1〜2回／随時）。WordPress管理画面から投稿。''' + cms('CMS更新') + '''</div>
+
+news_body = news_body_top + NEWS_STYLE + '''
+  <div style="margin-bottom:24px;">''' + fil + '''</div>
+  <div class="basemap" style="grid-template-columns:1fr 300px;align-items:start;">
+    <div>
+      <ul class="news-list">''' + items + '''</ul>
+      <div class="cms-note">◯ お知らせ・プレスリリース・季節の休業案内などを掲載。記事内の<b>動画埋め込み・画像ギャラリー</b>、および<b>カレンダーからの日付絞り込み</b>に対応（WordPressで自社更新）。''' + cms('CMS更新') + '''</div>
+    </div>
+    <aside>
+      <div class="news-cal">
+        <div class="news-cal__head"><span>2026年 8月</span><span style="color:#bbb;">‹ ›</span></div>
+        <div class="news-cal__grid">''' + _news_cal(2026, 8, [10, 13]) + '''</div>
+      </div>
+      <p style="font-size:11px;color:#888;margin:8px 0 0;">■ の日付に記事あり（クリックで絞り込み）</p>
+      <h3 style="font-size:11px;letter-spacing:.14em;color:var(--c-muted);margin:24px 0 6px;font-family:var(--font-en);">ARCHIVE</h3>
+      <ul class="news-archive">
+        <li><a href="#">2026年 8月（2）</a></li>
+        <li><a href="#">2026年 7月（1）</a></li>
+        <li><a href="#">2025年 3月（1）</a></li>
+      </ul>
+    </aside>
+  </div>
 </div></section>'''
 page("news.html","新着情報｜近江度量衡株式会社", news_body, active="news.html",
      crumbs=[("TOP","top.html"),("新着情報",None)])
@@ -946,11 +998,21 @@ PAGES.append(("I","新着情報","/news/","news.html","corp",True))
 # I1 記事詳細
 news_detail_body = '''
 <section class="section"><div class="container" style="max-width:760px;">
-  <p style="font-size:12px;color:#888;letter-spacing:.06em;">2026.08　<span style="border:1px solid var(--c-border);padding:1px 8px;">お知らせ</span></p>
+  <p style="font-size:12px;color:#888;letter-spacing:.06em;">2026.08.13　<span style="border:1px solid var(--c-border);padding:1px 8px;">お知らせ</span></p>
   <h1 style="font-size:30px;font-weight:700;line-height:1.5;margin:16px 0 8px;">札幌営業所を移転しました ''' + cms('CMS更新') + '''</h1>
   <div style="margin:24px 0;">''' + ph('記事メイン画像（任意）','','aspect-ratio:16/9') + '''</div>
   <p style="font-size:15px;line-height:2;color:#333;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇''' + todo('記事ごとに入力') + '''</p>
-  <p style="font-size:15px;line-height:2;color:#333;margin-top:16px;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</p>
+
+  <!-- 動画埋め込み枠（任意） -->
+  <div style="margin:28px 0;">''' + ph('動画埋め込み枠（YouTube／Vimeo 等・任意）','','aspect-ratio:16/9') + '''</div>
+
+  <p style="font-size:15px;line-height:2;color:#333;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</p>
+
+  <!-- 画像ギャラリー枠（任意） -->
+  <h2 style="font-size:16px;font-weight:700;margin:32px 0 12px;">ギャラリー</h2>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+    ''' + ph('ギャラリー①','','aspect-ratio:1') + ph('ギャラリー②','','aspect-ratio:1') + ph('ギャラリー③','','aspect-ratio:1') + ph('ギャラリー④','','aspect-ratio:1') + '''
+  </div>
 </div></section>
 <section class="section section--grey"><div class="container">
   <h2 class="section-title" style="font-size:20px;">関連記事</h2>
