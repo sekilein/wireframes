@@ -600,6 +600,35 @@ page("service.html","サービス案内｜近江度量衡株式会社", service_
 PAGES.append(("C","サービス案内","/service/","service.html","corp",False))
 
 # ======================= D. 納入実績 =======================
+# 納入実績：CASE01-03 の導入先をロゴボックスで列挙（ダミー・PC3/SP2カラム）
+DELIV_LOGO_STYLE = '''<style>
+.logogrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;}
+.logobox{position:relative;border:1px solid var(--c-border);aspect-ratio:3/2;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;
+  background-color:#f7f7f7;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.04) 0 8px,transparent 8px 16px);}
+.logobox span{position:relative;background:rgba(255,255,255,.92);padding:6px 10px;font-size:12px;color:#555;line-height:1.4;font-family:var(--font-ja);}
+@media(max-width:600px){.logogrid{grid-template-columns:repeat(2,1fr);}}
+</style>'''
+
+_DELIV_CASES = [
+ ("01","AGRICULTURAL","農産物用計量システム 導入先",
+   ["〇〇農業協同組合","〇〇青果市場","〇〇中央卸売市場","〇〇選果場","〇〇柑橘出荷組合","〇〇りんご選果所","〇〇玉葱センター","〇〇園芸農業協同組合","〇〇ファーム","〇〇農産"]),
+ ("02","GRAIN","穀類用計量システム 導入先",
+   ["〇〇カントリーエレベーター","〇〇ライスセンター","〇〇農産","〇〇米穀","〇〇穀物倉庫","〇〇集出荷施設","〇〇農業協同組合 CE","〇〇精米工場","〇〇食糧","〇〇ホールディングス"]),
+ ("03","INDUSTRIAL","工業用計量システム 導入先",
+   ["〇〇ゴム工業","〇〇タイヤ","〇〇化学工業","〇〇ガラス","〇〇製鉄","〇〇肥料","〇〇食品工業","〇〇プラントエンジニアリング","〇〇マテリアル","〇〇セメント"]),
+]
+def _deliv_case_html():
+    out = ""
+    for i,(no,en,title,names) in enumerate(_DELIV_CASES):
+        boxes = "".join(f'<div class="logobox"><span>{n}</span></div>' for n in names)
+        mt = '40px' if i>0 else '28px'
+        out += (f'<div style="margin-top:{mt};">'
+                f'<div class="case__cat">CASE {no} / {en}</div>'
+                f'<h3 class="section-title" style="font-size:22px;margin-top:6px;">{title}</h3>'
+                f'<div class="logogrid">{boxes}</div></div>')
+    return out
+delivery_cases = _deliv_case_html()
+
 delivery_body = '''
 <header class="page-header"><div class="page-header__inner">
   <p class="page-header__meta">DELIVERY RECORD</p>
@@ -629,28 +658,12 @@ delivery_body = '''
   </div>
 </div></section>
 
-<!-- ④ 分野別の納入実績（一品一様のため個別設備の詳細・社名・導入年月は非掲載） -->
+''' + DELIV_LOGO_STYLE + '''
+<!-- ④ CASE01-03：導入先ロゴ列挙（各10社ダミー・PC3/SP2カラム） -->
 <section class="section"><div class="container">
-  <p class="section-meta">Field Record</p><h2 class="section-title">分野別の納入実績</h2>
-  <p class="section-lead">計量システムはすべて一品一様のオーダーメイド。これまでに納入してきた代表的な分野と、対象となる現場・施設をご紹介します。</p>
-  <div class="grid-3" style="margin-top:28px;">
-    <div class="card"><div class="card__img">''' + ph('農産物 選果イメージ') + '''</div><div class="card__body"><div class="card__tag">AGRICULTURAL</div><div class="card__title">農産物用</div><p class="card__text">選果場・青果市場・農協施設など。玉葱・柑橘・りんご等の重量選別・計量ラインを全国に納入。</p><a class="card__link" href="products-agricultural.html">製品を見る →</a></div></div>
-    <div class="card"><div class="card__img">''' + ph('穀類施設イメージ') + '''</div><div class="card__body"><div class="card__tag">GRAIN</div><div class="card__title">穀類用</div><p class="card__text">カントリーエレベーター・ライスセンター・穀物備蓄施設など。累計1,000施設超への納入実績。</p><a class="card__link" href="products-weighing.html">製品を見る →</a></div></div>
-    <div class="card"><div class="card__img">''' + ph('工場ラインイメージ') + '''</div><div class="card__body"><div class="card__tag">INDUSTRIAL</div><div class="card__title">工業用</div><p class="card__text">タイヤ・ゴム、ガラス、鉄鋼、肥料・化学、食品加工などのプラント。原料計量・自動配合設備を設計・製作。</p><a class="card__link" href="products-industry.html">製品を見る →</a></div></div>
-  </div>
-</div></section>
-
-<!-- ⑤ 掲載方針＋取引実績（会社案内）への導線 -->
-<section class="section section--grey"><div class="container">
-  <div class="grid-2" style="align-items:center;gap:40px;">
-    <div>
-      <p class="section-meta">Our Policy</p>
-      <h2 class="section-title" style="font-size:24px;">個別の設備詳細は、あえて掲載していません。</h2>
-      <p class="section-lead" style="margin-top:14px;">計量システムは一品一様のため、個別の設備仕様・導入時期・導入先名は、機密保持およびお客様（元請け・エンドユーザー）への配慮から掲載を控えています。主要な取引先・取引実績は、会社案内にてご紹介しています。</p>
-      <a class="btn btn--outline btn--sm" href="company.html#clients" style="margin-top:20px;">取引実績を見る（会社案内）→</a>
-    </div>
-    <div>''' + ph('現場イメージ（分野横断／社名・設備が特定されないカット）','','aspect-ratio:4/3') + '''</div>
-  </div>
+  <p class="section-meta">Field Record</p><h2 class="section-title">分野別の導入先</h2>
+  <p class="section-lead">農産物・穀類・工業の各分野で、全国の企業・団体にご採用いただいています。''' + todo('掲載可能な社名・ロゴを確認（元請け経由はエンドユーザー非掲載）') + '''</p>
+  ''' + delivery_cases + '''
 </div></section>
 
 <div class="recruit-banner" style="background:#222;"><div class="recruit-banner__inner">
