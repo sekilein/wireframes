@@ -1,34 +1,22 @@
-/* 下層共通：グローバルナビ（PC=ホバーでメガメニュー / SP=ハンバーガー＋アコーディオン） */
+/* wire v2：ハンバーガー格納メニュー（〜1100px）。メガメニューはCSSホバー */
 (function(){
-  var nav = document.querySelector('.nav');
-  var allItems = [].slice.call(document.querySelectorAll('.gnav__item'));
-  function closeAll(){ allItems.forEach(function(it){ it.classList.remove('is-open'); }); }
-  allItems.forEach(function(it){
-    it.addEventListener('mouseenter', function(){
-      closeAll();
-      if(it.hasAttribute('data-mega')) it.classList.add('is-open');
-    });
-  });
-  if(nav) nav.addEventListener('mouseleave', closeAll);
-
-  var burger = document.querySelector('.burger');
-  var sp = document.getElementById('spmenu');
-  if(burger && sp){
-    function setSp(open){
-      sp.classList.toggle('is-open', open);
-      burger.classList.toggle('is-open', open);
-      burger.setAttribute('aria-expanded', open?'true':'false');
-      sp.setAttribute('aria-hidden', open?'false':'true');
-      document.body.classList.toggle('menu-open', open);
-    }
-    burger.addEventListener('click', function(){ setSp(!sp.classList.contains('is-open')); });
-    sp.querySelectorAll('.spmenu__top').forEach(function(btn){
-      btn.addEventListener('click', function(){
-        var g = btn.parentNode;
-        var open = g.classList.toggle('is-open');
-        btn.setAttribute('aria-expanded', open?'true':'false');
-      });
-    });
-    sp.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setSp(false); }); });
+  var burger = document.querySelector('.wburger');
+  var drawer = document.getElementById('wdrawer');
+  if(!burger || !drawer) return;
+  function set(open){
+    drawer.classList.toggle('is-open', open);
+    burger.classList.toggle('is-open', open);
+    document.body.classList.toggle('menu-open', open);
+    burger.setAttribute('aria-expanded', open?'true':'false');
+    drawer.setAttribute('aria-hidden', open?'false':'true');
   }
+  burger.addEventListener('click', function(){ set(!drawer.classList.contains('is-open')); });
+  drawer.querySelectorAll('.wdrawer__top').forEach(function(btn){
+    btn.addEventListener('click', function(){ btn.parentNode.classList.toggle('is-open'); });
+  });
+  drawer.querySelectorAll('a').forEach(function(el){ el.addEventListener('click', function(){ set(false); }); });
 })();
+
+/* 左レール：お知らせティッカー（5秒切替） */
+(function(){var it=document.querySelectorAll('.wrail__item');if(it.length<2)return;var i=0;
+setInterval(function(){it[i].classList.remove('is-on');i=(i+1)%it.length;it[i].classList.add('is-on');},5000);})();

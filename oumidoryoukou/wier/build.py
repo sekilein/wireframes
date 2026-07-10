@@ -54,7 +54,7 @@ NAV_GROUPS = [
     ("delivery", "納入実績", "delivery.html", None, []),
     ("company", "会社案内", "company.html", "links", [
         ("企業理念", "company.html#concept"), ("代表挨拶", "company.html#greeting"),
-        ("サービス拠点", "company.html#servicebase"), ("取引実績", "company.html#clients"),
+        ("サービス拠点", "company.html#servicebase"), ("品質・認証", "company.html#quality"),
         ("会社概要", "company.html#profile"),
     ]),
     ("history", "126年ヒストリー", "history.html", None, []),
@@ -79,39 +79,40 @@ def _active_key(active):
 def header(active="", recruit=False, overlay=False):
     akey = _active_key(active)
     items_html = ""
-    sp_html = ""
+    dr_html = ""
     for key, label, url, mega, children in NAV_GROUPS:
         is_active = " is-active" if key == akey else ""
-        if not mega:
-            items_html += f'<div class="gnav__item{is_active}"><a class="gnav__link" href="{url}">{label}</a></div>'
-            sp_html += f'<a class="spmenu__single" href="{url}">{label}</a>'
+        if not children:
+            items_html += f'<div class="witem{is_active}"><a class="wlink" href="{url}">{label}</a></div>'
+            dr_html += f'<a class="wdrawer__single" href="{url}">{label}</a>'
             continue
         en = NAV_EN.get(key, label)
-        if mega == "cards":
-            cards = "".join(
-                f'<a class="mega__card" href="{cu}"><span class="mega__thumb">Image</span>'
-                f'<span class="mega__cap">{cn}<i>›</i></span></a>' for cn, cu in children)
-            panel = f'<div class="mega__cards">{cards}</div>'
-        else:
-            links = "".join(f'<li><a href="{cu}">{cn}<i>›</i></a></li>' for cn, cu in children)
-            panel = f'<ul class="mega__links">{links}</ul>'
+        links = "".join(f'<a href="{cu}"><i class="ar">→</i>{cn}</a>' for cn, cu in children)
         items_html += (
-            f'<div class="gnav__item{is_active}" data-mega>'
-            f'<a class="gnav__link" href="{url}">{label}</a>'
-            f'<div class="mega"><div class="mega__inner">'
-            f'<div class="mega__lead"><span class="mega__en">{en}</span>'
-            f'<span class="mega__jp">{label}</span>'
-            f'<a class="mega__more" href="{url}">詳しく見る →</a></div>'
-            f'{panel}</div></div></div>')
+            f'<div class="witem{is_active}">'
+            f'<a class="wlink" href="{url}">{label}</a>'
+            f'<div class="wmega"><div class="wmega__inner">'
+            f'<div class="wmega__lead"><span class="men">{en}</span><span class="mjp">{label}</span>'
+            f'<a class="wmega__more" href="{url}">詳しく見る →</a></div>'
+            f'<div class="wmega__links">{links}</div>'
+            f'</div></div></div>')
         sub = "".join(f'<a href="{cu}">{cn}</a>' for cn, cu in children)
-        sp_html += (f'<div class="spmenu__group"><button class="spmenu__top" aria-expanded="false">{label}</button>'
-                    f'<div class="spmenu__sub">{sub}</div></div>')
-    return f'''<header class="nav">
-  <a class="logo" href="top.html"><span class="logo-mark">近江度量衡</span><span class="logo-en">126th SINCE 1900</span></a>
-  <nav class="gnav">{items_html}</nav>
+        dr_html += (f'<div class="wdrawer__group"><button class="wdrawer__top">{label}</button>'
+                    f'<div class="wdrawer__sub">{sub}</div></div>')
+    return f'''<header class="wnav">
+  <a class="wnav__logo" href="top.html"><span class="tlogo">近江度量衡株式会社</span></a>
+  <nav class="wnav__menu">{items_html}</nav>
+  <button class="wburger" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
+  <a class="wnav__cta" href="contact.html">お問い合わせ</a>
 </header>
-<button class="burger" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
-<div class="spmenu" id="spmenu" aria-hidden="true"><nav class="spmenu__nav">{sp_html}</nav></div>'''
+<div class="wdrawer" id="wdrawer" aria-hidden="true"><nav>{dr_html}<a class="wdrawer__single" href="contact.html">お問い合わせ</a></nav></div>
+<div class="wrail"><span class="wrail__cap">News</span>
+<div class="wrail__news">
+<a class="wrail__item is-on" href="news-detail.html"><b>2026.07.01</b><span>夏季休業のお知らせ（8/13〜8/16）</span></a>
+<a class="wrail__item" href="news-detail.html"><b>2026.06.20</b><span>フルオートドライヤー納入事例を公開しました</span></a>
+<a class="wrail__item" href="news-detail.html"><b>2026.06.01</b><span>2027年度 採用情報を更新しました</span></a>
+</div>
+<span class="wrail__label">Kusatsu, Shiga</span></div>'''
 
 def breadcrumb(items):
     parts = []
@@ -123,54 +124,46 @@ def breadcrumb(items):
     return '<nav class="breadcrumb"><div class="inner">' + '<span>›</span>'.join(parts) + '</div></nav>'
 
 def footer(recruit=False):
-    # d_3 トーンのフッター（ブランド＋3カラム＋著作権バー）。TOPと統一。
+    # index_8トーンのワイヤー共通フッター（ブランド/サイトマップ/CONTACT箱＋採用バナー）
     return '''
-<footer class="foot">
-  <div class="foot__cols">
-    <div class="foot__brand">
-      <span class="foot__logo">近江度量衡株式会社</span>
-      <p class="foot__tagline"><b>OMISCALE CO.,LTD.</b>「いきる」をはかり、豊かな世界へ。</p>
-      <div class="foot__info">
-        〒525-0054　滋賀県草津市東矢倉三丁目11番70号<br>
-        TEL 077-562-7111／受付 平日 9:00〜17:00<br>
-        国内6拠点＋海外3拠点（上海・バンコク・韓国）
+<footer class="wfoot">
+  <div class="wfoot__grid">
+    <div class="wfoot__brand">
+      <p class="name">近江度量衡株式会社</p>
+      <p>〒525-0054<br>滋賀県草津市東矢倉三丁目11番70号<br>TEL 077-562-7111 ／ FAX 077-562-7116<br><a href="company.html#servicebase">Google map</a></p>
+    </div>
+    <nav class="wfoot__nav">
+      <div>
+        <a href="top.html">トップページ</a>
+        <a href="products.html">製品・技術</a>
+        <a class="sub" href="products-agricultural.html">農産物用計量システム</a>
+        <a class="sub" href="products-weighing.html">穀類用計量システム</a>
+        <a class="sub" href="products-industry.html">工業用計量システム</a>
+        <a class="sub" href="products-other.html">その他・特殊用途</a>
+        <a href="service.html">サービス案内</a>
+        <a href="delivery.html">納入実績</a>
       </div>
-    </div>
-    <div class="foot__col">
-      <h4>製品・技術</h4>
-      <ul>
-        <li><a href="products.html">製品・技術紹介</a></li>
-        <li><a href="products-agricultural.html">農産物用計量システム</a></li>
-        <li><a href="products-weighing.html">穀類用計量システム</a></li>
-        <li><a href="products-industry.html">工業用計量システム</a></li>
-        <li><a href="products-other.html">その他・特殊用途</a></li>
-        <li><a href="service.html">サービス案内</a></li>
-        <li><a href="delivery.html">納入実績</a></li>
-      </ul>
-    </div>
-    <div class="foot__col">
-      <h4>企業情報</h4>
-      <ul>
-        <li><a href="company.html">会社案内</a></li>
-        <li><a href="history.html">126年ヒストリー</a></li>
-        <li><a href="news.html">新着情報</a></li>
-        <li><a href="contact.html">お問い合わせ</a></li>
-        <li><a href="privacy.html">プライバシーポリシー</a></li>
-      </ul>
-    </div>
-    <div class="foot__col">
-      <h4>採用情報</h4>
-      <ul>
-        <li><a href="recruit.html">採用TOP</a></li>
-        <li><a href="recruit-interview.html">社員インタビュー</a></li>
-        <li><a href="recruit-news.html">採用ニュース</a></li>
-        <li><a href="recruit-jobs.html">募集要項</a></li>
-        <li><a href="recruit-jobs-graduate.html">新卒採用</a></li>
-        <li><a href="recruit-jobs-career.html">中途採用</a></li>
-      </ul>
+      <div>
+        <a href="company.html">会社案内</a>
+        <a href="history.html">126年ヒストリー</a>
+        <a href="news.html">新着情報</a>
+        <a href="recruit.html">採用情報</a>
+        <a href="contact.html">お問い合わせ</a>
+        <a href="privacy.html">プライバシーポリシー</a>
+      </div>
+    </nav>
+    <div class="wfoot__contact">
+      <span class="en">( Contact )</span>
+      <h3>お問い合わせ・ご相談</h3>
+      <p>お気軽にご相談ください。<br>お見積もり依頼も可能です。</p>
+      <a class="cbtn" href="contact.html">Contact Form <i class="ar">→</i></a>
     </div>
   </div>
-  <div class="foot__bar"><a href="privacy.html">Privacy Policy</a><span>© 2026 OMISCALE CO.,LTD. All Rights Reserved.</span></div>
+  <a class="wfoot__recruit" href="recruit.html">
+    <span class="rtxt"><span class="en">Recruitment 2027</span><h3>「いきる」の単位とは、なんだろう。</h3></span>
+    <span class="go">採用情報を見る →</span>
+  </a>
+  <div class="wfoot__bar"><span>OMISCALE CO.,LTD.</span><span>© 近江度量衡株式会社 ALL RIGHTS RESERVED.</span></div>
 </footer>'''
 
 def page(filename, title, body, active="", recruit=False, crumbs=None, overlay=False):
@@ -185,14 +178,16 @@ def page(filename, title, body, active="", recruit=False, crumbs=None, overlay=F
 <title>{title}</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Noto+Sans+JP:wght@400;500;700;900&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 {header(active, recruit, overlay)}
+<div class="wwrap">
 {bc}
 {body}
 {footer(recruit)}
+</div>
 <script src="_nav.js"></script>
 </body>
 </html>'''
@@ -283,11 +278,11 @@ top_body = '''
 </section>
 
 <!-- ⑦ RECRUITMENT -->
-<section class="section section--dark theme-recruit" style="background:#1a0d0d;">
+<section class="section section--dark theme-recruit" style="background:#111315;">
   <div class="container">
-    <p class="statement__en" style="color:#c98;">RECRUITMENT</p>
+    <p class="statement__en" style="color:#888;">RECRUITMENT</p>
     <h2 class="statement__main" style="text-align:left;color:#fff;">「いきる」の単位とは、なんだろう。</h2>
-    <p class="section-lead" style="color:#cbb;">地に足のついた仕事のリアル・職場環境・社員の声——飾らず正直に。あなたの確かな仕事で、豊かな未来を担う力になる。</p>
+    <p class="section-lead" style="color:#bbb;">地に足のついた仕事のリアル・職場環境・社員の声——飾らず正直に。あなたの確かな仕事で、豊かな未来を担う力になる。</p>
     <div class="entry-split" style="margin-top:40px;">
       <div class="entry-card"><div class="entry-card__label">NEW GRADUATE 新卒採用</div><div class="entry-card__copy">「未来を、ここからはかる。」</div><p class="entry-card__desc">理系・工学系だけじゃない。着実にものをつくる誠実さに共感できる人を求めています。</p><a class="btn btn--red" href="recruit-jobs-graduate.html" style="background:#111315;color:#fff;">新卒採用を見る</a></div>
       <div class="entry-card"><div class="entry-card__label">MID-CAREER 中途採用</div><div class="entry-card__copy">「培った経験を、126年の精度に加えてください。」</div><p class="entry-card__desc">年齢・業界不問。あなたの経験が、次の100年の基盤になる。</p><a class="btn btn--red" href="recruit-jobs-career.html" style="background:#111315;color:#fff;">中途採用を見る</a></div>
@@ -676,13 +671,53 @@ page("delivery.html","納入実績｜近江度量衡株式会社", delivery_body
 PAGES.append(("D","納入実績","/deliveryrecord/","delivery.html","corp",False))
 
 # ======================= E. 会社案内 =======================
+# --- サービス拠点データ（住所は現行サイト omiscale.co.jp/company/servicebase/ より転記・要クライアント確認） ---
+from urllib.parse import quote as _q
+
+BASES_HQ = [
+    ("本社／草津工場", "本社", "〒525-0054 滋賀県草津市東矢倉三丁目11番70号", "TEL 077-562-7111 ／ FAX 077-562-7116", "滋賀県草津市東矢倉3丁目11番70号", ""),
+]
+BASES_JP = [
+    ("東京営業所", "営業所", "〒101-0023 東京都千代田区神田松永町23番地 NC島商ビル7F", "TEL 03-3257-9231 ／ FAX 03-3257-9233", "東京都千代田区神田松永町23番地", ""),
+    ("札幌営業所", "営業所", "〒060-0807 北海道札幌市北区北7条西2丁目6番37 山京ビル1012号", "TEL 011-747-5321 ／ FAX 011-747-7146", "北海道札幌市北区北7条西2丁目6番37", "2026年8月移転予定 → 新住所へ差し替え"),
+    ("北海道営業所（旭川）", "営業所", "〒078-8251 北海道旭川市東旭川北1条6-146-7", "TEL 0166-74-7391 ／ FAX 0166-74-7392", "北海道旭川市東旭川北1条6-146-7", ""),
+    ("仙台出張所", "出張所", "〒981-1217 宮城県名取市美田園5丁目23-1 プランドール102号", "TEL 022-290-5671 ／ FAX 022-290-5672", "宮城県名取市美田園5丁目23-1", ""),
+    ("新潟出張所", "出張所", "〒950-0982 新潟県新潟市中央区堀之内南1丁目15番6号 日南ビル3階-1号", "TEL 025-243-7721 ／ FAX 025-243-7728", "新潟県新潟市中央区堀之内南1丁目15番6号", ""),
+    ("九州営業所（熊本）", "営業所", "〒860-0016 熊本県熊本市中央区山崎町66-7 熊本中央ビル2階", "TEL 096-356-1177 ／ FAX 096-356-1178", "熊本県熊本市中央区山崎町66-7", ""),
+]
+BASES_OV = [
+    ("近江度量衡 設備(上海)有限公司", "海外現地法人", "上海市閔行区莘建東路58弄緑地科技島2号 1310室（〒201100）", "TEL 0086-21-64136483 ／ FAX 0086-21-64136485", "上海市閔行区莘建東路58弄 緑地科技島2号", ""),
+    ("OMI WEIGHING MACHINE (THAILAND) CO.,LTD.", "海外現地法人", "90/43 16th Floor, Sathorn Thani Bldg 1, North Sathorn Road, Silom, Bangrak Bangkok 10500, Thailand", "TEL 0-2636-7702 ／ FAX 0-2636-7703", "Sathorn Thani Building 1, North Sathorn Road, Bangkok", ""),
+    ("WON SANG CO., LTD.（韓国）", "海外現地法人", "830, 122 LS-ro, Dongan-gu, Anyang-si, Gyeonggi-do, 14118, Republic of Korea", "TEL 0082-31-346-3430 ／ FAX 0082-31-346-3433", "122 LS-ro, Dongan-gu, Anyang-si, Gyeonggi-do, Korea", ""),
+]
+BASES_GROUP = [
+    ("株式会社テクノオーミ", "グループ会社", "〒525-0063 滋賀県草津市南山田町1081", "TEL 077-563-2011 ／ FAX 077-565-9777", "滋賀県草津市南山田町1081", "グループ会社として掲載するか要確認"),
+]
+
+def base_card(name, tag, addr, tel, mapq, note):
+    note_html = todo(note) if note else ""
+    ov = " base-card--ov" if tag == "海外現地法人" else ""
+    return f'''<div class="base-card{ov}">
+      <div class="base-card__info">
+        <p class="base-card__tag">{tag}</p>
+        <h3 class="base-card__name">{name}</h3>
+        <p class="base-card__addr">{addr}</p>
+        <p class="base-card__tel">{tel}</p>
+        {note_html}
+      </div>
+      <div class="base-card__map"><iframe src="https://maps.google.com/maps?q={_q(mapq)}&z=15&hl=ja&output=embed" loading="lazy" title="{name} 地図"></iframe></div>
+    </div>'''
+
+def base_cards(bases):
+    return '<div class="base-cards">' + "".join(base_card(*b) for b in bases) + '</div>'
+
 company_body = '''
 <header class="page-header"><div class="page-header__inner">
   <p class="page-header__meta">COMPANY</p>
   <h1 class="page-header__title">会社案内</h1>
 </div></header>
 <nav class="page-nav"><div class="inner">
-  <a href="#concept">企業理念</a><a href="#greeting">代表挨拶</a><a href="#servicebase">サービス拠点</a><a href="#clients">取引実績</a><a href="#profile">会社概要</a>
+  <a href="#concept">企業理念</a><a href="#greeting">代表挨拶</a><a href="#servicebase">サービス拠点</a><a href="#quality">品質・認証</a><a href="#profile">会社概要</a>
 </div></nav>
 
 <!-- ② 企業理念 -->
@@ -718,35 +753,51 @@ company_body = '''
   </div>
 </div></section>
 
-<!-- ⑤ サービス拠点 -->
+<!-- ⑤ サービス拠点（第8回決定：各拠点に住所を明記し、横にGoogleマップを併設） -->
 <section class="section" id="servicebase"><div class="container">
   <p class="section-meta">Service Base</p><h2 class="section-title">サービス拠点</h2>
-  <div class="basemap" style="margin-top:24px;">
-    <div>''' + ph('グローバル拠点マップ（国内6＋海外3）','','aspect-ratio:4/3') + '''</div>
-    <div class="base-list">
-      <div class="base-item"><span>本社</span>滋賀県（草津）</div>
-      <div class="base-item"><span>営業所</span>東京都</div>
-      <div class="base-item"><span>営業所</span>北海道</div>
-      <div class="base-item"><span>営業所</span>宮城県</div>
-      <div class="base-item"><span>営業所</span>新潟県</div>
-      <div class="base-item"><span>営業所</span>熊本県</div>
-      <div class="base-item base-item--ov"><span>海外</span>上海（中国）</div>
-      <div class="base-item base-item--ov"><span>海外</span>バンコク（タイ）</div>
-      <div class="base-item base-item--ov"><span>海外</span>韓国</div>
-    </div>
-  </div>
+  <p class="section-lead">本社（滋賀・草津）と国内6拠点＋海外3拠点のサービス網。各拠点の所在地はマップからご確認いただけます。</p>
+  <div style="margin-top:24px;">''' + ph('グローバル拠点マップ（国内6＋海外3 全体図）','','aspect-ratio:21/9') + '''</div>
+  <h3 class="base-group-title">本社</h3>
+  ''' + base_cards(BASES_HQ) + '''
+  <h3 class="base-group-title">国内拠点</h3>
+  ''' + base_cards(BASES_JP) + '''
+  <h3 class="base-group-title">海外拠点</h3>
+  ''' + base_cards(BASES_OV) + '''
+  <h3 class="base-group-title">グループ会社</h3>
+  ''' + base_cards(BASES_GROUP) + '''
+  <div class="cms-note" style="background:#fff7ec;border-left-color:#e0a030;">★ 各拠点の住所・TEL/FAXは現行サイトから転記。掲載内容（テクノオーミの掲載可否・札幌移転後の新住所を含む）はクライアント確認のうえ確定。''' + todo('拠点情報の最終確認') + '''</div>
 </div></section>
 
-<!-- ⑤b 取引実績（納入実績ページの方針に対応：社名は業種表記・元請け経由はエンドユーザー非掲載） -->
-<section class="section" id="clients"><div class="container">
-  <p class="section-meta">Track Record</p><h2 class="section-title">取引実績</h2>
-  <p class="section-lead">創業以来、農産・穀類・工業の各分野で全国の企業・団体にご採用いただいています。（分野別・順不同）</p>
-  <div class="grid-3" style="margin-top:24px;">
-    <div class="value-item"><div class="value-item__title" style="font-size:16px;">農産・食品</div><p class="value-item__body">全国の農業協同組合（JA）・選果場運営団体／青果市場／食品加工メーカー ほか</p></div>
-    <div class="value-item"><div class="value-item__title" style="font-size:16px;">穀類・流通</div><p class="value-item__body">米麦カントリーエレベーター運営各社／ライスセンター／穀物商社・倉庫会社 ほか</p></div>
-    <div class="value-item"><div class="value-item__title" style="font-size:16px;">工業・プラント</div><p class="value-item__body">タイヤ・ゴム／ガラス・鉄鋼・化学プラント／プラントエンジニアリング元請各社 ほか</p></div>
+<!-- ⑤b 品質・認証・取り組み（現行サイト「品質について／地域未来牽引企業／SDGs」を転記） -->
+<section class="section" id="quality"><div class="container">
+  <p class="section-meta">Quality &amp; Initiatives</p><h2 class="section-title">品質・認証・取り組み</h2>
+
+  <div class="grid-2" style="margin-top:36px;align-items:center;gap:48px;">
+    <div>
+      <h3 style="font-size:20px;font-weight:700;margin-bottom:14px;">品質について — ISO9001</h3>
+      <p style="font-size:14px;line-height:2.05;color:#333;">近江度量衡は2000年2月、ISO（国際標準化機構）が定めた国際的な品質保証規格「ISO9001」の認証を取得しました。ISO9001は、製品の受注・開発・設計・生産・保管出荷等の各過程の管理体制を評価する品質保証規格であり、ISOが定める厳正な審査をクリアした企業だけに与えられるものです。認証取得により当社の企業品質が国際的に認められ、長年にわたって培ってきた品質追求の姿勢が評価されたものと言えます。これを機に、さらに高い信頼をいただける企業を目指して努力を重ねてまいります。</p>
+    </div>
+    <div>''' + ph('ISO9001 マネジメントシステム登録証（JQA・現行サイトの画像を流用）','','aspect-ratio:16/10') + '''</div>
   </div>
-  <div class="cms-note" style="background:#fff7ec;border-left-color:#e0a030;">★ 掲載する取引先名はクライアント確認のうえ決定。元請け（プラントメーカー等）経由の案件はエンドユーザー名を伏せ、業種表記とする。ロゴ掲載可否も併せて確認。''' + todo('掲載可能な取引先名・ロゴを確認') + '''</div>
+
+  <div class="grid-2" style="margin-top:56px;align-items:center;gap:48px;">
+    <div>''' + ph('地域未来牽引企業 ロゴ（現行サイトの画像を流用）','','aspect-ratio:16/10') + '''</div>
+    <div>
+      <h3 style="font-size:20px;font-weight:700;margin-bottom:14px;">地域未来牽引企業</h3>
+      <p style="font-size:14px;line-height:2.05;color:#333;">「地域未来牽引企業」は、地域経済への影響力が大きく、成長性が見込まれるとともに、地域経済のバリューチェーンの要を担う、地域経済牽引事業の中心的な担い手候補である企業を経済産業省が選定するものです。この選定によって地域経済の活性化を後押しする中核企業として認知され、今後の成長についてさまざまな支援が期待できます。近江度量衡は、これからも地域経済の活性化や地域の特性・強みを活かす企業として、より一層邁進してまいります。</p>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:56px;align-items:center;gap:48px;">
+    <div>
+      <h3 style="font-size:20px;font-weight:700;margin-bottom:14px;">SDGsへの取り組み</h3>
+      <p style="font-size:14px;line-height:2.05;color:#333;">SDGs（持続可能な開発目標）とは、2030年に向けて世界が合意した「持続可能な開発目標」です。近江度量衡株式会社は、高度技術サービスの提供を通じて、SDGs（持続可能な開発目標）に取り組んでいきます。</p>
+    </div>
+    <div>''' + ph('SUSTAINABLE DEVELOPMENT GOALS ロゴ','','aspect-ratio:16/10') + '''</div>
+  </div>
+
+  <div class="cms-note">◯ 現行サイト「品質について／地域未来牽引企業／SDGsへの取り組み」の文章を転記（表記のみ整え）。ISO登録証・各ロゴ画像は現行サイトから流用。</div>
 </div></section>
 
 <!-- ⑥ 会社概要 -->
@@ -817,6 +868,8 @@ def history_eras():
 
 # 126年ヒストリー：奥行きトンネル型の透視スクロール（遠い過去→手前へ迫る／時代を進むごとに通り抜ける）
 _hc_panels = ""
+_hc_photos = ""
+_hc_years = []
 _hc_n = 0
 for _era, _intro, _rows in HISTORY:
     for _e, _n, _h, _b, _asset in _rows:
@@ -826,7 +879,19 @@ for _era, _intro, _rows in HISTORY:
             '<h3 class="hc-panel__year"><small>' + _e + '</small>' + _n + '</h3>'
             '<p class="hc-panel__title">' + _h + '</p>'
             '<p class="hc-panel__desc">' + _b + '</p>' + _photo + '</article>')
+        _lbl = ('背景写真：' + _asset) if _asset else ('背景イメージ：' + _era + '／' + _n + ' 年代の風景・資料写真')
+        _hc_photos += '<div class="hc-photo"><span>' + _lbl + '</span></div>'
+        _hc_years.append((_n, _era))
         _hc_n += 1
+
+# 下部プログレスバーの年号目盛り（時代の切替は強調ティック）
+_hc_ticks = ""
+_prev_era = None
+for _i, (_yr, _er) in enumerate(_hc_years):
+    _pos = (_i / (len(_hc_years) - 1)) * 100 if len(_hc_years) > 1 else 0
+    _cls = 'hc-tick' + (' --era' if _er != _prev_era else '')
+    _hc_ticks += '<span class="' + _cls + '" style="left:' + ('%.2f' % _pos) + '%"><b>' + _yr + '</b></span>'
+    _prev_era = _er
 
 HC_STYLE = '''<style>
 .hc-scene{position:relative;background:var(--c-black);color:#fff;}
@@ -834,29 +899,55 @@ HC_STYLE = '''<style>
 .hc-bg{position:absolute;inset:0;pointer-events:none;background:
   radial-gradient(56% 52% at 66% 40%, rgba(255,255,255,.07), rgba(0,0,0,0) 70%),
   repeating-linear-gradient(0deg, rgba(255,255,255,.028) 0 1px, transparent 1px 3px);}
+/* 背景写真（スライドごとにクロスフェード切替・ワイヤーではダミー枠） */
+.hc-photos{position:absolute;inset:0;pointer-events:none;}
+.hc-photo{position:absolute;inset:0;opacity:0;transform:scale(1.06);
+  transition:opacity 1s ease,transform 1.6s ease;
+  background:repeating-linear-gradient(45deg, rgba(255,255,255,.045) 0 2px, transparent 2px 14px);}
+.hc-photo span{position:absolute;left:50%;top:12%;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--font-en);font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.4);
+  border:1px dashed rgba(255,255,255,.25);padding:6px 14px;}
+.hc-photo.is-on{opacity:.5;transform:scale(1);}
+.hc-photo::after{content:'';position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 55%, rgba(0,0,0,0) 30%, rgba(17,19,21,.8) 100%);}
 .hc-stage{position:absolute;inset:0;transform-style:preserve-3d;}
-.hc-panel{position:absolute;left:50%;top:50%;width:min(660px,86vw);transform:translate(-50%,-50%);
-  will-change:transform,opacity;text-align:center;padding:40px 40px 44px;
+.hc-panel{position:absolute;left:50%;top:50%;width:min(880px,92vw);transform:translate(-50%,-50%);
+  will-change:transform,opacity;text-align:center;padding:52px 56px 56px;
   border:1px solid rgba(255,255,255,.28);background:rgba(17,19,21,.66);}
 .hc-panel.is-active{border-color:rgba(255,255,255,.85);}
 .hc-panel__era{font-family:var(--font-en);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:var(--c-muted);}
-.hc-panel__year{font-family:var(--font-mn);font-weight:700;font-size:clamp(46px,8.4vw,96px);line-height:1;letter-spacing:.02em;margin-top:6px;}
-.hc-panel__year small{display:block;font-family:var(--font-en);font-weight:500;font-size:12px;letter-spacing:.22em;color:var(--c-muted);margin-bottom:8px;}
-.hc-panel__title{font-family:var(--font-mn);font-weight:700;font-size:clamp(17px,2vw,24px);margin-top:16px;line-height:1.55;}
-.hc-panel__desc{font-family:var(--font-ja);font-size:13px;line-height:2;color:rgba(255,255,255,.78);margin:14px auto 0;max-width:500px;}
+.hc-panel__year{font-family:var(--font-mn);font-weight:600;font-size:clamp(20px,2.4vw,30px);line-height:1;letter-spacing:.06em;margin-top:12px;color:rgba(255,255,255,.85);}
+.hc-panel__year small{display:inline;font-family:var(--font-en);font-weight:500;font-size:11px;letter-spacing:.22em;color:var(--c-muted);margin-right:12px;}
+.hc-panel__title{font-family:var(--font-mn);font-weight:700;font-size:clamp(26px,3.4vw,46px);margin-top:20px;line-height:1.5;letter-spacing:.03em;}
+.hc-panel__desc{font-family:var(--font-ja);font-size:14px;line-height:2.1;color:rgba(255,255,255,.8);margin:20px auto 0;max-width:680px;}
 .hc-panel__photo{display:inline-block;margin-top:16px;font-family:var(--font-en);font-size:10px;letter-spacing:.14em;color:var(--c-muted);border:1px dashed rgba(255,255,255,.28);padding:7px 12px;}
 .hc-hud{position:absolute;left:40px;top:96px;z-index:6;pointer-events:none;}
 .hc-hud__era{font-family:var(--font-en);font-size:11px;letter-spacing:.26em;text-transform:uppercase;color:rgba(255,255,255,.55);}
-.hc-progress{position:absolute;left:40px;right:40px;bottom:52px;height:1px;background:rgba(255,255,255,.18);z-index:6;}
+.hc-progress{position:absolute;left:40px;right:40px;bottom:64px;height:1px;background:rgba(255,255,255,.18);z-index:6;}
 .hc-progress__fill{position:absolute;left:0;top:0;height:100%;width:0;background:#fff;}
-.hc-progress::before{content:"1900";position:absolute;left:0;top:10px;font:500 10px/1 var(--font-en);letter-spacing:.16em;color:var(--c-muted);}
-.hc-progress::after{content:"2026";position:absolute;right:0;top:10px;font:500 10px/1 var(--font-en);letter-spacing:.16em;color:var(--c-muted);}
-.hc-scroll{position:absolute;left:50%;bottom:72px;transform:translateX(-50%);z-index:6;font-family:var(--font-en);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.5);}
-@media(max-width:640px){.hc-hud{left:20px;top:76px;}.hc-progress{left:20px;right:20px;}.hc-panel{padding:28px 22px;}}
+/* 年号目盛り：全スライド分のティック＋年号ラベル、時代の頭は強調 */
+.hc-tick{position:absolute;top:-3px;width:1px;height:7px;background:rgba(255,255,255,.3);transform:translateX(-.5px);}
+.hc-tick.--era{top:-5px;height:11px;background:rgba(255,255,255,.55);}
+.hc-tick b{position:absolute;top:11px;left:50%;transform:translateX(-50%);font:500 9px/1 var(--font-en);letter-spacing:.1em;color:rgba(255,255,255,.38);font-weight:500;white-space:nowrap;}
+.hc-tick.--era b{color:rgba(255,255,255,.6);}
+.hc-tick.is-on{background:#fff;top:-6px;height:13px;}
+.hc-tick.is-on b{color:#fff;font-weight:700;top:13px;}
+.hc-scroll{position:absolute;left:50%;bottom:96px;transform:translateX(-50%);z-index:6;font-family:var(--font-en);font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:rgba(255,255,255,.5);}
+/* ── SP：縦長ボックスで1枚を主役に ── */
+@media(max-width:640px){
+  .hc-hud{left:20px;top:76px;}
+  .hc-progress{left:20px;right:20px;bottom:44px;}
+  .hc-tick b{display:none;}
+  .hc-tick.is-on b,.hc-tick.--era b{display:block;}
+  .hc-tick.--era:not(.is-on) b{color:rgba(255,255,255,.3);}
+  .hc-panel{width:86vw;min-height:64vh;padding:40px 24px;display:flex;flex-direction:column;justify-content:center;}
+  .hc-panel__title{font-size:clamp(22px,6.6vw,30px);line-height:1.5;}
+  .hc-panel__desc{font-size:12px;line-height:2;}
+  .hc-panel__photo{margin-top:20px;}
+}
 /* reduced-motion フォールバック：通常の縦積み */
 .hc--static .hc-pin{position:static;height:auto;overflow:visible;perspective:none;padding:60px 0;}
 .hc--static .hc-stage{position:static;transform:none;}
-.hc--static .hc-bg,.hc--static .hc-progress,.hc--static .hc-scroll,.hc--static .hc-hud{display:none;}
+.hc--static .hc-bg,.hc--static .hc-photos,.hc--static .hc-progress,.hc--static .hc-scroll,.hc--static .hc-hud{display:none;}
 .hc--static .hc-panel{position:relative;left:auto;top:auto;transform:none!important;opacity:1!important;width:min(680px,90vw);margin:0 auto 18px;}
 </style>'''
 
@@ -864,14 +955,16 @@ HC_SCRIPT = '''<script>
 (function(){
   var scene=document.querySelector('.hc-scene'); if(!scene) return;
   var panels=[].slice.call(scene.querySelectorAll('.hc-panel'));
+  var photos=[].slice.call(scene.querySelectorAll('.hc-photo'));
+  var ticks=[].slice.call(scene.querySelectorAll('.hc-tick'));
   var fill=scene.querySelector('.hc-progress__fill');
   var eraHud=scene.querySelector('.hc-hud__era');
   var scroll=scene.querySelector('.hc-scroll');
   if(!panels.length) return;
   if(matchMedia('(prefers-reduced-motion:reduce)').matches){ scene.classList.add('hc--static'); return; }
-  var N=panels.length, STEP=720, PMAX=720;
+  var N=panels.length, STEP=900, PMAX=900;
   function cl(v,a,b){a=(a==null?0:a);b=(b==null?1:b);return v<a?a:(v>b?b:v);}
-  var ticking=false;
+  var ticking=false, lastActive=-1;
   function upd(){
     var vh=window.innerHeight, max=scene.offsetHeight-vh;
     var r=scene.getBoundingClientRect();
@@ -880,14 +973,21 @@ HC_SCRIPT = '''<script>
     for(var i=0;i<N;i++){
       var el=panels[i], d=i-pf, z=-d*STEP;
       if(z>PMAX) z=PMAX;
-      var x = d*210;                                // 右奥→左手前の動線：未来=右、手前=左
-      var y = -d*54;                                // 未来=奥(上)、手前=前(下)
-      var op = d>=0 ? cl(1-d/2.6) : cl(1+d/1.0);    // 手前1〜2枚だけを明瞭に
+      var x = d*470;                                // 右奥→左手前の動線：未来=右、手前=左
+      var y = -d*80;                                // 未来=奥(上)、手前=前(下)
+      var op = d>=0 ? cl(1-d/0.95) : cl(1+d/0.7);   // アクティブ1枚だけを明瞭に（次スライドは読了後に現れる）
       el.style.transform='translate(-50%,-50%) translate('+x+'px,'+y+'px) translateZ('+z+'px)';
       el.style.opacity=String(op);
       el.style.zIndex=String(2000-Math.round(Math.abs(d)*12));
       var act=(i===active);
       if(act!==el._act){ el.classList.toggle('is-active',act); el._act=act; }
+    }
+    if(active!==lastActive){
+      if(photos[lastActive]) photos[lastActive].classList.remove('is-on');
+      if(photos[active]) photos[active].classList.add('is-on');
+      if(ticks[lastActive]) ticks[lastActive].classList.remove('is-on');
+      if(ticks[active]) ticks[active].classList.add('is-on');
+      lastActive=active;
     }
     if(fill) fill.style.width=(p*100)+'%';
     if(eraHud){ var ap=panels[active]; if(ap) eraHud.textContent=ap.getAttribute('data-era'); }
@@ -907,12 +1007,13 @@ history_body = ('''
   <p class="page-header__lead">1900年、草津の小さな工房から始まった物語。時代とともに移りゆく景色を、ひとつずつ辿ってください。</p>
 </div></header>
 ''' + HC_STYLE + '''
-<section class="hc-scene" style="height:calc(46vh * ''' + str(_hc_n) + ''' + 70vh);">
+<section class="hc-scene" style="height:calc(115vh * ''' + str(_hc_n) + ''' + 70vh);">
   <div class="hc-pin">
     <div class="hc-bg"></div>
+    <div class="hc-photos">''' + _hc_photos + '''</div>
     <div class="hc-hud"><p class="hc-hud__era"></p></div>
     <div class="hc-stage">''' + _hc_panels + '''</div>
-    <div class="hc-progress"><span class="hc-progress__fill"></span></div>
+    <div class="hc-progress"><span class="hc-progress__fill"></span>''' + _hc_ticks + '''</div>
     <div class="hc-scroll">Scroll — 1900 → 2026</div>
   </div>
 </section>
@@ -1010,21 +1111,108 @@ PAGES.append(("I","新着情報","/news/","news.html","corp",True))
 
 # I1 記事詳細
 news_detail_body = '''
+<style>
+/* ── 記事本文テンプレート（news-detail 専用） ── */
+.art{font-size:15px;line-height:2;color:#333;}
+.art>*+*{margin-top:20px;}
+.el-tag{display:block;width:fit-content;font-family:var(--font-en);font-size:10px;letter-spacing:.16em;color:#999;border:1px dashed #bbb;padding:2px 10px;margin:44px 0 12px;}
+.art .el-tag:first-child{margin-top:0;}
+.art-h2{font-size:22px;font-weight:700;line-height:1.6;letter-spacing:.03em;border-left:4px solid #111315;padding-left:14px;margin-top:8px;}
+.art-h3{font-size:17px;font-weight:700;line-height:1.6;border-bottom:1px solid var(--c-border);padding-bottom:8px;margin-top:8px;}
+.art-toc{border:1px solid var(--c-border);background:#f6f6f6;padding:24px 28px;}
+.art-toc__label{font-family:var(--font-en);font-size:11px;letter-spacing:.26em;color:#888;margin-bottom:10px;}
+.art-toc ol{margin:0;padding-left:20px;}
+.art-toc li{padding:3px 0;}
+.art-toc a{color:#333;text-decoration:underline;text-underline-offset:3px;}
+.art-ul{padding-left:2px;list-style:none;}
+.art-ul li{padding:3px 0 3px 18px;position:relative;}
+.art-ul li::before{content:'';position:absolute;left:0;top:14px;width:8px;height:1px;background:#111315;}
+.art-ol{padding-left:22px;}
+.art-ol li{padding:3px 0;}
+.art-quote{border-left:3px solid #ccc;background:#f6f6f6;padding:20px 24px;color:#555;position:relative;}
+.art-quote::before{content:'“';font-family:var(--font-en);font-size:34px;line-height:1;color:#bbb;display:block;margin-bottom:4px;}
+.art-quote cite{display:block;font-style:normal;font-size:12px;color:#999;margin-top:8px;}
+.art-box{border:1px solid #111315;padding:22px 26px;}
+.art-box__title{font-weight:700;font-size:14px;letter-spacing:.06em;margin-bottom:6px;}
+.art-fig{margin:0;}
+.art-fig figcaption{font-size:12px;color:#888;margin-top:8px;}
+.art-video{position:relative;}
+.art-video::after{content:'▶';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;background:rgba(17,19,21,.28);pointer-events:none;}
+.art-slider{position:relative;}
+.art-slider__arrow{position:absolute;top:50%;transform:translateY(-50%);width:40px;height:40px;border:1px solid #111315;background:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;z-index:2;}
+.art-slider__arrow.--prev{left:-14px;}
+.art-slider__arrow.--next{right:-14px;}
+.art-slider__dots{display:flex;justify-content:center;gap:8px;margin-top:12px;}
+.art-slider__dots i{width:8px;height:8px;border-radius:50%;background:#ccc;}
+.art-slider__dots i.--on{background:#111315;}
+</style>
 <section class="section"><div class="container" style="max-width:760px;">
   <p style="font-size:12px;color:#888;letter-spacing:.06em;">2026.08.13　<span style="border:1px solid var(--c-border);padding:1px 8px;">お知らせ</span></p>
   <h1 style="font-size:30px;font-weight:700;line-height:1.5;margin:16px 0 8px;">札幌営業所を移転しました ''' + cms('CMS更新') + '''</h1>
   <div style="margin:24px 0;">''' + ph('記事メイン画像（任意）','','aspect-ratio:16/9') + '''</div>
-  <p style="font-size:15px;line-height:2;color:#333;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇''' + todo('記事ごとに入力') + '''</p>
 
-  <!-- 動画埋め込み枠（任意） -->
-  <div style="margin:28px 0;">''' + ph('動画埋め込み枠（YouTube／Vimeo 等・任意）','','aspect-ratio:16/9') + '''</div>
+  <div class="art">
+    <p style="font-size:12px;color:#999;">※ 以下は記事本文で使える要素の一覧（テンプレート）です。CMSのリッチエディタから各スタイルを選んで組み合わせます。''' + todo('要素の過不足を確認') + '''</p>
 
-  <p style="font-size:15px;line-height:2;color:#333;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</p>
+    <span class="el-tag">目次（自動生成）</span>
+    <div class="art-toc">
+      <p class="art-toc__label">CONTENTS</p>
+      <ol>
+        <li><a href="#sec1">大見出しが入ります（H2）</a>
+          <ol style="padding-left:18px;"><li><a href="#sec2-1">小見出しが入ります（H3）</a></li></ol>
+        </li>
+      </ol>
+    </div>
 
-  <!-- 画像ギャラリー枠（任意） -->
-  <h2 style="font-size:16px;font-weight:700;margin:32px 0 12px;">ギャラリー</h2>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
-    ''' + ph('ギャラリー①','','aspect-ratio:1') + ph('ギャラリー②','','aspect-ratio:1') + ph('ギャラリー③','','aspect-ratio:1') + ph('ギャラリー④','','aspect-ratio:1') + '''
+    <span class="el-tag">大見出し H2</span>
+    <h2 class="art-h2" id="sec1">大見出しが入ります。記事の章タイトルです</h2>
+
+    <span class="el-tag">本文</span>
+    <p>本文テキストが入ります。〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。太字は<strong>このように強調</strong>、リンクは<a href="#" style="color:#333;text-decoration:underline;text-underline-offset:3px;">テキストリンク</a>で表示されます。</p>
+
+    <span class="el-tag">小見出し H3</span>
+    <h3 class="art-h3" id="sec2-1">小見出しが入ります。章の中の節タイトルです</h3>
+    <p>本文テキストが入ります。〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。</p>
+
+    <span class="el-tag">リスト（箇条書き／番号付き）</span>
+    <ul class="art-ul">
+      <li>箇条書きリストの項目が入ります</li>
+      <li>箇条書きリストの項目が入ります</li>
+      <li>箇条書きリストの項目が入ります</li>
+    </ul>
+    <ol class="art-ol">
+      <li>番号付きリストの項目が入ります</li>
+      <li>番号付きリストの項目が入ります</li>
+    </ol>
+
+    <span class="el-tag">引用</span>
+    <blockquote class="art-quote">
+      引用文が入ります。〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。
+      <cite>― 出典：〇〇〇〇（URL）</cite>
+    </blockquote>
+
+    <span class="el-tag">ボックス（囲み）</span>
+    <div class="art-box">
+      <p class="art-box__title">ポイント・補足タイトル</p>
+      <p style="margin:0;">囲みボックスの本文が入ります。お知らせの中で特に伝えたい情報（営業時間・注意事項など）に使用します。</p>
+    </div>
+
+    <span class="el-tag">画像＋キャプション</span>
+    <figure class="art-fig">
+      ''' + ph('記事内画像','','aspect-ratio:16/9') + '''
+      <figcaption>画像のキャプションが入ります（撮影場所・説明など）</figcaption>
+    </figure>
+
+    <span class="el-tag">YouTube動画</span>
+    <div class="art-video">''' + ph('YouTube動画（URL貼付で自動埋込・16:9）','','aspect-ratio:16/9') + '''</div>
+
+    <span class="el-tag">ギャラリースライド</span>
+    <div class="art-slider">
+      <div class="art-slider__arrow --prev">‹</div>
+      <div class="art-slider__arrow --next">›</div>
+      ''' + ph('ギャラリー画像 1/4（スライド切替）','','aspect-ratio:16/9') + '''
+      <div class="art-slider__dots"><i class="--on"></i><i></i><i></i><i></i></div>
+    </div>
   </div>
 </div></section>
 <section class="section section--grey"><div class="container">
@@ -1104,75 +1292,175 @@ page("privacy.html","プライバシーポリシー｜近江度量衡株式会�
 PAGES.append(("K","プライバシーポリシー","/privacy/","privacy.html","corp",False))
 
 # ======================= G. 採用TOP =======================
-recruit_body = '''
-<section class="fv">
-  <div class="fv__bg">''' + ph('採用キービジュアル（現場・社員）','','height:100%') + '''</div>
-  <div class="fv__content">
-    <p class="fv__eyebrow">OMISCALE RECRUIT 2027</p>
-    <h1 class="fv__title"><span>「いきる」の単位とは、</span><span>なんだろう。</span></h1>
-    <p class="fv__sub">「働く人を大切にする」という理念のもと、あなたの確かな仕事で、豊かな未来を担う力になる。</p>
-    <div class="fv__cta"><a class="btn btn--red" href="recruit-jobs.html" style="background:#111315;color:#fff;">募集要項を見る</a><a class="btn btn--white" href="recruit-interview.html">社員インタビュー</a></div>
+RCT_STYLE = """<style>
+/* ── 採用トップ：有機的レイアウト ── */
+.rct-fv{padding:72px 5vw 0;overflow:hidden;}
+.rct-fv__eyebrow{font-family:var(--font-en);font-size:12px;letter-spacing:.3em;color:var(--c-muted);}
+.rct-fv__title{font-size:clamp(38px,6.4vw,86px);font-weight:900;line-height:1.4;letter-spacing:.04em;margin-top:18px;position:relative;z-index:2;}
+.rct-fv__title span{display:block;}
+.rct-fv__title .idnt{margin-left:1.4em;}
+.rct-fv__grid{display:grid;grid-template-columns:5fr 7fr;gap:40px;align-items:start;margin-top:28px;}
+.rct-fv__main{margin-top:-90px;}   /* タイトルに食い込ませる（有機的な重なり） */
+.rct-fv__sub{padding-top:34px;display:flex;flex-direction:column;gap:28px;}
+.rct-fv__sub p{font-size:14.5px;line-height:2.2;max-width:400px;}
+.rct-fv__subphoto{width:72%;}
+.rct-marq{overflow:hidden;border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border);padding:16px 0;margin-top:64px;background:#fff;}
+.rct-marq__in{display:flex;gap:56px;white-space:nowrap;width:max-content;animation:rctmarq 28s linear infinite;}
+.rct-marq__in span{font-family:var(--font-en);font-size:13px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;color:var(--c-muted);}
+@keyframes rctmarq{to{transform:translateX(-50%);}}
+.rct-wm{font-family:var(--font-en);font-weight:700;font-size:clamp(58px,9vw,128px);line-height:1;letter-spacing:.02em;color:#f0f0f0;user-select:none;white-space:nowrap;}
+.section--dark .rct-wm,.section--grey .rct-wm{color:rgba(255,255,255,.05);}
+.section--grey .rct-wm{color:#e7e7e7;}
+.rct-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.rct-menu a{display:flex;flex-direction:column;border:1px solid var(--c-border);background:#fff;transition:opacity .2s;}
+.rct-menu a:hover{opacity:.75;}
+.rct-menu a .ph{aspect-ratio:16/10;}
+.rct-menu a:first-child{grid-row:span 2;}
+.rct-menu a:first-child .ph{flex:1;aspect-ratio:auto;min-height:300px;}
+.rct-menu__bar{display:flex;align-items:baseline;gap:14px;padding:18px 20px;}
+.rct-menu__no{font-family:var(--font-en);font-size:11px;font-weight:600;letter-spacing:.18em;color:var(--c-muted);}
+.rct-menu__ttl{font-size:15px;font-weight:700;}
+.rct-menu__bar i{margin-left:auto;font-style:normal;}
+.rct-vision{display:grid;grid-template-columns:6fr 5fr;gap:56px;align-items:start;}
+.rct-vision__photos{display:flex;flex-direction:column;align-items:flex-end;}
+.rct-vision__p1{width:100%;}
+.rct-vision__p2{width:56%;margin-top:-18%;margin-right:58%;}  /* ずらして重ねる */
+.rct-num{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.14);}
+.rct-num__cell{background:var(--c-dark);padding:34px 26px;}
+.rct-num__cell.--wide{grid-column:span 2;}
+.rct-num__val{font-family:var(--font-en);font-weight:600;font-size:clamp(40px,4.6vw,72px);line-height:1;letter-spacing:.02em;}
+.rct-num__cell.--wide .rct-num__val{font-size:clamp(64px,8vw,120px);}
+.rct-num__val small{font-size:.38em;margin-left:6px;letter-spacing:.06em;}
+.rct-num__label{font-size:12px;color:rgba(255,255,255,.6);margin-top:12px;}
+.rct-people{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;align-items:start;}
+.rct-people .interview-card:nth-child(2){margin-top:64px;}
+.rct-people .interview-card:nth-child(3){margin-top:128px;}
+.rct-welf{display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:start;}
+.rct-welf__list{border-top:1px solid var(--c-border);}
+.rct-welf__row{display:flex;align-items:baseline;gap:22px;padding:20px 4px;border-bottom:1px solid var(--c-border);}
+.rct-welf__no{font-family:var(--font-en);font-size:11px;font-weight:600;letter-spacing:.16em;color:var(--c-muted);flex:0 0 34px;}
+.rct-welf__ttl{font-size:15px;font-weight:700;flex:0 0 15em;}
+.rct-welf__desc{font-size:12.5px;color:var(--c-mid);line-height:1.8;}
+@media(max-width:760px){
+  .rct-fv__grid{grid-template-columns:1fr;gap:24px;}
+  .rct-fv__main{margin-top:0;order:-1;}
+  .rct-fv__subphoto{width:60%;}
+  .rct-menu{grid-template-columns:1fr 1fr;}
+  .rct-menu a:first-child{grid-row:auto;grid-column:span 2;}
+  .rct-menu a:first-child .ph{aspect-ratio:16/10;min-height:0;}
+  .rct-vision{grid-template-columns:1fr;gap:32px;}
+  .rct-num{grid-template-columns:1fr 1fr;}
+  .rct-people{grid-template-columns:1fr;gap:24px;}
+  .rct-people .interview-card:nth-child(2),.rct-people .interview-card:nth-child(3){margin-top:0;}
+  .rct-welf{grid-template-columns:1fr;gap:28px;}
+  .rct-welf__ttl{flex:0 0 auto;}
+  .rct-welf__row{flex-wrap:wrap;}
+}
+</style>"""
+
+_marq_items = "".join('<span>OMISCALE RECRUIT 2027</span><span>—</span><span>WE MEASURE THE VALUE OF LIVING</span><span>—</span>' for _ in range(4))
+
+recruit_body = (RCT_STYLE + '''
+<!-- ① FV：大タイポ×写真の重なり -->
+<section class="rct-fv">
+  <p class="rct-fv__eyebrow">OMISCALE RECRUIT 2027</p>
+  <h1 class="rct-fv__title"><span>「いきる」の単位とは、</span><span class="idnt">なんだろう。</span></h1>
+  <div class="rct-fv__grid">
+    <div class="rct-fv__sub">
+      <p>「働く人を大切にする」という理念のもと、あなたの確かな仕事で、豊かな未来を担う力になる。</p>
+      <div class="fv__cta" style="position:static;"><a class="btn btn--red" href="recruit-jobs.html" style="background:#111315;color:#fff;">募集要項を見る</a><a class="btn btn--outline" href="recruit-interview.html">社員インタビュー</a></div>
+      <div class="rct-fv__subphoto">''' + ph('サブ写真：作業の手元・道具','','aspect-ratio:4/5') + '''</div>
+    </div>
+    <div class="rct-fv__main">''' + ph('採用キービジュアル（現場・社員／動画可）','','aspect-ratio:4/3') + '''</div>
   </div>
+  <div class="rct-marq"><div class="rct-marq__in">''' + _marq_items + '''</div></div>
 </section>
-<nav class="page-nav"><div class="inner">
-  <a href="#vision">ビジョン</a><a href="#numbers">数字で見る</a><a href="recruit-interview.html">社員インタビュー</a><a href="#welfare">福利厚生</a><a href="#career">キャリアパス</a><a href="recruit-jobs.html">募集要項</a>
-</div></nav>
 
-<!-- ② VISION -->
-<section class="section" id="vision"><div class="container statement">
-  <p class="statement__en">VISION &amp; VALUES</p>
-  <h2 class="statement__main">「いきる」をはかり、豊かな世界へ。</h2>
-  <p class="statement__body">「技術」と「誇り」を礎に、日本から世界へ、計量という仕事で社会を豊かにし続けること。それが、近江度量衡の使命です。採用においても「働く人を大切にする」という理念を核に、長く誇りを持って働ける環境を目指しています。</p>
-  <div class="grid-3" style="margin-top:40px;">
-    <div class="pillar"><div class="pillar__title">技術</div></div>
-    <div class="pillar"><div class="pillar__title">誇り</div></div>
-    <div class="pillar"><div class="pillar__title">グローバル</div></div>
-  </div>
-  <p style="font-size:13px;margin-top:24px;"><a href="history.html" style="border-bottom:1px solid #999;">126年ヒストリーを見る →</a></p>
-</div></section>
-
-<!-- ③ NUMBERS -->
-<section class="section section--dark" id="numbers"><div class="container">
-  <p class="statement__en" style="text-align:center;">数字で見る近江度量衡</p>
-  <div class="numbers-grid numbers-grid--dark" style="grid-template-columns:repeat(4,1fr);margin-top:24px;">
-    <div class="number-card"><div class="number-card__num">126<span class="number-card__unit">年</span></div><div class="number-card__label">創業からの歴史</div></div>
-    <div class="number-card"><div class="number-card__num">約150<span class="number-card__unit">名</span></div><div class="number-card__label">従業員数 ''' + todo('要確認') + '''</div></div>
-    <div class="number-card"><div class="number-card__num">2,000<span class="number-card__unit">+</span></div><div class="number-card__label">累計納入施設数</div></div>
-    <div class="number-card"><div class="number-card__num">9<span class="number-card__unit">拠点</span></div><div class="number-card__label">国内6＋海外3</div></div>
-    <div class="number-card"><div class="number-card__num">〇〇<span class="number-card__unit">%</span></div><div class="number-card__label">新卒3年定着率 ''' + todo('数値提供待ち') + '''</div></div>
-    <div class="number-card"><div class="number-card__num">〇〇<span class="number-card__unit">歳</span></div><div class="number-card__label">平均年齢 ''' + todo('数値提供待ち') + '''</div></div>
-    <div class="number-card"><div class="number-card__num">ISO<span class="number-card__unit">9001</span></div><div class="number-card__label">品質認証取得</div></div>
-    <div class="number-card"><div class="number-card__num">3<span class="number-card__unit">カ国</span></div><div class="number-card__label">海外展開</div></div>
-  </div>
-</div></section>
-
-<!-- ④ PEOPLE -->
+<!-- ② コンテンツメニュー（写真モザイク） -->
 <section class="section"><div class="container">
-  <p class="section-meta">People</p><h2 class="section-title">技術と誇りを持って働く、近江の現場のことば。</h2>
+  <div class="rct-menu">
+    <a href="recruit-interview.html"><span class="ph" style="min-height:300px;"><span>社員インタビュー 写真（大）</span></span><span class="rct-menu__bar"><span class="rct-menu__no">01</span><span class="rct-menu__ttl">社員インタビュー</span><i>→</i></span></a>
+    <a href="#vision"><span class="ph"><span>ビジョン 写真</span></span><span class="rct-menu__bar"><span class="rct-menu__no">02</span><span class="rct-menu__ttl">ビジョン</span><i>→</i></span></a>
+    <a href="#numbers"><span class="ph"><span>数字 写真</span></span><span class="rct-menu__bar"><span class="rct-menu__no">03</span><span class="rct-menu__ttl">数字で見る近江度量衡</span><i>→</i></span></a>
+    <a href="#welfare"><span class="ph"><span>福利厚生 写真</span></span><span class="rct-menu__bar"><span class="rct-menu__no">04</span><span class="rct-menu__ttl">福利厚生・職場環境</span><i>→</i></span></a>
+    <a href="recruit-jobs.html"><span class="ph"><span>募集要項 写真</span></span><span class="rct-menu__bar"><span class="rct-menu__no">05</span><span class="rct-menu__ttl">募集要項</span><i>→</i></span></a>
+  </div>
+</div></section>
+
+<!-- ③ VISION：ウォーターマーク＋ずらし写真 -->
+<section class="section" id="vision" style="overflow:hidden;"><div class="container">
+  <p class="rct-wm">VISION</p>
+  <div class="rct-vision" style="margin-top:-18px;">
+    <div>
+      <p class="statement__en">VISION &amp; VALUES</p>
+      <h2 class="statement__main" style="text-align:left;font-size:clamp(24px,3vw,38px);">「いきる」をはかり、<br>豊かな世界へ。</h2>
+      <p class="statement__body" style="text-align:left;margin-top:20px;">「技術」と「誇り」を礎に、日本から世界へ、計量という仕事で社会を豊かにし続けること。それが、近江度量衡の使命です。採用においても「働く人を大切にする」という理念を核に、長く誇りを持って働ける環境を目指しています。</p>
+      <div class="grid-3" style="margin-top:32px;">
+        <div class="pillar"><div class="pillar__title">技術</div></div>
+        <div class="pillar"><div class="pillar__title">誇り</div></div>
+        <div class="pillar"><div class="pillar__title">グローバル</div></div>
+      </div>
+      <p style="font-size:13px;margin-top:24px;"><a href="history.html" style="border-bottom:1px solid #999;">126年ヒストリーを見る →</a></p>
+    </div>
+    <div class="rct-vision__photos">
+      <div class="rct-vision__p1">''' + ph('ビジョン写真①：現場・チーム','','aspect-ratio:4/3') + '''</div>
+      <div class="rct-vision__p2">''' + ph('写真②：手元','','aspect-ratio:1') + '''</div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ④ NUMBERS：巨大数字タイル -->
+<section class="section section--dark" id="numbers" style="overflow:hidden;"><div class="container">
+  <p class="rct-wm">NUMBERS</p>
+  <p class="statement__en" style="margin-top:-10px;">数字で見る近江度量衡</p>
+  <div class="rct-num" style="margin-top:28px;">
+    <div class="rct-num__cell --wide"><div class="rct-num__val">126<small>年</small></div><div class="rct-num__label">創業からの歴史（1900年創業）</div></div>
+    <div class="rct-num__cell"><div class="rct-num__val">2,000<small>+</small></div><div class="rct-num__label">累計納入施設数</div></div>
+    <div class="rct-num__cell"><div class="rct-num__val">9<small>拠点</small></div><div class="rct-num__label">国内6＋海外3</div></div>
+    <div class="rct-num__cell"><div class="rct-num__val">約150<small>名</small></div><div class="rct-num__label">従業員数 ''' + todo('要確認') + '''</div></div>
+    <div class="rct-num__cell"><div class="rct-num__val">〇〇<small>%</small></div><div class="rct-num__label">新卒3年定着率 ''' + todo('数値提供待ち') + '''</div></div>
+    <div class="rct-num__cell"><div class="rct-num__val">〇〇<small>歳</small></div><div class="rct-num__label">平均年齢 ''' + todo('数値提供待ち') + '''</div></div>
+    <div class="rct-num__cell"><div class="rct-num__val">3<small>カ国</small></div><div class="rct-num__label">海外展開（中国・タイ・韓国）</div></div>
+  </div>
+</div></section>
+
+<!-- ⑤ PEOPLE：互い違いの大きなカード -->
+<section class="section" style="overflow:hidden;"><div class="container">
+  <p class="rct-wm">PEOPLE</p>
+  <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:18px;margin-top:-10px;">
+    <h2 class="section-title">技術と誇りを持って働く、近江の現場のことば。</h2>
+    <a class="btn btn--outline btn--sm" href="recruit-interview.html" style="margin-left:auto;">インタビュー一覧へ</a>
+  </div>
   <p class="section-lead">現場・設計・営業——それぞれの視点で語る、近江度量衡の仕事。''' + todo('実在社員に差し替え') + '''</p>
-  <div class="grid-3" style="margin-top:32px;">
-    <a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img">''' + ph('社員写真') + '''</div><div class="interview-card__body"><div class="interview-card__dept">製造部 / 入社〇年目（20代）</div><div class="interview-card__name">山田 〇〇</div><p class="interview-card__quote">毎回違う課題に向き合うから、技術者として本当に成長できる。</p></div></a>
-    <a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img">''' + ph('社員写真') + '''</div><div class="interview-card__body"><div class="interview-card__dept">設計部 / 入社〇年目（30代）</div><div class="interview-card__name">鈴木 〇〇</div><p class="interview-card__quote">図面通りにつくるのではなく、現場に合わせてつくる。</p></div></a>
-    <a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img">''' + ph('社員写真') + '''</div><div class="interview-card__body"><div class="interview-card__dept">営業部 / 入社〇年目（30代）</div><div class="interview-card__name">田中 〇〇</div><p class="interview-card__quote">お客様の現場を見て、何が必要か考える。</p></div></a>
-  </div>
-  <a class="btn btn--outline btn--sm" href="recruit-interview.html" style="margin-top:24px;">インタビュー一覧へ</a>
-</div></section>
-
-<!-- ⑤ WELFARE -->
-<section class="section section--grey" id="welfare"><div class="container">
-  <p class="section-meta">Welfare</p><h2 class="section-title">福利厚生・職場環境</h2>
-  <p class="section-lead">「働く人を大切にする」という理念を体現する制度・環境を整えています。</p>
-  <div class="grid-3" style="margin-top:24px;">
-    <div class="value-item" style="background:#fff;"><div class="value-item__title" style="font-size:15px;">各種社会保険完備</div></div>
-    <div class="value-item" style="background:#fff;"><div class="value-item__title" style="font-size:15px;">有給休暇・育児休暇</div></div>
-    <div class="value-item" style="background:#fff;"><div class="value-item__title" style="font-size:15px;">住宅手当・通勤手当</div></div>
-    <div class="value-item" style="background:#fff;"><div class="value-item__title" style="font-size:15px;">研修制度</div></div>
-    <div class="value-item" style="background:#fff;"><div class="value-item__title" style="font-size:15px;">フレックス・リモート対応 ''' + todo('実施状況を確認') + '''</div></div>
-    <div class="value-item" style="background:#fff;"><div class="value-item__title" style="font-size:15px;">社内施設・福利厚生</div></div>
+  <div class="rct-people" style="margin-top:40px;">
+    <a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img">''' + ph('社員写真（縦）','','aspect-ratio:3/4') + '''</div><div class="interview-card__body"><div class="interview-card__dept">製造部 / 入社〇年目（20代）</div><div class="interview-card__name">山田 〇〇</div><p class="interview-card__quote">毎回違う課題に向き合うから、技術者として本当に成長できる。</p></div></a>
+    <a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img">''' + ph('社員写真（縦）','','aspect-ratio:3/4') + '''</div><div class="interview-card__body"><div class="interview-card__dept">設計部 / 入社〇年目（30代）</div><div class="interview-card__name">鈴木 〇〇</div><p class="interview-card__quote">図面通りにつくるのではなく、現場に合わせてつくる。</p></div></a>
+    <a class="interview-card" href="recruit-interview-detail.html"><div class="interview-card__img">''' + ph('社員写真（縦）','','aspect-ratio:3/4') + '''</div><div class="interview-card__body"><div class="interview-card__dept">営業部 / 入社〇年目（30代）</div><div class="interview-card__name">田中 〇〇</div><p class="interview-card__quote">お客様の現場を見て、何が必要か考える。</p></div></a>
   </div>
 </div></section>
 
-<!-- ⑥ CAREER PATH -->
+<!-- ⑥ WELFARE：写真×リスト -->
+<section class="section section--grey" id="welfare" style="overflow:hidden;"><div class="container">
+  <p class="rct-wm">WELFARE</p>
+  <div class="rct-welf" style="margin-top:-10px;">
+    <div>
+      <p class="section-meta">Welfare</p>
+      <h2 class="section-title">福利厚生・職場環境</h2>
+      <p class="section-lead" style="margin-top:14px;">「働く人を大切にする」という理念を体現する制度・環境を整えています。</p>
+      <div style="margin-top:28px;">''' + ph('職場環境の写真：休憩・オフィス','','aspect-ratio:4/3') + '''</div>
+    </div>
+    <div class="rct-welf__list">
+      <div class="rct-welf__row"><span class="rct-welf__no">01</span><span class="rct-welf__ttl">各種社会保険完備</span><span class="rct-welf__desc">健康保険・厚生年金・雇用保険・労災保険</span></div>
+      <div class="rct-welf__row"><span class="rct-welf__no">02</span><span class="rct-welf__ttl">有給休暇・育児休暇</span><span class="rct-welf__desc">取得実績・取得率は掲載時に記載 ''' + todo('実績確認') + '''</span></div>
+      <div class="rct-welf__row"><span class="rct-welf__no">03</span><span class="rct-welf__ttl">住宅手当・通勤手当</span><span class="rct-welf__desc">支給条件の詳細は募集要項に記載</span></div>
+      <div class="rct-welf__row"><span class="rct-welf__no">04</span><span class="rct-welf__ttl">研修制度</span><span class="rct-welf__desc">入社時研修・OJT・資格取得支援</span></div>
+      <div class="rct-welf__row"><span class="rct-welf__no">05</span><span class="rct-welf__ttl">フレックス・リモート対応</span><span class="rct-welf__desc">''' + todo('実施状況を確認') + '''</span></div>
+      <div class="rct-welf__row"><span class="rct-welf__no">06</span><span class="rct-welf__ttl">社内施設・福利厚生</span><span class="rct-welf__desc">食堂・保養施設など ''' + todo('内容確認') + '''</span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- ⑦ CAREER PATH -->
 <section class="section" id="career"><div class="container">
   <p class="section-meta">Career Path</p><h2 class="section-title">研修・キャリアパス</h2>
   <p class="section-lead">入社後の育成プログラム・OJT・キャリアパス事例を紹介。技術者として誇りを持って成長できる環境を、具体的なロードマップで。</p>
@@ -1187,16 +1475,17 @@ recruit_body = '''
   </div>
 </div></section>
 
-<!-- ⑦ ENTRY -->
-<section class="section section--dark theme-recruit" id="entry" style="background:#1a0d0d;"><div class="container">
-  <div class="statement"><h2 class="statement__main" style="color:#fff;">あなたの「測る」を見つけてください。</h2>
-  <p class="statement__body" style="color:#cbb;">新卒・中途、いずれも募集中です。126年の技術と誇りを、次の世代へ。</p></div>
-  <div class="entry-split" style="margin-top:40px;">
+<!-- ⑧ ENTRY -->
+<section class="section section--dark theme-recruit" id="entry" style="background:#111315;"><div class="container">
+  <div class="statement"><h2 class="statement__main" style="color:#fff;font-size:clamp(28px,3.6vw,46px);">あなたの「測る」を見つけてください。</h2>
+  <p class="statement__body" style="color:#bbb;">新卒・中途、いずれも募集中です。126年の技術と誇りを、次の世代へ。</p></div>
+  <div class="entry-split" style="margin-top:44px;">
     <div class="entry-card"><div class="entry-card__label">NEW GRADUATE 新卒採用</div><div class="entry-card__copy">「未来を測る第一歩を、ここから。」</div><a class="btn btn--white" href="recruit-jobs-graduate.html">新卒採用</a></div>
     <div class="entry-card"><div class="entry-card__label">MID-CAREER 中途採用</div><div class="entry-card__copy">「培った経験を、126年の精度に加えてください。」</div><a class="btn btn--white" href="recruit-jobs-career.html">中途採用</a></div>
   </div>
 </div></section>
-'''
+''')
+
 page("recruit.html","採用情報｜近江度量衡 ― 「いきる」の単位とは、なんだろう。", recruit_body,
      active="recruit.html", recruit=True, crumbs=None)
 PAGES.append(("G","採用TOP","/recruit/","recruit.html","recruit",False))
@@ -1275,82 +1564,199 @@ _related_members = "".join(
         ("制御・技術電装部 / 入社〇年目（20代）","佐藤 〇〇","ソフトも自社。だから面白い。"),
     ])
 
-interview_detail_body = ('''
-<section class="fv" style="min-height:420px;"><div class="fv__bg">''' + ph('社員メイン写真（現場）','','height:100%') + '''</div>
-  <div class="fv__content"><p class="fv__eyebrow">PEOPLE — 製造部 / 入社〇年目（20代）''' + todo('社員ごとに入力') + '''</p>
-  <h1 class="fv__title" style="font-size:32px;">「（その社員の引用文）」</h1>
-  <p class="fv__sub">山田 〇〇</p></div>
+IDV_STYLE = """<style>
+/* ── インタビュー詳細（ベンチマーク: giken-kk voice 準拠） ── */
+.gv-hero{display:grid;grid-template-columns:5fr 7fr;min-height:520px;background:var(--c-black);color:#fff;}
+.gv-hero__txt{display:flex;flex-direction:column;justify-content:center;padding:72px 56px;}
+.gv-hero__no{font-family:var(--font-en);font-size:12px;letter-spacing:.3em;color:var(--c-muted);}
+.gv-hero__no b{display:block;font-size:64px;font-weight:600;line-height:1;margin-top:10px;color:rgba(255,255,255,.14);}
+.gv-hero__role{font-size:clamp(24px,2.6vw,36px);font-weight:700;line-height:1.6;margin-top:16px;}
+.gv-hero__meta{font-size:14px;color:rgba(255,255,255,.75);margin-top:14px;}
+.gv-hero__meta b{font-family:var(--font-en);font-size:22px;color:#fff;margin-left:14px;letter-spacing:.1em;}
+.gv-hero__photo .ph{height:100%;min-height:420px;}
+.gv-status{background:#fff;border:1px solid var(--c-border);padding:36px 40px;display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:center;}
+.gv-status__avatar .ph{width:132px;height:132px;border-radius:50%;}
+.gv-status__label{font-family:var(--font-en);font-size:11px;letter-spacing:.26em;color:var(--c-muted);}
+.gv-status__grid{display:grid;grid-template-columns:repeat(4,auto);gap:8px 36px;margin-top:14px;width:fit-content;}
+.gv-status__item small{display:block;font-size:10px;color:var(--c-muted);}
+.gv-status__item b{font-size:13.5px;}
+.gv-tags{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.gv-tags span{border:1px solid var(--c-black);border-radius:999px;padding:6px 16px;font-size:12px;font-weight:700;}
+.gv-sec{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;}
+.gv-sec.--rev .gv-sec__txt{order:2;}
+.gv-sec__en{font-family:var(--font-en);font-size:12px;font-weight:600;letter-spacing:.3em;color:var(--c-muted);}
+.gv-sec__catch{font-size:clamp(22px,2.4vw,32px);font-weight:700;line-height:1.7;margin-top:12px;}
+.gv-sec__body{font-size:14px;line-height:2.15;color:#333;margin-top:20px;}
+.gv-qa{position:relative;}
+.gv-qa__item{background:#fff;border:1px solid var(--c-border);padding:26px 30px;}
+.gv-qa__item+.gv-qa__item{margin-top:14px;}
+.gv-qa__q{font-size:15px;font-weight:700;}
+.gv-qa__q::before{content:'Q.';font-family:var(--font-en);color:var(--c-muted);margin-right:10px;}
+.gv-qa__a{font-size:13px;line-height:2;color:#444;margin-top:10px;padding-left:26px;}
+.gv-sched__tabs{display:flex;gap:0;margin-bottom:24px;}
+.gv-sched__tab{flex:1;text-align:center;padding:13px;font-family:var(--font-en);font-weight:700;letter-spacing:.2em;border:1px solid var(--c-black);font-size:13px;}
+.gv-sched__tab.--on{background:var(--c-black);color:#fff;}
+.gv-sched{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start;}
+.gv-msg{background:var(--c-black);color:#fff;}
+.gv-msg__inner{display:grid;grid-template-columns:7fr 5fr;gap:56px;align-items:center;}
+.gv-msg__label{font-family:var(--font-en);font-size:12px;letter-spacing:.3em;color:var(--c-muted);}
+.gv-msg__catch{font-size:clamp(22px,2.6vw,34px);font-weight:700;line-height:1.8;margin-top:16px;}
+.gv-msg__body{font-size:14px;line-height:2.15;color:rgba(255,255,255,.8);margin-top:18px;}
+@media(max-width:760px){
+  .gv-hero{grid-template-columns:1fr;}
+  .gv-hero__txt{padding:48px 24px;}
+  .gv-hero__photo .ph{min-height:0;height:auto;aspect-ratio:4/3;}
+  .gv-status{grid-template-columns:1fr;gap:24px;padding:28px 22px;}
+  .gv-status__grid{grid-template-columns:1fr 1fr;}
+  .gv-sec{grid-template-columns:1fr;gap:24px;}
+  .gv-sec.--rev .gv-sec__txt{order:0;}
+  .gv-sched{grid-template-columns:1fr;gap:28px;}
+  .gv-msg__inner{grid-template-columns:1fr;gap:28px;}
+}
+</style>"""
+
+def _gv_sched(rows):
+    out = '<div class="ischedule">'
+    for t,h,b in rows:
+        out += ('<div class="ischedule__row"><span class="ischedule__time">' + t + '</span>'
+                '<div class="ischedule__body"><b>' + h + '</b>' + ('<p>' + b + '</p>' if b else '') + '</div></div>')
+    return out + '</div>'
+
+_SCHED_OFF = [
+ ("8:00","起床",""),
+ ("10:00","趣味・買い物",""),
+ ("12:00","昼食",""),
+ ("14:00","家族・友人と過ごす",""),
+ ("18:00","夕食",""),
+ ("23:00","就寝",""),
+]
+
+interview_detail_body = (IDV_STYLE + '''
+<!-- HERO：職種／入社年・区分／イニシャル（ベンチマーク準拠のシンプル構成） -->
+<section class="gv-hero">
+  <div class="gv-hero__txt">
+    <p class="gv-hero__no">INTERVIEW <b>01</b></p>
+    <h1 class="gv-hero__role">製造・組立担当</h1>
+    <p class="gv-hero__meta">中途／20〇〇年入社 <b>Y.S.</b></p>
+    <p style="font-size:11px;color:rgba(255,255,255,.45);margin-top:18px;">※氏名はイニシャル・実名どちらも可（ご本人の希望に合わせます）''' + todo('ヒアリング【A】より') + '''</p>
+  </div>
+  <div class="gv-hero__photo">''' + ph('メイン写真：現場での上半身〜全身','','height:100%') + '''</div>
 </section>
 ''' + ISCHED_STYLE + '''
-<section class="section"><div class="container" style="max-width:900px;">
-  <table class="info-table" style="margin-bottom:36px;">
-    <tr><th>出身・学歴</th><td>〇〇大学 〇〇学部 卒業</td></tr>
-    <tr><th>入社年</th><td>〇〇〇〇年入社</td></tr>
-    <tr><th>現在の担当業務</th><td>〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</td></tr>
-  </table>
 
-  <p class="section-meta">About Job</p>
-  <h2 class="section-title" style="font-size:24px;margin-bottom:14px;">「（仕事を象徴するキャッチコピー）」''' + todo('社員ごとに入力') + '''</h2>
-  <p class="section-lead" style="margin-top:0;">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇</p>
-
-  <!-- 本文写真①（ワイド） -->
-  <div style="margin:32px 0;">''' + ph('インタビュー写真①：働く様子（ワイド）','','aspect-ratio:16/9') + '''</div>
-
-  ''' + _qa(0) + _qa(1) + '''
-
-  <!-- 写真②③（2枚組：手元・設備／チーム） -->
-  <div class="grid-2" style="margin:28px 0;">
-    <div>''' + ph('インタビュー写真②：作業の手元','','aspect-ratio:4/3') + '''</div>
-    <div>''' + ph('インタビュー写真③：チーム・設備','','aspect-ratio:4/3') + '''</div>
-  </div>
-
-  ''' + _qa(2) + '''
-
-  <!-- 写真④（縦・ポートレート）＋Q&A横並び -->
-  <div class="grid-2" style="margin:28px 0;align-items:center;gap:32px;">
-    <div>''' + ph('インタビュー写真④：ポートレート（縦）','','aspect-ratio:3/4') + '''</div>
-    <div>''' + _qa(3) + '''</div>
-  </div>
-
-  ''' + _qa(4) + '''
-</div></section>
-
-<!-- ① 1日のスケジュール -->
-<section class="section section--grey"><div class="container" style="max-width:900px;">
-  <p class="section-meta">Schedule</p>
-  <h2 class="section-title">ある1日のスケジュール ''' + todo('社員ごとに入力') + '''</h2>
-  <div class="grid-2" style="margin-top:24px;align-items:start;gap:40px;">
-    <div class="ischedule">''' + _sched_rows + '''</div>
-    <div>''' + ph('スケジュール中の写真：現場スナップ','','aspect-ratio:3/4') + '''</div>
-  </div>
-</div></section>
-
-<!-- ② 関連社員 -->
-<section class="section"><div class="container">
-  <p class="section-meta">Other Members</p>
-  <h2 class="section-title">関連する社員インタビュー</h2>
-  <div class="grid-3" style="margin-top:24px;">''' + _related_members + '''</div>
-</div></section>
-
-<!-- ③ 関連製品（1製品を横長で） -->
-<section class="section section--grey"><div class="container">
-  <p class="section-meta">Related Product</p>
-  <h2 class="section-title">この社員が関わる製品</h2>
-  <a class="case" href="products-weighing.html" style="margin-top:24px;background:#fff;">
-    <div class="case__img">''' + ph('穀類施設イメージ') + '''</div>
-    <div class="case__body">
-      <div class="case__cat">GRAIN / 穀類用計量システム</div>
-      <div class="case__title">フルオートドライヤーシステムの組立・検査を担当</div>
-      <p style="font-size:14px;color:#444;line-height:1.95;">この社員が日々向き合う主力システム。全国約2,000施設に納入された穀類計量の要となる設備を、組立から精度検査まで一貫して手がけています。</p>
-      <span class="card__link" style="margin-top:18px;">製品ページを見る →</span>
+<!-- MEMBER STATUS（アバター＋基本情報＋人柄タグ） -->
+<section class="section" style="padding-bottom:0;"><div class="container" style="max-width:980px;">
+  <div class="gv-status">
+    <div class="gv-status__avatar">''' + ph('顔写真（丸抜き）','','width:132px;height:132px;border-radius:50%;') + '''</div>
+    <div>
+      <p class="gv-status__label">MEMBER STATUS</p>
+      <div class="gv-status__grid">
+        <div class="gv-status__item"><small>部門</small><b>製造部</b></div>
+        <div class="gv-status__item"><small>職種</small><b>計量システムの組立・検査</b></div>
+        <div class="gv-status__item"><small>入社</small><b>20〇〇年／中途</b></div>
+        <div class="gv-status__item"><small>出身</small><b>滋賀県（任意）</b></div>
+        <div class="gv-status__item"><small>好きな食べ物</small><b>〇〇〇〇</b></div>
+        <div class="gv-status__item"><small>趣味</small><b>〇〇〇〇</b></div>
+      </div>
+      <div class="gv-tags"><span>コツコツ型</span><span>ものづくり好き</span><span>チームワーク</span><span>好奇心</span><span>慎重派</span>''' + todo('人柄タグ3〜5つ＝ヒアリング【A】より') + '''</div>
     </div>
-  </a>
+  </div>
 </div></section>
 
-<section class="section"><div class="container" style="text-align:center;">
-  <a class="btn btn--outline btn--sm" href="recruit-interview.html">インタビュー一覧へ戻る</a>
+<!-- REASONS：入社理由 -->
+<section class="section"><div class="container" style="max-width:1060px;">
+  <div class="gv-sec">
+    <div class="gv-sec__txt">
+      <p class="gv-sec__en">REASONS <span style="letter-spacing:.1em;">― 入社理由</span></p>
+      <h2 class="gv-sec__catch">「（回答から抜粋したキャッチコピー）」''' + cms('見出し=回答から制作側で抜粋') + '''</h2>
+      <p class="gv-sec__body">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。''' + todo('ヒアリング【B】Q1 入社のきっかけ') + '''</p>
+    </div>
+    <div>''' + ph('写真：入社当時を語る表情（横）','','aspect-ratio:4/3') + '''</div>
+  </div>
+</div></section>
+
+<!-- WORKS：仕事内容・やりがい -->
+<section class="section section--grey"><div class="container" style="max-width:1060px;">
+  <div class="gv-sec --rev">
+    <div class="gv-sec__txt">
+      <p class="gv-sec__en">WORKS <span style="letter-spacing:.1em;">― 仕事内容・やりがい</span></p>
+      <h2 class="gv-sec__catch">「（回答から抜粋したキャッチコピー）」</h2>
+      <p class="gv-sec__body">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。''' + todo('ヒアリング【B】Q2仕事内容＋Q3やりがい') + '''</p>
+      <p class="gv-sec__body">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。''' + todo('ヒアリング【B】Q4 一品一様エピソード') + '''</p>
+    </div>
+    <div>''' + ph('写真：作業風景（横・大）','','aspect-ratio:4/3') + '''</div>
+  </div>
+  <div class="grid-2" style="margin-top:28px;gap:28px;">
+    <div>''' + ph('写真：作業の手元','','aspect-ratio:16/9') + '''</div>
+    <div>''' + ph('写真：チーム・職場','','aspect-ratio:16/9') + '''</div>
+  </div>
+</div></section>
+
+<!-- FUTURE：今後の目標 -->
+<section class="section"><div class="container" style="max-width:1060px;">
+  <div class="gv-sec">
+    <div class="gv-sec__txt">
+      <p class="gv-sec__en">FUTURE <span style="letter-spacing:.1em;">― 今後の目標</span></p>
+      <h2 class="gv-sec__catch">「（回答から抜粋したキャッチコピー）」</h2>
+      <p class="gv-sec__body">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。''' + todo('ヒアリング【B】Q5 今後の目標') + '''</p>
+    </div>
+    <div>''' + ph('写真：ポートレート（縦）','','aspect-ratio:4/5;max-width:420px;margin-left:auto;') + '''</div>
+  </div>
+</div></section>
+
+<!-- Q&A：一問一答 -->
+<section class="section section--grey"><div class="container" style="max-width:860px;">
+  <p class="section-meta">Q&amp;A</p>
+  <h2 class="section-title">一問一答</h2>
+  <div class="gv-qa" style="margin-top:28px;">
+    <div class="gv-qa__item"><p class="gv-qa__q">仕事をする上で意識していることは？</p><p class="gv-qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。''' + todo('ヒアリング【C】') + '''</p></div>
+    <div class="gv-qa__item"><p class="gv-qa__q">入社当時と比べ、仕事に対する姿勢はどのように変わりましたか？</p><p class="gv-qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。</p></div>
+    <div class="gv-qa__item"><p class="gv-qa__q">入社前後で、働くイメージにギャップはありましたか？</p><p class="gv-qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。</p></div>
+    <div class="gv-qa__item"><p class="gv-qa__q">入社後に成長できたと感じることは？</p><p class="gv-qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。</p></div>
+    <div class="gv-qa__item"><p class="gv-qa__q">「働く人を大切にする」と感じる場面はありますか？</p><p class="gv-qa__a">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。（近江度量衡オリジナル質問）</p></div>
+  </div>
+</div></section>
+
+<!-- SCHEDULE：ON / OFF -->
+<section class="section"><div class="container" style="max-width:980px;">
+  <p class="section-meta">Schedule</p>
+  <h2 class="section-title">ある1日のスケジュール</h2>
+  <div class="gv-sched__tabs" style="margin-top:28px;max-width:420px;">
+    <div class="gv-sched__tab --on">ON ― 仕事の日</div>
+    <div class="gv-sched__tab">OFF ― 休みの日</div>
+  </div>
+  <p style="font-size:11px;color:#999;margin:-12px 0 20px;">※実装はタブ切替（ワイヤーでは両方併記）''' + todo('ヒアリング【D】より') + '''</p>
+  <div class="gv-sched">
+    <div><p style="font-family:var(--font-en);font-weight:700;letter-spacing:.2em;font-size:12px;margin-bottom:12px;">ON</p>''' + _gv_sched(_SCHED) + '''</div>
+    <div><p style="font-family:var(--font-en);font-weight:700;letter-spacing:.2em;font-size:12px;margin-bottom:12px;">OFF</p>''' + _gv_sched(_SCHED_OFF) + '''</div>
+  </div>
+</div></section>
+
+<!-- MESSAGE：就活生・転職希望者へ -->
+<section class="section gv-msg"><div class="container" style="max-width:1060px;">
+  <div class="gv-msg__inner">
+    <div>
+      <p class="gv-msg__label">MESSAGE</p>
+      <h2 class="gv-msg__catch">就活生・転職を考えている方へ</h2>
+      <p class="gv-msg__body">〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇〇。''' + todo('ヒアリング【E】メッセージ') + '''</p>
+    </div>
+    <div>''' + ph('写真：笑顔のカット（横）','','aspect-ratio:4/3') + '''</div>
+  </div>
+</div></section>
+
+<!-- 他の社員 -->
+<section class="section section--grey"><div class="container">
+  <p class="section-meta">Other Members</p>
+  <h2 class="section-title">ほかの社員インタビュー</h2>
+  <div class="grid-3" style="margin-top:24px;">''' + _related_members + '''</div>
+  <div style="text-align:center;margin-top:36px;"><a class="btn btn--outline btn--sm" href="recruit-interview.html">インタビュー一覧へ戻る</a></div>
+</div></section>
+
+<section class="section"><div class="container">
+  <div class="cms-note">◯ 構成ベンチマーク：岐建 採用サイト VOICE（HERO＝職種/入社年/イニシャル → MEMBER STATUS → REASONS → WORKS → FUTURE → 一問一答 → ON/OFFスケジュール → MESSAGE）。原稿はヒアリングシート（【A】ステータス／【B】Q1-5=REASONS・WORKS・FUTURE／【C】一問一答／【D】ON・OFFスケジュール／【E】メッセージ）から構成。''' + cms('CMS更新') + '''</div>
 </div></section>
 ''')
+
 page("recruit-interview-detail.html","社員インタビュー 詳細｜近江度量衡 採用", interview_detail_body,
      active="recruit-interview.html", recruit=True, crumbs=RC+[("社員インタビュー","recruit-interview.html"),("詳細",None)])
 PAGES.append(("G3-1","インタビュー詳細","/recruit/interview/[slug]/","recruit-interview-detail.html","recruit",True))
@@ -1464,9 +1870,9 @@ def entry_lp(copy, intro, stats, jobs, jobs_link):
   <table class="info-table" style="margin-top:20px;background:#fff;">''' + jr + '''</table>
   <p style="font-size:13px;margin-top:16px;"><a href="''' + jobs_link + '''" style="border-bottom:1px solid #999;">詳しい募集要項を見る →</a></p>
 </div></section>
-<section class="section section--dark theme-recruit" id="entry" style="background:#1a0d0d;"><div class="container statement">
+<section class="section section--dark theme-recruit" id="entry" style="background:#111315;"><div class="container statement">
   <h2 class="statement__main" style="color:#fff;">''' + copy + '''</h2>
-  <p class="statement__body" style="color:#cbb;">エントリーは専用フォームより受け付けています。</p>
+  <p class="statement__body" style="color:#bbb;">エントリーは専用フォームより受け付けています。</p>
   <div style="margin-top:24px;"><a class="btn btn--red" href="contact.html" style="background:#111315;color:#fff;">エントリーフォームへ</a></div>
 </div></section>
 '''
@@ -1528,6 +1934,8 @@ index_html = '''<!DOCTYPE html>
   td.name-sub{padding-left:22px;color:#444;}
   td.name-sub3{padding-left:40px;color:#666;font-size:11px;}
   a.wf-link{color:#111;text-decoration:underline;font-size:11px;font-family:monospace;}
+  .table-scroll{overflow-x:auto;}
+  .table-scroll table{min-width:560px;}
 </style></head>
 <body>
 <h1><span class="badge">wier</span>近江度量衡 Webリニューアル　ワイヤーフレーム一覧</h1>
@@ -1536,10 +1944,10 @@ index_html = '''<!DOCTYPE html>
 <p class="legend"><span>CMS</span> ＝ クライアントがWordPress管理画面から更新するページ（投稿・カスタム投稿）。それ以外は固定ページ（更新頻度：低）。</p>
 
 <div class="section-label section-label--corp">▼ CORPORATE SITE　コーポレートサイト</div>
-<table><thead><tr><th>No.</th><th>ページ名</th><th>URL</th><th>WFファイル</th></tr></thead><tbody>''' + index_rows("corp") + '''</tbody></table>
+<div class="table-scroll"><table><thead><tr><th>No.</th><th>ページ名</th><th>URL</th><th>WFファイル</th></tr></thead><tbody>''' + index_rows("corp") + '''</tbody></table></div>
 
 <div class="section-label section-label--recruit">▼ RECRUITMENT SITE　採用サイト（同ドメイン / /recruit/ 以下・独立UI）</div>
-<table><thead><tr><th>No.</th><th>ページ名</th><th>URL</th><th>WFファイル</th></tr></thead><tbody>''' + index_rows("recruit") + '''</tbody></table>
+<div class="table-scroll"><table><thead><tr><th>No.</th><th>ページ名</th><th>URL</th><th>WFファイル</th></tr></thead><tbody>''' + index_rows("recruit") + '''</tbody></table></div>
 </body></html>'''
 with open(os.path.join(OUT,"index.html"),"w",encoding="utf-8") as f:
     f.write(index_html)

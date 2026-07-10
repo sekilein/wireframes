@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>近江度量衡 TOP デザイン 4案｜v10 ベース</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Noto+Sans+JP:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{--red:#D40D0D;--ink:#0a0a0a}
+  body{background:#0a0a0a;color:#fff;font-family:"Noto Sans JP",sans-serif;min-height:100vh;padding:56px 32px}
+  .head{max-width:1200px;margin:0 auto 40px}
+  .head .badge{display:inline-block;background:var(--red);font-family:Inter;font-size:11px;letter-spacing:.18em;padding:3px 10px;font-weight:600}
+  .head h1{font-family:"Shippori Mincho",serif;font-weight:700;font-size:26px;letter-spacing:.06em;margin:14px 0 8px}
+  .head p{font-size:13px;color:rgba(255,255,255,.6);line-height:1.9}
+  .grid{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+  .card{background:#161616;border:1px solid #2a2a2a;transition:border-color .2s,transform .2s;display:block}
+  .card:hover{border-color:var(--red);transform:translateY(-4px)}
+  .card .thumb{aspect-ratio:4/3;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center}
+  .card.a .thumb{background:linear-gradient(120deg,#1e2818,#0a0a0a 70%)}
+  .card.b .thumb{background:linear-gradient(120deg,#27313e,#0a0a0a 70%)}
+  .card.c .thumb{background:linear-gradient(120deg,#3a1010,#0a0a0a 70%)}
+  .card .thumb .v{writing-mode:vertical-rl;font-family:Inter;font-size:10px;letter-spacing:.4em;color:rgba(255,255,255,.4);text-transform:uppercase;position:absolute;right:16px;top:16px}
+  .card .thumb .big{font-family:"Shippori Mincho",serif;font-style:italic;font-size:84px;color:rgba(255,255,255,.12);line-height:.8}
+  .card .thumb .red-band{position:absolute;right:0;top:0;bottom:0;width:30%;background:var(--red);opacity:.85}
+  .card.b .thumb .red-band{width:100%;height:34%;top:auto;bottom:0;background:linear-gradient(0deg,rgba(212,13,13,.9),transparent)}
+  .card.c .thumb .red-band{width:120%;height:18px;top:50%;right:-10%;transform:rotate(-4deg)}
+  .card.d .thumb{background:linear-gradient(120deg,#2a2620,#0a0a0a 72%)}
+  .card.d .thumb .mn{font-family:"Shippori Mincho",serif;font-size:30px;color:#fff;position:absolute;left:18px;top:24px}
+  .card.d .thumb .mn em{font-style:italic;display:block;font-size:24px;color:rgba(255,255,255,.55);margin-left:20px}
+  .card.d .thumb .prod{position:absolute;left:50%;top:50%;transform:translate(-50%,-46%);width:26%;height:56%;border:1px dashed rgba(255,255,255,.3)}
+  .card .body{padding:24px}
+  .card .tag{font-family:Inter;font-size:11px;letter-spacing:.28em;color:var(--red);text-transform:uppercase;font-weight:600}
+  .card h2{font-family:"Shippori Mincho",serif;font-weight:700;font-size:20px;margin:10px 0 8px;letter-spacing:.04em}
+  .card .desc{font-size:12px;color:rgba(255,255,255,.55);line-height:1.9}
+  .card .open{display:inline-block;margin-top:16px;font-family:Inter;font-size:11px;letter-spacing:.2em;text-transform:uppercase;border-bottom:1px solid #fff;padding-bottom:2px}
+  .note{max-width:1200px;margin:36px auto 0;font-size:11px;color:rgba(255,255,255,.4);line-height:2;border-top:1px solid #2a2a2a;padding-top:20px}
+  @media(max-width:860px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+  <div class="head">
+    <span class="badge">DESIGN · v10</span>
+    <h1>近江度量衡 TOPページ デザイン 4案</h1>
+    <p>ムードデザイン v10（A/B/C）をベースに、最新ワイヤー（修正案優先）のコンテンツへ整合。ステートメント「いきる」をはかり、豊かな世界へ。／126年／拠点 国内6＋海外3＝9 に統一。</p>
+  </div>
+  <div class="grid">
+    <a class="card a" href="top_a.html">
+      <div class="thumb"><div class="red-band"></div><div class="v">Factory · Red Band</div></div>
+      <div class="body"><div class="tag">Plan A</div><h2>Factory × Red Band</h2><p class="desc">動画×赤帯のスクロール駆動FV。明朝＋赤の工場ライン感。重厚で骨太、BtoBの信頼感を前面に。</p><span class="open">この案を見る →</span></div>
+    </a>
+    <a class="card b" href="top_b.html">
+      <div class="thumb"><div class="red-band"></div><div class="big">126</div><div class="v">Global · Skyline</div></div>
+      <div class="body"><div class="tag">Plan B</div><h2>Global Skyline Immersion</h2><p class="desc">スカイライン×大きな126のSVG演出。グローバル・没入感。世界へ広がるスケール感を強調。</p><span class="open">この案を見る →</span></div>
+    </a>
+    <a class="card c" href="top_c.html">
+      <div class="thumb"><div class="red-band"></div><div class="v">Bleeding · Machine</div></div>
+      <div class="body"><div class="tag">Plan C</div><h2>Bleeding Machine</h2><p class="desc">機械の精緻さと赤の滲み。エッジの効いたモダン。先進性・テクノロジー寄りの印象。</p><span class="open">この案を見る →</span></div>
+    </a>
+    <a class="card d" href="top_d.html">
+      <div class="thumb"><div class="mn">「いきる」を<em>はかり、</em></div><div class="prod"></div><div class="v">Editorial · Wilderness</div></div>
+      <div class="body"><div class="tag">Plan D</div><h2>Editorial Wilderness</h2><p class="desc">aupale vodka のFV踏襲。中央の主役を大きな明朝見出しが囲むエディトリアル組み。中央ロゴ＋左右ナビの透過ヘッダー。</p><span class="open">この案を見る →</span></div>
+    </a>
+  </div>
+  <h2 style="max-width:1200px;margin:48px auto 4px;font-family:'Shippori Mincho',serif;font-weight:700;font-size:19px;letter-spacing:.06em;">Plan D 派生 ― 「はかる」を演出に</h2>
+  <p style="max-width:1200px;margin:0 auto 20px;font-size:12px;color:rgba(255,255,255,.55);line-height:1.9;">Editorial Wilderness（D）をベースに、計量メーカーらしい“はかる”の仕掛けを3方向で展開（背景動画＋演出）。</p>
+  <div class="grid" style="grid-template-columns:repeat(3,1fr);">
+    <a class="card d" href="d_1.html">
+      <div class="thumb"><div class="mn" style="font-size:22px;">「いきる」を<em style="font-size:18px;">はかり、</em></div>
+        <div style="position:absolute;right:14px;top:18px;bottom:18px;width:22px;display:flex;flex-direction:column;justify-content:space-between;align-items:flex-end">
+          <span style="height:1px;width:18px;background:rgba(255,255,255,.5)"></span><span style="height:1px;width:9px;background:rgba(255,255,255,.3)"></span><span style="height:1px;width:9px;background:rgba(255,255,255,.3)"></span><span style="height:1px;width:18px;background:rgba(255,255,255,.5)"></span><span style="height:1px;width:9px;background:rgba(255,255,255,.3)"></span><span style="height:1px;width:18px;background:rgba(255,255,255,.5)"></span></div>
+        <div style="position:absolute;left:18px;bottom:26px;height:1px;width:46%;background:rgba(255,255,255,.5)"></div>
+        <div style="position:absolute;left:calc(18px + 46%);bottom:20px;font:600 10px/1 Inter;color:#fff;background:var(--red);padding:2px 6px">126</div></div>
+      <div class="body"><div class="tag">d_1</div><h2>Graduation 目盛り／物差し</h2><p class="desc">画面に目盛りを敷き、横方向に“測る”キャリパー演出。右端に物差し、四隅にティック。スケールメーカーの地。</p><span class="open">この案を見る →</span></div>
+    </a>
+    <a class="card d" href="d_2.html">
+      <div class="thumb"><div style="position:absolute;left:50%;top:54%;transform:translate(-50%,-50%);width:120px;height:60px;border-top:2px solid rgba(255,255,255,.3);border-radius:120px 120px 0 0"></div>
+        <div style="position:absolute;left:50%;top:54%;width:2px;height:42px;background:#fff;transform-origin:bottom;transform:translateX(-50%) rotate(40deg)"></div>
+        <div style="position:absolute;left:20px;bottom:18px;font:600 24px/1 Inter;color:#fff">100.0<span style="color:var(--red);font-size:13px">%</span></div></div>
+      <div class="body"><div class="tag">d_2</div><h2>Calibration 計器の針</h2><p class="desc">読み込みで針が振れて確定。デジタル計量カウント（0→100%）で“精度をはかる”瞬間を可視化。</p><span class="open">この案を見る →</span></div>
+    </a>
+    <a class="card d" href="d_3.html">
+      <div class="thumb"><div style="position:absolute;left:50%;top:46%;transform:translate(-50%,-50%);font-family:'Shippori Mincho',serif;font-size:46px;color:#fff">測<span style="font-size:20px;color:rgba(255,255,255,.4)">り、</span></div>
+        <div style="position:absolute;left:50%;top:66%;transform:translateX(-50%);font:600 10px/1 Inter;letter-spacing:.2em;color:var(--red)">MEASURE</div>
+        <div style="position:absolute;left:16px;bottom:16px;font:600 22px/1 Inter;color:#fff">1,957<span style="color:var(--red)">+</span></div></div>
+      <div class="body"><div class="tag">d_3</div><h2>Polysemy はかるの多義</h2><p class="desc">量る→測る→計る→図る が切替（英訳グロス付き）。数字のカウントアップも併載。言葉で“はかる”を語る。</p><span class="open">この案を見る →</span></div>
+    </a>
+  </div>
+  <p class="note">※ いずれも TOPページのみのデザイン案。下層ページ構成は wier/ のワイヤーフレームを参照。動画・画像はダミー（home.mp4 等）。演出は prefers-reduced-motion で停止。</p>
+</body>
+</html>
