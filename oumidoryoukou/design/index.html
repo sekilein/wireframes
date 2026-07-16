@@ -195,11 +195,31 @@ body.menu-open{overflow:hidden}
 /* 各ブロック上端の段差（高さはバラバラ） */
 .svc::after{content:"";position:absolute;right:0;bottom:100%;width:29%;height:200px;background:var(--paper)}
 .stats::after{content:"";position:absolute;left:0;bottom:100%;width:34%;height:150px;background:var(--ink)}
+.hist::after{content:"";position:absolute;right:0;bottom:100%;width:33%;height:120px;background:var(--red)}
 .newsblock::after{content:"";position:absolute;right:0;bottom:100%;width:40%;height:70px;background:var(--paper)}
 @media(max-width:900px){
   .svc::after{height:56px;width:48%}
   .stats::after{height:80px;width:40%}
+  .hist::after{height:64px;width:40%}
   .newsblock::after{height:40px;width:44%}
+}
+
+/* ============ 126年ヒストリー：赤バンドのTOP動線 ============ */
+.hist{display:block;background:var(--red);color:#fff;transition:background .3s}
+.hist:hover{background:#d60000}
+.hist .eyebrow{color:rgba(255,255,255,.82)}
+.hist__grid{display:grid;grid-template-columns:minmax(0,1.2fr) auto;gap:6vw;align-items:center}
+.hist .disp-jp{font-size:clamp(1.8rem,3.6vw,3.2rem);margin-top:22px}
+.hist__lead{font-size:14px;line-height:2.1;color:rgba(255,255,255,.85);margin-top:24px;max-width:520px}
+.hist__go{display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--red);font-size:13px;font-weight:700;letter-spacing:.1em;padding:18px 34px;margin-top:40px;transition:background .25s,color .25s}
+.hist:hover .hist__go{background:var(--ink);color:#fff}
+.hist__num{text-align:right}
+.hist__num .since{display:block;font-family:var(--en);font-size:13px;letter-spacing:.3em;color:rgba(255,255,255,.85)}
+.hist__num b{display:block;font-family:var(--en);font-weight:600;font-size:clamp(6rem,13vw,11rem);line-height:1;margin-top:10px}
+.hist__num b i{font-style:normal;font-size:.16em;letter-spacing:.3em;margin-left:8px}
+@media(max-width:900px){
+  .hist__grid{grid-template-columns:1fr;gap:36px}
+  .hist__num{text-align:left}
 }
 .phil__box{position:relative;grid-column:1;width:fit-content;margin:0}
 /* 右側：滋賀・琵琶湖の線画マップ（想い表示中はsticky固定、スクロールで一度スッと出現） */
@@ -692,6 +712,22 @@ body.menu-open .nav{background:transparent;border:none}
 </section>
 
 
+
+<!-- ============ 126年ヒストリー（TOP動線） ============ -->
+<a class="gsec hist" id="history" href="#">
+  <div class="hist__grid">
+    <div class="hist__txt">
+      <p class="eyebrow rv">HISTORY — 126年ヒストリー</p>
+      <h2 class="disp-jp rv rv-d1">計量ひとすじ、126年。</h2>
+      <p class="hist__lead rv rv-d1">明治33年、近江の地で創業。一世紀を超えて「はかる」に向き合いつづけた歩みを、年表でたどる。</p>
+      <span class="hist__go rv rv-d2">126年ヒストリーを見る <i class="arrow-i" style="color:inherit">→</i></span>
+    </div>
+    <div class="hist__num rv rv-d1">
+      <span class="since">SINCE 1900</span>
+      <b>126<i>YEARS</i></b>
+    </div>
+  </div>
+</a>
 
 <!-- ============ 新着情報 ============ -->
 <section class="gsec newsblock">
