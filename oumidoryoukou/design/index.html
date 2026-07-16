@@ -296,7 +296,7 @@ body.menu-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.strip__track{animation:none}}
 
 /* ============ フッター（ロゴ+住所／サイトマップ／CONTACTパネル） ============ */
-.foot{background:var(--paper);color:var(--ink);margin-left:0;padding:96px 7vw 36px;border-top:0.5px solid var(--line)}
+.foot{position:relative;background:var(--paper);color:var(--ink);margin-left:0;padding:96px 7vw 36px;border-top:0.5px solid var(--line)}
 @media(max-width:900px){.foot{margin-left:0}}
 .foot__grid{display:grid;grid-template-columns:minmax(220px,.85fr) minmax(0,1fr) minmax(380px,.95fr);gap:4.5vw;align-items:start}
 .foot__brand img{height:38px}
@@ -365,6 +365,23 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
 .fv__title .en-sub{font-size:clamp(14px,1.2vw,18px);margin-top:28px;color:rgba(255,255,255,.92);}
 /* ── SP：お問い合わせはハンバーガー内に格納（ヘッダーのボタンは非表示） ── */
 @media(max-width:900px){.nav__cta{display:none;}}
+/* ── グローバルナビ：上に余白の浮遊バー（kaonavi参考・常時白・お問い合わせは右端のまま） ── */
+.nav{top:18px;left:18px;right:18px;background:#fff;border:0.5px solid var(--line)}
+.nav .nav__logo img{filter:none}
+.nav .nav__logo{border-right:0.5px solid var(--line)}
+.nav .nav__menu .nlink{color:var(--ink)}
+.nav .nav__lang{color:var(--ink);border-left-color:var(--line)}
+.nav .nav__cta{background:var(--ink);color:#fff;border-left-color:var(--ink)}
+.nav .nav__cta:hover{background:var(--red);border-left-color:var(--red)}
+.nav .burger span{background:var(--ink)}
+.nav.is-hidden{transform:translateY(calc(-100% - 22px))}
+.mega{top:calc(18px + 64px);left:18px;right:18px}
+.drawer{top:calc(18px + 64px)}
+@media(max-width:900px){
+  .nav{top:12px;left:12px;right:12px}
+  .drawer{top:calc(12px + 64px)}
+}
+
 /* ── SP：お問い合わせボックスをマーキー帯（strip）上に載せる ── */
 .strip__contact{display:none;}
 @media(max-width:900px){
