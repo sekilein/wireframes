@@ -15,11 +15,11 @@
   --ink:#181a17;
   --red:#ff0000;
   --line:#000;
-  --frame:18px;
+  --frame:28px;
   --en:"Oswald",sans-serif;
   --jp:"Noto Sans JP","Hiragino Sans",system-ui,sans-serif;
 }
-@media(max-width:900px){:root{--frame:12px}}
+@media(max-width:900px){:root{--frame:16px}}
 html{scroll-behavior:smooth}
 ::selection{background:var(--red);color:#fff}
 ::-moz-selection{background:var(--red);color:#fff}
@@ -158,17 +158,24 @@ body.menu-open{overflow:hidden}
 .fv__head-sub{color:rgba(255,255,255,.92);font-family:var(--en);font-weight:500;font-size:clamp(12px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase}
 @media(max-width:900px){.fv__head{min-height:26vh;gap:16px;padding:0 6vw 7vh}}
 
-.phil{background:var(--paper);margin:26px var(--frame) 96px}
-/* gsmd風の段差：カード上端の左側が一段持ち上がる */
-.phil::after{content:"";position:absolute;left:0;bottom:100%;width:38%;height:64px;background:var(--paper)}
+/* 想い：左3割の赤ブロック＋メッセージは左寄せで行頭が赤に載り右へはみ出す */
+.phil{background:transparent;margin:26px var(--frame) 0}
+.gsec.phil::before{content:"";position:absolute;top:0;bottom:0;left:0;width:min(32vw,470px);height:auto;background:var(--red)}
+/* 段差：赤ブロックの左肩が一段持ち上がる */
+.gsec.phil::after{content:"";position:absolute;left:0;bottom:100%;width:min(19vw,280px);height:100px;background:var(--red)}
+.phil .eyebrow{position:relative;color:rgba(255,255,255,.88)}
 /* 製品セクション上端の段差（右側が持ち上がり、左に映像の帯が残る） */
-.svc::after{content:"";position:absolute;right:0;bottom:100%;width:42%;height:64px;background:var(--paper)}
+.svc::after{content:"";position:absolute;right:0;bottom:100%;width:46%;height:100px;background:var(--paper)}
 @media(max-width:900px){
-  .phil{margin-bottom:64px}
-  .phil::after{height:36px;width:46%}
-  .svc::after{height:36px;width:48%}
+  .gsec.phil::before{width:56vw}
+  .gsec.phil::after{width:30vw;height:56px}
+  .svc::after{height:56px;width:48%}
 }
-.phil__box{width:fit-content;margin:0 auto}
+.phil__box{position:relative;width:fit-content;margin:0}
+.phil .btn{background:var(--ink)}
+.phil .btn::after{background:var(--ink);box-shadow:-34px 34px 0 var(--ink)}
+.phil .btn::before{background:var(--ink)}
+.phil .btn:hover{background:#fff;color:var(--ink)}
 .phil__st{margin-top:90px;font-weight:900;font-size:clamp(15px,1.8vw,23px);letter-spacing:.14em}
 .phil__st .ln{position:relative;display:block;width:fit-content;color:#fff;line-height:1.6;padding:.3em .7em .34em .55em}
 .phil__st .ln::before{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .5s ease}
@@ -410,6 +417,14 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
   .strip__contact .cbtn{display:inline-flex;align-items:center;gap:14px;margin-top:26px;background:#fff;color:var(--ink);font-family:var(--en);font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;padding:18px 36px;}
   .foot__contact{display:none;}
 }
+/* ── 数字で見る：黒背景ブロック（製品=白/数字=黒/新着から下=白） ── */
+.stats{background:var(--ink)}
+.stats .eyebrow{color:rgba(255,255,255,.62)}
+.stats .disp-jp{color:#fff}
+.stats .stat b{color:#fff}
+.stats .stat .lbl{color:rgba(255,255,255,.72)}
+.stats .stat+.stat{border-left-color:rgba(255,255,255,.35)}
+@media(max-width:900px){.stats .stat:nth-child(n+3){border-top-color:rgba(255,255,255,.35)}}
 </style>
 </head>
 <body>
