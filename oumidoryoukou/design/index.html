@@ -109,7 +109,8 @@ body.menu-open{overflow:hidden}
 /* 映像は固定背景：コンテンツだけが上にスクロールし、想いブロックまで背後に居続ける */
 .fv__stage video{position:fixed;top:0;left:0;width:100%;height:100vh;object-fit:cover;filter:brightness(.6) saturate(.9);transition:filter .7s ease,transform .7s ease}
 .fv__stage video.is-blur{filter:brightness(.55) saturate(.9) blur(7px);transform:scale(1.05)}
-.fv__stage::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,11,10,.62) 0%,rgba(10,11,10,.28) 55%,rgba(10,11,10,.12) 100%)}
+/* 黒幕も映像と一緒に固定（想いブロックまで維持） */
+.fv__stage::after{content:"";position:fixed;top:0;left:0;width:100%;height:100vh;background:linear-gradient(90deg,rgba(10,11,10,.62) 0%,rgba(10,11,10,.28) 55%,rgba(10,11,10,.12) 100%)}
 .fv__inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:0 7vw}
 .fv__title{color:var(--paper)}
 .fv__title span{display:block}
@@ -161,10 +162,8 @@ body.menu-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.js-chars .ch{opacity:1;transition:none}.phil__st .ln::before{transform:none;transition:none}}
 .phil__close{margin-top:220px}
 .phil__close > span{position:relative;display:block;width:fit-content;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.42;letter-spacing:normal;color:#fff;padding:0 .24em 0 .16em}
-.phil__close > span::before{content:"";position:absolute;inset:0;background:var(--red);transform:scaleX(0);transform-origin:left center;transition:transform .7s cubic-bezier(.2,.7,.2,1)}
+.phil__close > span::before{content:"";position:absolute;inset:0;background:var(--red);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .5s ease}
 .phil__close > span + span{margin-top:.18em}
-.phil__close > span:nth-child(2)::before{transition-delay:.18s}
-.phil__close.is-in > span::before{transform:none}
 @media(prefers-reduced-motion:reduce){.phil__close > span::before{transform:none;transition:none}}
 .phil__cta{margin-top:130px}
 @media(max-width:900px){
@@ -497,7 +496,7 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
     <p><span class="ln">1900年の創業から126年。</span><span class="ln">近江度量衡は、あらゆる現場の「はかる」に、</span><span class="ln">一品一様のものづくりで応えつづけてきた。</span></p>
     <p><span class="ln">暮らしを、産業を、その先の未来を。</span><span class="ln">私たちは、これからもはかりつづける。</span></p>
   </div>
-  <h2 class="phil__close js-chars" data-once><span>“いきる”をはかり</span><span>豊かな世界へ</span></h2>
+  <h2 class="phil__close js-chars"><span>“いきる”をはかり</span><span>豊かな世界へ</span></h2>
   <div class="phil__cta rv"><a class="btn" href="#">会社案内を見る <span>→</span></a></div>
   </div>
 </section>
@@ -678,7 +677,7 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
   window.addEventListener('scroll', u, {passive:true});
   u();
 })();
-/* 企業理念：スクロール量に応じて文字が1字ずつパラパラ出現（出た分は定着・data-onceは一度きりで最後まで一気出し） */
+/* 企業理念：スクロール量に応じて文字が帯ごと1字ずつパラパラ出現（出た分はリロードまで定着） */
 (function(){
   if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
   var els = [].slice.call(document.querySelectorAll('.js-chars'));
@@ -702,7 +701,7 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
       });
     })(el);
     el._chs = [].slice.call(el.querySelectorAll('.ch'));
-    el._lines = [].slice.call(el.querySelectorAll('.ln')).map(function(ln){
+    el._lines = [].slice.call(el.querySelectorAll('.ln, .phil__close > span')).map(function(ln){
       var chs = [].slice.call(ln.querySelectorAll('.ch'));
       return {ln:ln, start:el._chs.indexOf(chs[0]), count:chs.length};
     }).filter(function(L){ return L.count > 0; });
@@ -717,16 +716,7 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
       var start = vh * .88, end = vh * .42;
       var p = (start - r.top) / ((start - end) + r.height);
       p = Math.max(0, Math.min(1, p));
-      /* 一回出現したら最後まで一気に出すワンショット型 */
-      if(el.hasAttribute('data-once')){
-        if(p > 0.02){
-          el._done = true;
-          el.classList.add('is-in');
-          el._chs.forEach(function(s, i){ s.style.transitionDelay = (i * 36) + 'ms'; s.classList.add('is-on'); });
-        }
-        return;
-      }
-      /* 通常型：進んだ分は定着（スクロールを戻しても消えない） */
+      /* スクロール連動スクラブ。進んだ分は定着（スクロールを戻しても消えない） */
       p = Math.max(p, el._max || 0);
       el._max = p;
       if(p >= 1) el._done = true;
