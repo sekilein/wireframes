@@ -169,7 +169,7 @@ body.menu-open{overflow:hidden}
 
 /* ============ 企業理念：スクロールで文字がパラパラ出現（黒帯白文字・締めは赤帯コピー） ============ */
 /* ============ FVコピー：映像の上・FV左下配置（背景なし・白文字・帯なし／英字は日本語の下） ============ */
-.fv__head{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:22px;padding:0 7vw 10vh;text-align:left}
+.fv__head{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:22px;padding:0 7vw 10vh var(--frame);text-align:left}
 .fv__head-title{display:flex;flex-direction:column;align-items:flex-start}
 .fv__head-title > span{display:block;color:#fff;font-family:"Gen Interface JP Display",var(--jp);font-weight:800;font-size:clamp(2.3rem,5.6vw,5.2rem);line-height:1.32;letter-spacing:.04em}
 /* 有機的レイアウト：2行目を少し右へずらし、キーワード4つは級数アップ・接続詞は小さく */
@@ -180,7 +180,7 @@ body.menu-open{overflow:hidden}
 .fv__head-title .sm{font-size:.64em}
 .fv__head-title .q{font-style:normal}
 .fv__head-sub{color:rgba(255,255,255,.92);font-family:var(--en);font-weight:500;font-size:clamp(12px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase}
-@media(max-width:900px){.fv__head{gap:16px}}
+@media(max-width:900px){.fv__head{gap:16px;padding:0 6vw 7vh var(--frame)}}
 
 /* 想い：左3割の赤ブロック（段差なし・下は余白たっぷり）＋メッセージ左寄せで行頭が赤に載る */
 .phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
