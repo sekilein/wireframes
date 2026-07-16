@@ -1,67 +1,57 @@
-/* ページ遷移演出：ブロックごとに赤い幕が覆い→抜けていく（参考: gmining.com/careers）
-   - 入場: 各ブロックを覆った幕が上へ抜けて中身が現れる（上から順にスタガー）
-   - 退場: 内部リンククリックで幕が下から覆い→遷移
+/* ページ遷移演出：点線ガイドと同じ6×6マス目に赤いカードを敷き詰め、パラパラと消えて表示
+   - 入場: 全画面を赤カード36枚が覆った状態から、短時間でランダムに消えていく
+   - 退場: 内部リンククリックでカードがランダムに埋まっていき→遷移
    - prefers-reduced-motion では無効 */
 (function () {
   if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
 
-  var RED = '#ff0000';
-  var IN_DUR = 700, IN_STAG = 90, OUT_DUR = 460, EASE = 'cubic-bezier(.77,0,.18,1)';
+  var RED = '#ff0000', COLS = 6, ROWS = 6;
+  var IN_DUR = 320, IN_SPREAD = 560;   /* 消えるアニメの長さ / ランダム遅延の幅 */
+  var OUT_DUR = 240, OUT_SPREAD = 380;
 
   var style = document.createElement('style');
   style.textContent =
-    '.pt-cover{position:absolute;inset:-3px;background:' + RED + ';z-index:990;pointer-events:none;' +
-    'transform:scaleY(1);will-change:transform;}' +
+    '.pt-grid{position:fixed;inset:0;z-index:995;display:grid;' +
+    'grid-template-columns:repeat(' + COLS + ',1fr);grid-template-rows:repeat(' + ROWS + ',1fr);pointer-events:none;}' +
+    '.pt-grid i{display:block;background:' + RED + ';will-change:opacity;margin:-0.5px;}' +
     'html.pt-init body{visibility:hidden;}' +
     'html.pt-veil .burger,html.pt-veil .drawer{visibility:hidden!important;}';
   document.documentElement.appendChild(style);
   document.documentElement.classList.add('pt-init');
   document.documentElement.classList.add('pt-veil');
 
-  function blocks() {
-    var out = [];
-    [].slice.call(document.body.children).forEach(function (k) {
-      if (/^(SCRIPT|STYLE|LINK)$/.test(k.tagName)) return;
-      if (k.classList && (k.classList.contains('burger') || k.classList.contains('drawer') || k.classList.contains('spmenu'))) return;
-      var isWrap = k.tagName === 'DIV' && k.classList.contains('wrap');
-      if (isWrap || /^(FOOTER|MAIN)$/.test(k.tagName)) {
-        [].slice.call(k.children).forEach(function (c) {
-          if (!/^(SCRIPT|STYLE)$/.test(c.tagName)) out.push(c);
-        });
-      } else out.push(k);
-    });
-    return out.filter(function (b) { return b.offsetHeight > 10; });
+  function makeGrid(initialOpacity) {
+    var g = document.createElement('div');
+    g.className = 'pt-grid';
+    var cells = [];
+    for (var k = 0; k < COLS * ROWS; k++) {
+      var i = document.createElement('i');
+      i.style.opacity = initialOpacity;
+      g.appendChild(i);
+      cells.push(i);
+    }
+    document.body.appendChild(g);
+    return { g: g, cells: cells };
   }
 
-  function addCovers(origin, initScale) {
-    return blocks().map(function (b) {
-      if (getComputedStyle(b).position === 'static') b.style.position = 'relative';
-      var c = document.createElement('div');
-      c.className = 'pt-cover';
-      c.style.transformOrigin = origin;
-      c.style.transform = 'scaleY(' + initScale + ')';
-      b.appendChild(c);
-      return c;
-    });
-  }
-
-  /* ── 入場：幕が上へ抜ける ── */
+  /* ── 入場：赤カードがパラパラと消えていく ── */
   function reveal() {
-    var covers = addCovers('top', 1);
+    var o = makeGrid(1);
     document.documentElement.classList.remove('pt-init');
     requestAnimationFrame(function () { requestAnimationFrame(function () {
-      covers.forEach(function (c, i) {
-        c.style.transition = 'transform ' + IN_DUR + 'ms ' + EASE + ' ' + (i * IN_STAG) + 'ms';
-        c.style.transform = 'scaleY(0)';
+      o.cells.forEach(function (c) {
+        var d = Math.random() * IN_SPREAD;
+        c.style.transition = 'opacity ' + IN_DUR + 'ms ease ' + Math.round(d) + 'ms';
+        c.style.opacity = '0';
       });
       setTimeout(function () {
-        covers.forEach(function (c) { if (c.parentNode) c.parentNode.removeChild(c); });
+        if (o.g.parentNode) o.g.parentNode.removeChild(o.g);
         document.documentElement.classList.remove('pt-veil');
-      }, IN_DUR + covers.length * IN_STAG + 100);
+      }, IN_DUR + IN_SPREAD + 120);
     }); });
   }
 
-  /* ── 退場：幕が下から覆う → 遷移 ── */
+  /* ── 退場：赤カードがパラパラと埋まっていく → 遷移 ── */
   var leaving = false;
   document.addEventListener('click', function (e) {
     if (leaving || e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
@@ -73,14 +63,14 @@
     e.preventDefault();
     leaving = true;
     document.documentElement.classList.add('pt-veil');
-    var covers = addCovers('bottom', 0);
-    var stag = Math.min(60, Math.round(360 / Math.max(covers.length, 1)));
+    var o = makeGrid(0);
     requestAnimationFrame(function () { requestAnimationFrame(function () {
-      covers.forEach(function (c, i) {
-        c.style.transition = 'transform ' + OUT_DUR + 'ms ' + EASE + ' ' + (i * stag) + 'ms';
-        c.style.transform = 'scaleY(1)';
+      o.cells.forEach(function (c) {
+        var d = Math.random() * OUT_SPREAD;
+        c.style.transition = 'opacity ' + OUT_DUR + 'ms ease ' + Math.round(d) + 'ms';
+        c.style.opacity = '1';
       });
-      setTimeout(function () { location.href = href; }, OUT_DUR + covers.length * stag + 60);
+      setTimeout(function () { location.href = href; }, OUT_DUR + OUT_SPREAD + 80);
     }); });
   }, true);
 
