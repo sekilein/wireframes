@@ -242,12 +242,12 @@ body.menu-open{overflow:hidden}
 
 /* ============ 製品・技術：特大見出し＋矢印リスト（マス罫線） ============ */
 .svc{padding-bottom:320px}
-/* スクロール連動の製品切替：pinが画面に貼り付き、runway分のスクロールで4製品を順送り */
-.svc__pin{position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+/* スクロール連動の製品切替：pinが画面に貼り付き、runway分のスクロールで4製品を順送り（内容は上付け） */
+.svc__pin{position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;padding-top:104px}
 .svc__runway{height:180vh}
 @media(max-width:900px){.svc{padding-bottom:170px}}
 .svc .disp-jp{font-size:clamp(1.6rem,2.95vw,2.8rem);margin-top:22px}
-.svc__grid{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.5fr);gap:4vw;margin-top:0;align-items:center}
+.svc__grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4vw;margin-top:0;align-items:start}
 .svc__lead{font-size:14px;line-height:2.15;color:#444}
 .svc__lead .disp-jp{margin:22px 0 34px}
 .svc__lead .btn{margin-top:34px}
@@ -258,19 +258,17 @@ body.menu-open{overflow:hidden}
 .svc__list .arrow-i{font-size:16px}
 /* 製品ショーケース：計量皿に載せるドロップ＋針振れ目盛り */
 .svc-show{position:relative}
-/* 画像は右端いっぱい・高さほぼ画面フィックス */
-.svc-stage{position:relative;width:calc(100% + 7vw);margin-right:-7vw;will-change:transform}
-.svc-stage__imgs{position:relative;width:100%;height:min(86vh,940px);overflow:hidden;background:#141614}
-/* 現在地インジケーター：01〜04＋システム名（画像上にオーバーレイ） */
-.svc-nav{position:absolute;right:28px;bottom:170px;z-index:3;display:flex;flex-direction:column;gap:20px;align-items:flex-start}
-.svc-nav__item{position:relative;display:flex;align-items:baseline;gap:10px;background:none;border:0;cursor:pointer;text-align:left;padding:0 0 0 18px;color:rgba(255,255,255,.66);transition:color .25s;font-family:var(--jp);text-shadow:0 1px 10px rgba(0,0,0,.4)}
-.svc-nav__item::before{content:"";position:absolute;left:0;top:50%;width:11px;height:2px;background:var(--red);opacity:0;transition:opacity .25s}
-.svc-nav__item .no{font-family:var(--en);font-size:12px;letter-spacing:.12em}
-.svc-nav__item .nm{font-size:12.5px;font-weight:700;letter-spacing:.06em}
-.svc-nav__item:hover{color:#fff}
-.svc-nav__item.is-on{color:#fff}
-.svc-nav__item.is-on .no{color:var(--red)}
-.svc-nav__item.is-on::before{opacity:1}
+/* 画像は縦長・右端付け（左のテキスト領域を広く） */
+.svc-stage{position:relative;width:fit-content;margin-left:auto;margin-right:-7vw}
+.svc-stage__imgs{position:relative;height:min(calc(100vh - 150px),860px);aspect-ratio:3/4;width:auto;overflow:hidden;background:#141614}
+/* 現在地兼切替：4つのカードボタン（画像右下にオーバーレイ・キャプションセルの代替） */
+.svc-cards{position:absolute;right:24px;bottom:24px;z-index:3;display:flex;flex-direction:column;gap:8px;width:min(300px,calc(100% - 48px))}
+.svc-card{display:flex;align-items:baseline;gap:12px;background:rgba(255,255,255,.86);border:0;border-left:3px solid transparent;cursor:pointer;text-align:left;padding:13px 16px;font-family:var(--jp);color:#8a8a8a;transition:background .25s,color .25s,border-color .25s}
+.svc-card .no{font-family:var(--en);font-size:11px;letter-spacing:.12em}
+.svc-card .nm{font-size:13px;font-weight:700;letter-spacing:.05em}
+.svc-card:hover{background:#fff;color:var(--ink)}
+.svc-card.is-on{background:#fff;color:var(--ink);border-left-color:var(--red)}
+.svc-card.is-on .no{color:var(--red)}
 .svc-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .45s;z-index:1}
 .svc-img.is-on{opacity:1;z-index:2}
 .svc-cell{position:relative;z-index:3;margin:-72px 24px 0;background:#fff;border:0.5px solid var(--line)}
@@ -289,12 +287,12 @@ body.menu-open{overflow:hidden}
 .svc-ruler__pointer{position:absolute;right:19px;width:24px;height:2px;background:var(--red);box-shadow:0 0 8px rgba(255,0,0,.55);transition:top .75s cubic-bezier(.2,1.7,.35,1)}
 @media(max-width:900px){
   .svc__grid{grid-template-columns:1fr;gap:36px}
-  .svc-stage{width:calc(100% + 6vw);margin-right:-6vw}
-  .svc-stage__imgs{height:min(48vh,520px)}
-  .svc-cell{margin:-56px 14px 0}
-  .svc-nav{position:static;flex-direction:row;flex-wrap:wrap;gap:10px 18px;margin-top:16px}
-  .svc-nav__item{color:#a5a5a5;text-shadow:none}
-  .svc-nav__item.is-on{color:var(--ink)}
+  .svc__pin{padding-top:88px}
+  .svc-stage{width:100%;margin:0}
+  .svc-stage__imgs{height:min(46vh,480px);aspect-ratio:auto;width:100%}
+  .svc-cards{position:static;width:100%;margin-top:12px}
+  .svc-card{background:#fff;border:0.5px solid var(--line);border-left:3px solid transparent}
+  .svc-card.is-on{border-left-color:var(--red)}
 }
 
 /* ============ 数字で見る：カウントアップ＋縦罫マス ============ */
@@ -648,17 +646,12 @@ body.menu-open .nav{background:transparent;border:none}
           <div class="svc-img" style="background-image:url(photo-industry.jpg)"></div>
           <div class="svc-img" style="background-image:url(photo-others.jpg)"></div>
         </div>
-        <div class="svc-cell">
-          <div class="svc-cell__ttl">農産物用計量システム</div>
-          <div class="svc-cell__sub">Agricultural Weighing System</div>
-          <div class="svc-cell__row"><span><i class="dot"></i>Made-to-order</span><span class="svc-cell__meta">Calistar / Millistar / Rollerstar</span></div>
+        <div class="svc-cards">
+          <button class="svc-card is-on"><span class="no">01</span><span class="nm">農産物用計量システム</span></button>
+          <button class="svc-card"><span class="no">02</span><span class="nm">穀類用計量システム</span></button>
+          <button class="svc-card"><span class="no">03</span><span class="nm">工業用計量システム</span></button>
+          <button class="svc-card"><span class="no">04</span><span class="nm">その他・特殊用途</span></button>
         </div>
-      </div>
-      <div class="svc-nav">
-        <button class="svc-nav__item is-on"><span class="no">01</span><span class="nm">農産物用計量システム</span></button>
-        <button class="svc-nav__item"><span class="no">02</span><span class="nm">穀類用計量システム</span></button>
-        <button class="svc-nav__item"><span class="no">03</span><span class="nm">工業用計量システム</span></button>
-        <button class="svc-nav__item"><span class="no">04</span><span class="nm">その他・特殊用途</span></button>
       </div>
     </div>
   </div>
@@ -891,35 +884,18 @@ body.menu-open .nav{background:transparent;border:none}
   },{threshold:.18});
   document.querySelectorAll('.rv:not(.is-in)').forEach(function(el){ io.observe(el); });
 })();
-/* 製品ショーケース：計量皿ドロップ＋針振れで4製品を巡回 */
+/* 製品ショーケース：スクロール連動で4製品を順送り（カードボタンでも切替可） */
 (function(){
-  var DATA = [
-    {t:'農産物用計量システム', s:'Agricultural Weighing System', m:'Calistar / Millistar / Rollerstar'},
-    {t:'穀類用計量システム', s:'Grain Weighing System', m:'全国約2,000施設'},
-    {t:'工業用計量システム', s:'Industrial Weighing System', m:'ガラス・鉄鋼・化学 ほか'},
-    {t:'その他・特殊用途', s:'Special Applications', m:'動物計量・研究用途 ほか'}
-  ];
   var imgs = [].slice.call(document.querySelectorAll('.svc-img'));
   if(!imgs.length) return;
-  var nos = [].slice.call(document.querySelectorAll('.svc-nav__item'));
-  var pointer = document.querySelector('.svc-ruler__pointer');
-  var cell = document.querySelector('.svc-cell');
-  var cur = 0, timer = null;
+  var nos = [].slice.call(document.querySelectorAll('.svc-card'));
+  var cur = 0;
   function go(i){
     if(i===cur) return;
     imgs[cur].classList.remove('is-on');
     imgs[i].classList.add('is-on');
     nos[cur].classList.remove('is-on');
     nos[i].classList.add('is-on');
-    if(pointer) pointer.style.top = nos[i].style.top;
-    cell.classList.add('is-fade');
-    setTimeout(function(){
-      var d = DATA[i];
-      cell.querySelector('.svc-cell__ttl').textContent = d.t;
-      cell.querySelector('.svc-cell__sub').textContent = d.s;
-      cell.querySelector('.svc-cell__meta').textContent = d.m;
-      cell.classList.remove('is-fade');
-    }, 240);
     cur = i;
   }
   nos.forEach(function(btn,i){ btn.addEventListener('click', function(){ go(i); }); });
@@ -927,19 +903,11 @@ body.menu-open .nav{background:transparent;border:none}
   var pin = document.querySelector('.svc__pin');
   var runway = document.querySelector('.svc__runway');
   if(pin && runway){
-    var stage = document.querySelector('.svc-stage');
-    var LIFT = 315; /* 進入時：画像の頭が想いエリアの映像帯へ約110px食い込む持ち上げ量 */
     function onScroll(){
       var r = runway.getBoundingClientRect();
       var p = (window.innerHeight - r.top) / r.height;
       p = Math.max(0, Math.min(1, p));
       go(Math.min(imgs.length - 1, Math.floor(p * imgs.length)));
-      /* ピンに入る直前300pxで定位置へスッと収まる（それまでは頭出しキープ） */
-      if(stage && !matchMedia('(max-width:900px)').matches){
-        var t = Math.max(0, Math.min(1, pin.getBoundingClientRect().top / 300));
-        var e = t * t * (3 - 2 * t);
-        stage.style.transform = 'translateY(' + (-LIFT * e).toFixed(1) + 'px)';
-      }
     }
     window.addEventListener('scroll', onScroll, {passive:true});
     window.addEventListener('resize', onScroll);
