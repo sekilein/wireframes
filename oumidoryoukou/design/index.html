@@ -258,17 +258,25 @@ body.menu-open{overflow:hidden}
 .svc__list .arrow-i{font-size:16px}
 /* 製品ショーケース：計量皿に載せるドロップ＋針振れ目盛り */
 .svc-show{position:relative}
-/* 画像は縦長・右端付け（左のテキスト領域を広く） */
-.svc-stage{position:relative;width:fit-content;margin-left:auto;margin-right:-7vw}
-.svc-stage__imgs{position:relative;height:min(calc(100vh - 150px),860px);aspect-ratio:3/4;width:auto;overflow:hidden;background:#141614}
-/* 現在地兼切替：4つのカードボタン（画像右下にオーバーレイ・キャプションセルの代替） */
-.svc-cards{position:absolute;right:24px;bottom:24px;z-index:3;display:flex;flex-direction:column;gap:8px;width:min(300px,calc(100% - 48px))}
-.svc-card{display:flex;align-items:baseline;gap:12px;background:rgba(255,255,255,.86);border:0;border-left:3px solid transparent;cursor:pointer;text-align:left;padding:13px 16px;font-family:var(--jp);color:#8a8a8a;transition:background .25s,color .25s,border-color .25s}
-.svc-card .no{font-family:var(--en);font-size:11px;letter-spacing:.12em}
-.svc-card .nm{font-size:13px;font-weight:700;letter-spacing:.05em}
-.svc-card:hover{background:#fff;color:var(--ink)}
-.svc-card.is-on{background:#fff;color:var(--ink);border-left-color:var(--red)}
+/* 画像は縦長・右に余白を残して配置（左のテキスト領域を広く） */
+.svc-stage{position:relative;width:fit-content;margin-left:auto}
+.svc-stage__imgs{position:relative;height:min(calc(100vh - 210px),780px);aspect-ratio:3/4;width:auto;overflow:hidden;background:#141614}
+/* 切替メニュー：画像の下に小さく4つ横並び */
+.svc-cards{display:flex;gap:8px;margin-top:10px}
+.svc-card{flex:1;display:flex;align-items:baseline;gap:8px;background:#fff;border:0.5px solid var(--line);border-top:2px solid transparent;cursor:pointer;text-align:left;padding:9px 10px;font-family:var(--jp);color:#9a9a9a;transition:color .25s,border-color .25s}
+.svc-card .no{font-family:var(--en);font-size:10px;letter-spacing:.1em}
+.svc-card .nm{font-size:10.5px;font-weight:700;letter-spacing:.03em}
+.svc-card:hover{color:var(--ink)}
+.svc-card.is-on{color:var(--ink);border-top-color:var(--red)}
 .svc-card.is-on .no{color:var(--red)}
+/* スライド内容詳細：左カラムに表示（スライドに連動してフェード切替） */
+.svc-detail{margin-top:46px;padding-top:26px;border-top:0.5px solid var(--line);max-width:480px;transition:opacity .25s}
+.svc-detail.is-fade{opacity:0}
+.svc-detail__no{font-family:var(--en);font-size:11px;letter-spacing:.18em;color:var(--red)}
+.svc-detail__ttl{font-family:var(--jp);font-size:clamp(17px,1.6vw,22px);font-weight:900;letter-spacing:.05em;margin-top:10px}
+.svc-detail__sub{font-family:var(--en);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#888;margin-top:6px}
+.svc-detail__meta{font-size:12.5px;color:#555;margin-top:14px}
+.svc-detail__meta .dot{width:8px;height:8px;background:var(--red);display:inline-block;margin-right:8px}
 .svc-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .45s;z-index:1}
 .svc-img.is-on{opacity:1;z-index:2}
 .svc-cell{position:relative;z-index:3;margin:-72px 24px 0;background:#fff;border:0.5px solid var(--line)}
@@ -637,6 +645,12 @@ body.menu-open .nav{background:transparent;border:none}
       <h2 class="disp-jp">現場の「はかる」に、<br>一品一様で応える。</h2>
       <p>農産物から穀類、工業まで。計画・設計から制御・製造・施工・保守までを一貫して自社で担い、現場ごとに最適な計量システムをつくり上げます。同じものはひとつとしてありません。</p>
       <a class="btn" href="#">製品・技術を詳しく見る <span>→</span></a>
+      <div class="svc-detail">
+        <span class="svc-detail__no">( 01 )</span>
+        <h3 class="svc-detail__ttl">農産物用計量システム</h3>
+        <p class="svc-detail__sub">Agricultural Weighing System</p>
+        <p class="svc-detail__meta"><i class="dot"></i>Made-to-order — Calistar / Millistar / Rollerstar</p>
+      </div>
     </div>
     <div class="svc-show">
       <div class="svc-stage">
@@ -884,11 +898,18 @@ body.menu-open .nav{background:transparent;border:none}
   },{threshold:.18});
   document.querySelectorAll('.rv:not(.is-in)').forEach(function(el){ io.observe(el); });
 })();
-/* 製品ショーケース：スクロール連動で4製品を順送り（カードボタンでも切替可） */
+/* 製品ショーケース：スクロール連動で4製品を順送り（カードボタンでも切替可・詳細は左カラムに連動表示） */
 (function(){
+  var DATA = [
+    {t:'農産物用計量システム', s:'Agricultural Weighing System', m:'Made-to-order — Calistar / Millistar / Rollerstar'},
+    {t:'穀類用計量システム', s:'Grain Weighing System', m:'全国約2,000施設に納入'},
+    {t:'工業用計量システム', s:'Industrial Weighing System', m:'ガラス・鉄鋼・化学 ほか'},
+    {t:'その他・特殊用途', s:'Special Applications', m:'動物計量・研究用途 ほか'}
+  ];
   var imgs = [].slice.call(document.querySelectorAll('.svc-img'));
   if(!imgs.length) return;
   var nos = [].slice.call(document.querySelectorAll('.svc-card'));
+  var detail = document.querySelector('.svc-detail');
   var cur = 0;
   function go(i){
     if(i===cur) return;
@@ -896,6 +917,17 @@ body.menu-open .nav{background:transparent;border:none}
     imgs[i].classList.add('is-on');
     nos[cur].classList.remove('is-on');
     nos[i].classList.add('is-on');
+    if(detail){
+      detail.classList.add('is-fade');
+      setTimeout(function(){
+        var d = DATA[i];
+        detail.querySelector('.svc-detail__no').textContent = '( 0' + (i+1) + ' )';
+        detail.querySelector('.svc-detail__ttl').textContent = d.t;
+        detail.querySelector('.svc-detail__sub').textContent = d.s;
+        detail.querySelector('.svc-detail__meta').innerHTML = '<i class="dot"></i>' + d.m;
+        detail.classList.remove('is-fade');
+      }, 200);
+    }
     cur = i;
   }
   nos.forEach(function(btn,i){ btn.addEventListener('click', function(){ go(i); }); });
