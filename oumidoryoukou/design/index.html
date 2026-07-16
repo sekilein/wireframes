@@ -158,8 +158,16 @@ body.menu-open{overflow:hidden}
 .fv__head-sub{color:rgba(255,255,255,.92);font-family:var(--en);font-weight:500;font-size:clamp(12px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase}
 @media(max-width:900px){.fv__head{min-height:26vh;gap:16px;padding:0 6vw 7vh}}
 
-.phil{background:var(--paper);margin:26px 15vw}
-@media(max-width:900px){.phil{margin:20px 6vw}}
+.phil{background:var(--paper);margin:26px var(--frame) 96px}
+/* gsmd風の段差：カード上端の左側が一段持ち上がる */
+.phil::after{content:"";position:absolute;left:0;bottom:100%;width:38%;height:64px;background:var(--paper)}
+/* 製品セクション上端の段差（右側が持ち上がり、左に映像の帯が残る） */
+.svc::after{content:"";position:absolute;right:0;bottom:100%;width:42%;height:64px;background:var(--paper)}
+@media(max-width:900px){
+  .phil{margin-bottom:64px}
+  .phil::after{height:36px;width:46%}
+  .svc::after{height:36px;width:48%}
+}
 .phil__box{width:fit-content;margin:0 auto}
 .phil__st{margin-top:90px;font-weight:900;font-size:clamp(15px,1.8vw,23px);letter-spacing:.14em}
 .phil__st .ln{position:relative;display:block;width:fit-content;color:#fff;line-height:1.6;padding:.3em .7em .34em .55em}
