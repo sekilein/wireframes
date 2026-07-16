@@ -158,15 +158,16 @@ body.menu-open{overflow:hidden}
   .fv__cell p{display:none}
 }
 
-/* ============ 企業理念（想い）：FVと製品の間・黒帯マニフェスト ============ */
-.phil__win{position:absolute;top:0;left:0;width:min(300px,36vw);aspect-ratio:1;overflow:hidden}
+/* ============ 企業理念（想い）：FVと製品の間・固定映像背景に白帯マニフェスト ============ */
+.phil{background:#e9e9e9;background-image:repeating-linear-gradient(45deg,rgba(0,0,0,.05) 0 14px,transparent 14px 28px)}
 .phil__box{width:fit-content;margin:0 auto}
 .phil__st{margin-top:90px;font-weight:900;font-size:clamp(15px,1.8vw,23px);letter-spacing:.14em}
-.phil__st .ln{display:block;width:fit-content;background:var(--ink);color:#fff;line-height:1.6;padding:.3em .7em .34em .55em}
+.phil__st .ln{display:block;width:fit-content;background:#fff;color:var(--ink);border:1px solid var(--line);line-height:1.6;padding:.3em .7em .34em .55em}
 .phil__st .ln+.ln{margin-top:.55em}
 .phil__st p+p{margin-top:2.6em}
 .phil__close{margin-top:190px}
-.phil__close span{display:block;width:fit-content;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.5;letter-spacing:normal;color:var(--ink)}
+.phil__close span{display:block;width:fit-content;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.42;letter-spacing:normal;background:var(--red);color:#fff;padding:0 .24em 0 .16em}
+.phil__close span+span{margin-top:.18em}
 .phil__cta{margin-top:110px}
 @media(max-width:900px){
   .phil__st{margin-top:56px;font-size:13.5px;letter-spacing:.1em}
@@ -451,7 +452,6 @@ body.menu-open{overflow:hidden}
 
 <!-- ============ 企業理念（想い） ============ -->
 <section class="gsec phil" id="philosophy">
-  <div class="phil__win"><div class="ph-fill"><span>背景ムービー（FVから継続して覗く窓）</span></div></div>
   <p class="eyebrow rv">OUR PHILOSOPHY — 企業理念</p>
   <div class="phil__box">
     <div class="phil__st">
@@ -462,7 +462,7 @@ body.menu-open{overflow:hidden}
     </div>
     <h2 class="phil__close"><span>“いきる”をはかり</span><span>豊かな世界へ</span></h2>
     <div class="phil__cta"><a class="btn" href="company.html#concept">会社案内を見る <span>→</span></a></div>
-    <span class="wf-note">※演出仕様：文章はスクロール量に連動して黒帯ごと1文字ずつ左→右に出現。一度出た部分はリロードまで定着（戻しても消えない）。締めのコピーは出現開始したら最後まで一気に出現。左上はFVの背景ムービーが固定表示で覗く正方形の窓（映像が下にも続いて見える）。文言は仮。</span>
+    <span class="wf-note">※演出仕様：FVの背景ムービーは固定背景（コンテンツだけが上にスクロール）で、このブロックまで背後に続く。想いブロックに差し替わったら映像は若干ブラー（このエリアの斜線＝映像が透けている想定）。メッセージは白帯に黒文字、締めの「“いきる”をはかり…」だけ赤帯に白文字。文章はスクロール量に連動して帯ごと1文字ずつ左→右に出現し、一度出た部分はリロードまで定着。締めのコピーは出現開始したら最後まで一気に出現。文言は仮。</span>
   </div>
 </section>
 
