@@ -180,13 +180,11 @@ body.menu-open{overflow:hidden}
 .phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
 .gsec.phil::before{content:"";position:absolute;top:0;bottom:0;left:0;width:min(32vw,470px);height:auto;background:var(--red)}
 .phil .eyebrow{position:relative;grid-column:1 / -1;color:rgba(255,255,255,.88)}
-/* 各ブロック上端の段差（高さはバラバラ） */
-.svc::after{content:"";position:absolute;right:0;bottom:100%;width:31.5%;height:200px;background:var(--paper)}
+/* 各ブロック上端の段差（高さはバラバラ・製品は白が映像上に出ないよう段差なし） */
 .stats::after{content:"";position:absolute;left:0;bottom:100%;width:34%;height:150px;background:var(--ink)}
 .newsblock::after{content:"";position:absolute;right:0;bottom:100%;width:40%;height:70px;background:var(--paper)}
 @media(max-width:900px){
   .gsec.phil::before{width:56vw}
-  .svc::after{height:100px;width:44%}
   .stats::after{height:80px;width:40%}
   .newsblock::after{height:40px;width:44%}
 }
@@ -234,9 +232,12 @@ body.menu-open{overflow:hidden}
 
 /* ============ 製品・技術：特大見出し＋矢印リスト（マス罫線） ============ */
 .svc{padding-bottom:320px}
+/* スクロール連動の製品切替：pinが画面に貼り付き、runway分のスクロールで4製品を順送り */
+.svc__pin{position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+.svc__runway{height:180vh}
 @media(max-width:900px){.svc{padding-bottom:170px}}
 .svc .disp-jp{font-size:clamp(1.9rem,4.6vw,3.9rem);margin-top:22px}
-.svc__grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:6vw;margin-top:72px;align-items:start}
+.svc__grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:6vw;margin-top:44px;align-items:center}
 .svc__lead{font-size:14px;line-height:2.15;color:#444}
 .svc__lead .btn{margin-top:34px}
 .svc__list{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
@@ -245,9 +246,19 @@ body.menu-open{overflow:hidden}
 .svc__list a:hover{color:var(--red);padding-left:16px}
 .svc__list .arrow-i{font-size:16px}
 /* 製品ショーケース：計量皿に載せるドロップ＋針振れ目盛り */
-.svc-show{display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:20px;align-items:stretch;margin-top:-550px}
-.svc-stage{position:relative;max-width:540px;width:100%;margin-left:auto}
-.svc-stage__imgs{position:relative;aspect-ratio:3/4;overflow:hidden;background:#141614}
+.svc-show{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:34px;align-items:center}
+.svc-stage{position:relative;width:fit-content;margin-left:auto}
+.svc-stage__imgs{position:relative;height:min(56vh,640px);aspect-ratio:3/4;overflow:hidden;background:#141614}
+/* 現在地インジケーター：01〜04＋システム名（細かい目盛りなし） */
+.svc-nav{display:flex;flex-direction:column;gap:24px;justify-content:center}
+.svc-nav__item{position:relative;display:flex;align-items:baseline;gap:10px;background:none;border:0;cursor:pointer;text-align:left;padding:0 0 0 18px;color:#a5a5a5;transition:color .25s;font-family:var(--jp)}
+.svc-nav__item::before{content:"";position:absolute;left:0;top:50%;width:11px;height:2px;background:var(--red);opacity:0;transition:opacity .25s}
+.svc-nav__item .no{font-family:var(--en);font-size:12px;letter-spacing:.12em}
+.svc-nav__item .nm{font-size:12.5px;font-weight:700;letter-spacing:.06em}
+.svc-nav__item:hover{color:var(--ink)}
+.svc-nav__item.is-on{color:var(--ink)}
+.svc-nav__item.is-on .no{color:var(--red)}
+.svc-nav__item.is-on::before{opacity:1}
 .svc-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .45s;z-index:1}
 .svc-img.is-on{opacity:1;z-index:2}
 .svc-cell{position:relative;z-index:3;margin:-72px 24px 0;background:#fff;border:0.5px solid var(--line)}
@@ -265,13 +276,12 @@ body.menu-open{overflow:hidden}
 .svc-ruler__no:hover{color:var(--red)}
 .svc-ruler__pointer{position:absolute;right:19px;width:24px;height:2px;background:var(--red);box-shadow:0 0 8px rgba(255,0,0,.55);transition:top .75s cubic-bezier(.2,1.7,.35,1)}
 @media(max-width:900px){
-  .svc__grid{grid-template-columns:1fr;gap:44px}
-  .svc-show{grid-template-columns:minmax(0,1fr) 48px;gap:12px;margin-top:0}
+  .svc__grid{grid-template-columns:1fr;gap:36px}
+  .svc-show{grid-template-columns:1fr;gap:18px}
   .svc-stage{margin-left:0}
+  .svc-stage__imgs{height:min(46vh,480px)}
   .svc-cell{margin:-56px 14px 0}
-  .svc-ruler__no{right:30px}
-  .svc-ruler::before,.svc-ruler__ticks{right:14px}
-  .svc-ruler__pointer{right:9px}
+  .svc-nav{flex-direction:row;flex-wrap:wrap;gap:10px 18px}
 }
 
 /* ============ 数字で見る：カウントアップ＋縦罫マス ============ */
@@ -606,6 +616,7 @@ body.menu-open .nav{background:transparent;border:none}
 
 <!-- ============ 製品・技術 ============ -->
 <section class="gsec svc" id="products">
+  <div class="svc__pin">
   <p class="eyebrow rv">PRODUCTS &amp; TECHNOLOGY — 製品・技術</p>
   <h2 class="disp-jp rv rv-d1">現場の「はかる」に、<br>一品一様で応える。</h2>
   <div class="svc__grid">
@@ -627,16 +638,16 @@ body.menu-open .nav{background:transparent;border:none}
           <div class="svc-cell__row"><span><i class="dot"></i>Made-to-order</span><span class="svc-cell__meta">Calistar / Millistar / Rollerstar</span></div>
         </div>
       </div>
-      <div class="svc-ruler">
-        <span class="svc-ruler__ticks"></span>
-        <button class="svc-ruler__no is-on" style="top:10%">01</button>
-        <button class="svc-ruler__no" style="top:36.6%">02</button>
-        <button class="svc-ruler__no" style="top:63.3%">03</button>
-        <button class="svc-ruler__no" style="top:90%">04</button>
-        <span class="svc-ruler__pointer" style="top:10%"></span>
+      <div class="svc-nav">
+        <button class="svc-nav__item is-on"><span class="no">01</span><span class="nm">農産物用計量システム</span></button>
+        <button class="svc-nav__item"><span class="no">02</span><span class="nm">穀類用計量システム</span></button>
+        <button class="svc-nav__item"><span class="no">03</span><span class="nm">工業用計量システム</span></button>
+        <button class="svc-nav__item"><span class="no">04</span><span class="nm">その他・特殊用途</span></button>
       </div>
     </div>
   </div>
+  </div><!-- /svc__pin -->
+  <div class="svc__runway" aria-hidden="true"></div>
 </section>
 
 <!-- ============ 数字で見る ============ -->
@@ -874,7 +885,7 @@ body.menu-open .nav{background:transparent;border:none}
   ];
   var imgs = [].slice.call(document.querySelectorAll('.svc-img'));
   if(!imgs.length) return;
-  var nos = [].slice.call(document.querySelectorAll('.svc-ruler__no'));
+  var nos = [].slice.call(document.querySelectorAll('.svc-nav__item'));
   var pointer = document.querySelector('.svc-ruler__pointer');
   var cell = document.querySelector('.svc-cell');
   var cur = 0, timer = null;
@@ -895,14 +906,21 @@ body.menu-open .nav{background:transparent;border:none}
     }, 240);
     cur = i;
   }
-  function next(){ go((cur+1)%imgs.length); }
-  function play(){ stop(); timer = setInterval(next, 4200); }
-  function stop(){ if(timer){ clearInterval(timer); timer=null; } }
-  nos.forEach(function(btn,i){ btn.addEventListener('click', function(){ go(i); play(); }); });
-  var show = document.querySelector('.svc-show');
-  show.addEventListener('mouseenter', stop);
-  show.addEventListener('mouseleave', play);
-  if(!matchMedia('(prefers-reduced-motion:reduce)').matches) play();
+  nos.forEach(function(btn,i){ btn.addEventListener('click', function(){ go(i); }); });
+  /* スクロール連動：pinが貼り付いている間、runwayの進行度で4製品を順送り（自動巡回なし） */
+  var pin = document.querySelector('.svc__pin');
+  var runway = document.querySelector('.svc__runway');
+  if(pin && runway){
+    function onScroll(){
+      var r = runway.getBoundingClientRect();
+      var p = (window.innerHeight - r.top) / r.height;
+      p = Math.max(0, Math.min(1, p));
+      go(Math.min(imgs.length - 1, Math.floor(p * imgs.length)));
+    }
+    window.addEventListener('scroll', onScroll, {passive:true});
+    window.addEventListener('resize', onScroll);
+    onScroll();
+  }
 })();
 /* 数字カウントアップ（表示された時に開始） */
 (function(){
