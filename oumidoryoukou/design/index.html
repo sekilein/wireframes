@@ -115,6 +115,17 @@ body.menu-open{overflow:hidden}
 .fv__stage video.is-blur{filter:brightness(.55) saturate(.9) blur(7px);transform:scale(1.05)}
 /* 黒幕も映像と一緒に固定（想いブロックまで維持） */
 .fv__stage::after{content:"";position:fixed;top:0;left:0;width:100%;height:100vh;background:linear-gradient(90deg,rgba(10,11,10,.62) 0%,rgba(10,11,10,.28) 55%,rgba(10,11,10,.12) 100%)}
+/* 映像上の0.5px縦点線ガイド罫線（rollbahn.jp/25th参考・映像が見える領域すべてに固定表示） */
+.fv__lines{position:fixed;top:0;left:0;width:100%;height:100vh;pointer-events:none;
+  background-image:
+    repeating-linear-gradient(to bottom,rgba(255,255,255,.34) 0 2px,transparent 2px 6px),
+    repeating-linear-gradient(to bottom,rgba(255,255,255,.34) 0 2px,transparent 2px 6px),
+    repeating-linear-gradient(to bottom,rgba(255,255,255,.34) 0 2px,transparent 2px 6px),
+    repeating-linear-gradient(to bottom,rgba(255,255,255,.34) 0 2px,transparent 2px 6px),
+    repeating-linear-gradient(to bottom,rgba(255,255,255,.34) 0 2px,transparent 2px 6px);
+  background-size:0.5px 100%;
+  background-repeat:no-repeat;
+  background-position:calc(100%*1/6) 0,calc(100%*2/6) 0,calc(100%*3/6) 0,calc(100%*4/6) 0,calc(100%*5/6) 0}
 .fv__inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:0 7vw}
 .fv__title{color:var(--paper)}
 .fv__title span{display:block}
@@ -203,7 +214,7 @@ body.menu-open{overflow:hidden}
 .js-chars .ch.is-on{opacity:1}
 @media(prefers-reduced-motion:reduce){.js-chars .ch{opacity:1;transition:none}.phil__st .ln::before{transform:none;transition:none}}
 .phil__close{margin-top:220px}
-.phil__close > span{position:relative;display:block;width:fit-content;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.42;letter-spacing:normal;color:#fff;padding:0 .24em 0 .16em}
+.phil__close > span{position:relative;display:block;width:fit-content;font-family:"Gen Interface JP Display",var(--jp);font-weight:800;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.42;letter-spacing:.04em;color:#fff;padding:0 .24em 0 .16em}
 .phil__close > span::before{content:"";position:absolute;inset:0;background:var(--red);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .phil__close > span:nth-child(2)::before{transition-delay:.15s}
 .phil__close > span + span{margin-top:.18em}
@@ -540,6 +551,7 @@ body.menu-open .nav{background:transparent;border:none}
 <section class="fv">
   <div class="fv__stage">
     <video autoplay muted loop playsinline src="home.mp4"></video>
+    <div class="fv__lines" aria-hidden="true"></div>
   </div>
   <div class="fv__head">
     <h1 class="fv__head-title"><span><i class="q">“</i>いきる<i class="q">”</i>をはかり</span><span>豊かな世界へ</span></h1>
