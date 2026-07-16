@@ -158,6 +158,22 @@ body.menu-open{overflow:hidden}
   .fv__cell p{display:none}
 }
 
+/* ============ 企業理念（想い）：FVと製品の間・黒帯マニフェスト ============ */
+.phil__win{position:absolute;top:0;left:0;width:min(300px,36vw);aspect-ratio:1;overflow:hidden}
+.phil__box{width:fit-content;margin:0 auto}
+.phil__st{margin-top:90px;font-weight:900;font-size:clamp(15px,1.8vw,23px);letter-spacing:.14em}
+.phil__st .ln{display:block;width:fit-content;background:var(--ink);color:#fff;line-height:1.6;padding:.3em .7em .34em .55em}
+.phil__st .ln+.ln{margin-top:.55em}
+.phil__st p+p{margin-top:2.6em}
+.phil__close{margin-top:190px}
+.phil__close span{display:block;width:fit-content;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.5;letter-spacing:normal;color:var(--ink)}
+.phil__cta{margin-top:110px}
+@media(max-width:900px){
+  .phil__st{margin-top:56px;font-size:13.5px;letter-spacing:.1em}
+  .phil__close{margin-top:80px}
+  .phil__cta{margin-top:48px}
+}
+
 /* ============ 製品・技術：特大見出し＋矢印リスト（マス罫線） ============ */
 .svc .disp-jp{font-size:clamp(1.9rem,4.6vw,3.9rem);margin-top:22px}
 .svc__grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:6vw;margin-top:72px;align-items:start}
@@ -432,6 +448,23 @@ body.menu-open{overflow:hidden}
 </section>
 
 <div class="wrap">
+
+<!-- ============ 企業理念（想い） ============ -->
+<section class="gsec phil" id="philosophy">
+  <div class="phil__win"><div class="ph-fill"><span>背景ムービー（FVから継続して覗く窓）</span></div></div>
+  <p class="eyebrow rv">OUR PHILOSOPHY — 企業理念</p>
+  <div class="phil__box">
+    <div class="phil__st">
+      <p><span class="ln">私たちの暮らしは、</span><span class="ln">数えきれない「はかる」で、できている。</span></p>
+      <p><span class="ln">一粒の米も、一滴の水も、</span><span class="ln">正しくはかられて、はじめて価値になる。</span><span class="ln">公正な取引も、たしかな品質も、安心できる毎日も、</span><span class="ln">すべては、正確にはかることから始まる。</span></p>
+      <p><span class="ln">1900年の創業から126年。</span><span class="ln">近江度量衡は、あらゆる現場の「はかる」に、</span><span class="ln">一品一様のものづくりで応えつづけてきた。</span></p>
+      <p><span class="ln">暮らしを、産業を、その先の未来を。</span><span class="ln">私たちは、これからもはかりつづける。</span></p>
+    </div>
+    <h2 class="phil__close"><span>“いきる”をはかり</span><span>豊かな世界へ</span></h2>
+    <div class="phil__cta"><a class="btn" href="company.html#concept">会社案内を見る <span>→</span></a></div>
+    <span class="wf-note">※演出仕様：文章はスクロール量に連動して黒帯ごと1文字ずつ左→右に出現。一度出た部分はリロードまで定着（戻しても消えない）。締めのコピーは出現開始したら最後まで一気に出現。左上はFVの背景ムービーが固定表示で覗く正方形の窓（映像が下にも続いて見える）。文言は仮。</span>
+  </div>
+</section>
 
 <!-- ============ 製品・技術 ============ -->
 <section class="gsec svc" id="products">
