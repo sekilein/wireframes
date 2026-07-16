@@ -107,7 +107,7 @@ body.menu-open{overflow:hidden}
 
 /* ============ FV：動画＋特大コンデンス＋重なる白マス ============ */
 .fv{position:relative}
-.fv__stage{position:relative;height:70vh;min-height:480px;background:var(--ink)}
+.fv__stage{position:relative;height:100vh;min-height:640px;background:var(--ink)}
 /* 映像は固定背景：コンテンツだけが上にスクロールし、想いブロックまで背後に居続ける */
 .fv__stage video{position:fixed;top:0;left:0;width:100%;height:100vh;object-fit:cover;filter:brightness(.6) saturate(.9);transition:filter .7s ease,transform .7s ease}
 .fv__stage video.is-blur{filter:brightness(.55) saturate(.9) blur(7px);transform:scale(1.05)}
@@ -143,20 +143,20 @@ body.menu-open{overflow:hidden}
 .fv__recruit:hover{background:#c50000;border-color:#c50000}
 .fv__recruit:hover .arrow-i{transform:translateX(6px)}
 @media(max-width:900px){
-  .fv__stage{height:64vh}
+  .fv__stage{height:100vh;min-height:520px}
   .fv__cell{right:12px;bottom:12px;left:auto;width:min(480px,92%)}
   .fv__cell .inner{padding:20px 22px;gap:8px}
   .fv__cell p{display:none}
 }
 
 /* ============ 企業理念：スクロールで文字がパラパラ出現（黒帯白文字・締めは赤帯コピー） ============ */
-/* ============ FV下3割：コピーは映像の上に直乗せ（背景なし・白文字・帯なし／英字は日本語の下） ============ */
-.fv__head{position:relative;min-height:30vh;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:26px;padding:0 7vw 9vh}
-.fv__head-title{display:flex;flex-direction:column;align-items:flex-start}
+/* ============ FVコピー：映像の上・FV中央配置（背景なし・白文字・帯なし／英字は日本語の下） ============ */
+.fv__head{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;padding:0 6vw;text-align:center}
+.fv__head-title{display:flex;flex-direction:column;align-items:center}
 .fv__head-title span{display:block;color:#fff;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2.3rem,5.6vw,5.2rem);line-height:1.32;letter-spacing:normal}
 .fv__head-title .q{font-style:normal}
 .fv__head-sub{color:rgba(255,255,255,.92);font-family:var(--en);font-weight:500;font-size:clamp(12px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase}
-@media(max-width:900px){.fv__head{min-height:26vh;gap:16px;padding:0 6vw 7vh}}
+@media(max-width:900px){.fv__head{gap:16px}}
 
 /* 想い：左3割の赤ブロック（段差なし・下は余白たっぷり）＋メッセージ左寄せで行頭が赤に載る */
 .phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
@@ -379,7 +379,7 @@ body.menu-open{overflow:hidden}
 .nav .nav__logo img{height:28px;}
 @media(max-width:900px){.nav .nav__logo{padding:0 20px;}.nav .nav__logo img{height:26px;}}
 /* ── FV採用バナー：四角形の組み合わせ（ラベル小箱＋右端まで伸びる帯）・FV下端ベタ付け・リンクだけはみ出し ── */
-.fv .fv__cell--recruit{position:absolute;right:7vw;bottom:13vh;z-index:6;background:transparent;width:auto;max-width:min(780px,94%);display:flex;flex-direction:column;align-items:flex-start;mix-blend-mode:screen;}
+.fv .fv__cell--recruit{position:absolute;right:18px;bottom:18px;z-index:6;background:transparent;width:auto;max-width:min(780px,94%);display:flex;flex-direction:column;align-items:flex-start;mix-blend-mode:screen;}
 .fv .fv__cell--recruit:hover{mix-blend-mode:normal;}
 .fv .fv__cell--recruit .inner{background:transparent;padding:0;display:block;}
 .fv .fv__cell--recruit .rec-logo{display:block;width:min(160px,38vw);height:auto;margin:0 0 14px;filter:drop-shadow(0 2px 14px rgba(0,0,0,.25));}
@@ -388,7 +388,7 @@ body.menu-open{overflow:hidden}
 .fv .fv__cell--recruit .fv__cell-link{position:static;align-self:flex-end;background:#fff;color:#000;padding:10px 22px;font-size:10px;transition:background .25s,color .25s;}
 .fv .fv__cell--recruit .fv__cell-link:hover{background:var(--red);color:#fff;opacity:1;}
 .fv .fv__cell--recruit .fv__cell-link .arrow-i--w{color:inherit;}
-@media(max-width:700px){.fv .fv__cell--recruit{right:7vw;bottom:6vh;}.fv .fv__cell--recruit h3{padding:11px 22px 14px 16px;font-size:12px;}.fv .fv__cell--recruit .rec-logo{width:min(125px,34vw);}}
+@media(max-width:700px){.fv .fv__cell--recruit{right:12px;bottom:12px;}.fv .fv__cell--recruit h3{padding:11px 22px 14px 16px;font-size:12px;}.fv .fv__cell--recruit .rec-logo{width:min(125px,34vw);}}
 /* ── お問い合わせ：初期は背景なし白文字、ヘッダーが白背景のときは黒ボタン ── */
 .nav.is-solid .nav__cta{background:var(--ink);color:#fff;border-left-color:var(--ink);}
 .nav.is-solid .nav__cta:hover{background:var(--red);color:#fff;border-left-color:var(--red);}
