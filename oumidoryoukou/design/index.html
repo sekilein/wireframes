@@ -171,7 +171,13 @@ body.menu-open{overflow:hidden}
 /* ============ FVコピー：映像の上・FV中央配置（背景なし・白文字・帯なし／英字は日本語の下） ============ */
 .fv__head{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;padding:0 6vw;text-align:center}
 .fv__head-title{display:flex;flex-direction:column;align-items:center}
-.fv__head-title span{display:block;color:#fff;font-family:"Gen Interface JP Display",var(--jp);font-weight:800;font-size:clamp(2.3rem,5.6vw,5.2rem);line-height:1.32;letter-spacing:.04em}
+.fv__head-title > span{display:block;color:#fff;font-family:"Gen Interface JP Display",var(--jp);font-weight:800;font-size:clamp(2.3rem,5.6vw,5.2rem);line-height:1.32;letter-spacing:.04em}
+/* 有機的レイアウト：2行を左右に少しずらし、キーワード4つは級数アップ・接続詞は小さく */
+.fv__head-title .ln1{transform:translateX(-3.5vw)}
+.fv__head-title .ln2{transform:translateX(3.5vw)}
+.fv__head-title b{font-weight:inherit}
+.fv__head-title .lg{font-size:1.16em}
+.fv__head-title .sm{font-size:.64em}
 .fv__head-title .q{font-style:normal}
 .fv__head-sub{color:rgba(255,255,255,.92);font-family:var(--en);font-weight:500;font-size:clamp(12px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase}
 @media(max-width:900px){.fv__head{gap:16px}}
@@ -569,7 +575,10 @@ body.menu-open .nav{background:transparent;border:none}
     <div class="fv__lines" aria-hidden="true"></div>
   </div>
   <div class="fv__head">
-    <h1 class="fv__head-title"><span><i class="q">“</i>いきる<i class="q">”</i>をはかり</span><span>豊かな世界へ</span></h1>
+    <h1 class="fv__head-title">
+      <span class="ln1"><b class="lg"><i class="q">“</i>いきる<i class="q">”</i></b><b class="sm">を</b><b class="lg">はかり</b></span>
+      <span class="ln2"><b class="lg">豊</b><b class="sm">かな</b><b class="lg">世界</b><b class="sm">へ</b></span>
+    </h1>
     <span class="fv__head-sub">WE MEASURE THE VALUE OF LIVING.</span>
   </div>
   <div class="fv__cell fv__cell--recruit rv is-in rv-d3">
