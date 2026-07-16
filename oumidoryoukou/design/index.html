@@ -183,7 +183,7 @@ body.menu-open{overflow:hidden}
 @media(max-width:900px){.fv__head{gap:16px;padding:0 6vw 7vh var(--frame)}}
 
 /* 想い：左3割の赤ブロック（段差なし・下は余白たっぷり）＋メッセージ左寄せで行頭が赤に載る */
-.phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
+.phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,44%);column-gap:3vw}
 /* 赤背景はFVメインコピーの下にかかる高さまで上へ食い込む。初期は狭め→少しスクロールで現在幅へスッと拡張 */
 .gsec.phil::before{content:"";position:absolute;top:-160px;bottom:0;left:0;width:min(21vw,310px);height:auto;background:var(--red);transition:width .8s cubic-bezier(.2,.7,.2,1)}
 .gsec.phil.is-wide::before{width:min(32vw,470px)}
@@ -213,7 +213,7 @@ body.menu-open{overflow:hidden}
 .phil__box{position:relative;grid-column:1;width:fit-content;margin:0}
 /* 右側：滋賀・琵琶湖の線画マップ（想い表示中はsticky固定、スクロールで一度スッと出現） */
 .phil__map{position:relative;grid-column:2}
-.phil__map .mapwrap{position:sticky;top:12vh;width:min(100%,340px);margin-left:auto}
+.phil__map .mapwrap{position:sticky;top:10vh;width:min(100%,calc((100vh - 140px)*0.62),620px);margin-left:auto}
 .phil__map .shiga{width:100%;height:auto;display:block}
 .phil__map .mappin{position:absolute;left:30%;top:69%;width:9px;height:9px;background:var(--red);border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.6)}
 .phil__map .mappin .ring{position:absolute;inset:-7px;border:2px solid var(--red);border-radius:50%;animation:pinPulse 2.4s ease-out infinite}
