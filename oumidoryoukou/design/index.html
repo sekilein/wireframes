@@ -184,16 +184,19 @@ body.menu-open{overflow:hidden}
 
 /* 想い：左3割の赤ブロック（段差なし・下は余白たっぷり）＋メッセージ左寄せで行頭が赤に載る */
 .phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
-/* 赤背景はFVメインコピーの下にかかる高さまで上へ食い込む */
-.gsec.phil::before{content:"";position:absolute;top:-160px;bottom:0;left:0;width:min(32vw,470px);height:auto;background:var(--red)}
-@media(max-width:900px){.gsec.phil::before{top:-100px}}
+/* 赤背景はFVメインコピーの下にかかる高さまで上へ食い込む。初期は狭め→少しスクロールで現在幅へスッと拡張 */
+.gsec.phil::before{content:"";position:absolute;top:-160px;bottom:0;left:0;width:min(21vw,310px);height:auto;background:var(--red);transition:width .8s cubic-bezier(.2,.7,.2,1)}
+.gsec.phil.is-wide::before{width:min(32vw,470px)}
+@media(max-width:900px){
+  .gsec.phil::before{top:-100px;width:38vw}
+  .gsec.phil.is-wide::before{width:56vw}
+}
 .phil .eyebrow{position:relative;grid-column:1 / -1;color:rgba(255,255,255,.88)}
 /* 各ブロック上端の段差（高さはバラバラ） */
 .svc::after{content:"";position:absolute;right:0;bottom:100%;width:29%;height:200px;background:var(--paper)}
 .stats::after{content:"";position:absolute;left:0;bottom:100%;width:34%;height:150px;background:var(--ink)}
 .newsblock::after{content:"";position:absolute;right:0;bottom:100%;width:40%;height:70px;background:var(--paper)}
 @media(max-width:900px){
-  .gsec.phil::before{width:56vw}
   .svc::after{height:56px;width:48%}
   .stats::after{height:80px;width:40%}
   .newsblock::after{height:40px;width:44%}
@@ -227,7 +230,7 @@ body.menu-open{overflow:hidden}
 .js-chars .ch.is-on{opacity:1}
 @media(prefers-reduced-motion:reduce){.js-chars .ch{opacity:1;transition:none}.phil__st .ln::before{transform:none;transition:none}}
 .phil__close{margin-top:220px}
-.phil__close > span{position:relative;display:block;width:fit-content;font-family:"Gen Interface JP Display",var(--jp);font-weight:800;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.42;letter-spacing:.04em;color:#fff;padding:0 .24em 0 .16em}
+.phil__close > span{position:relative;display:block;width:fit-content;font-family:"Gen Interface JP Display",var(--jp);font-weight:800;font-size:clamp(2.4rem,6vw,5.6rem);line-height:1.42;letter-spacing:.04em;color:#fff;padding:0 .24em 0 .16em}
 .phil__close > span::before{content:"";position:absolute;inset:0;background:var(--red);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .phil__close > span:nth-child(2)::before{transition-delay:.15s}
 .phil__close > span + span{margin-top:.18em}
@@ -616,7 +619,7 @@ body.menu-open .nav{background:transparent;border:none}
     <p><span class="ln"><span class="lt">1900年の創業から126年。</span></span><span class="ln"><span class="lt">近江度量衡は、あらゆる現場の「はかる」に、</span></span><span class="ln"><span class="lt">一品一様のものづくりで応えつづけてきた。</span></span></p>
     <p><span class="ln"><span class="lt">暮らしを、産業を、その先の未来を。</span></span><span class="ln"><span class="lt">私たちは、これからもはかりつづける。</span></span></p>
   </div>
-  <h2 class="phil__close js-chars" data-once><span>近江から、</span><span>世界の“はかる”へ。</span></h2>
+  <h2 class="phil__close js-chars" data-once><span>近江から、</span><span>世界をはかる</span></h2>
   <div class="phil__cta rv"><a class="btn" href="#">会社案内を見る <span>→</span></a></div>
   </div>
   <div class="phil__map" aria-hidden="true">
@@ -888,6 +891,8 @@ body.menu-open .nav{background:transparent;border:none}
   if(!phil || !vid) return;
   function u(){
     vid.classList.toggle('is-blur', phil.getBoundingClientRect().top < window.innerHeight * .55);
+    /* 少しスクロールしたら赤帯を本来の幅へスッと拡張（一度広がったら戻さない） */
+    if(window.scrollY > 140) phil.classList.add('is-wide');
   }
   window.addEventListener('scroll', u, {passive:true});
   u();
