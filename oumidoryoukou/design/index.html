@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gen-interface-jp@latest/cdn/all.css">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -17,7 +19,7 @@
   --line:#000;
   --frame:28px;
   --en:"Oswald",sans-serif;
-  --jp:"Noto Sans JP","Hiragino Sans",system-ui,sans-serif;
+  --jp:"Gen Interface JP","Noto Sans JP","Hiragino Sans",system-ui,sans-serif;
 }
 @media(max-width:900px){:root{--frame:16px}}
 html{scroll-behavior:smooth}
@@ -153,7 +155,7 @@ body.menu-open{overflow:hidden}
 /* ============ FVコピー：映像の上・FV中央配置（背景なし・白文字・帯なし／英字は日本語の下） ============ */
 .fv__head{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;padding:0 6vw;text-align:center}
 .fv__head-title{display:flex;flex-direction:column;align-items:center}
-.fv__head-title span{display:block;color:#fff;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2.3rem,5.6vw,5.2rem);line-height:1.32;letter-spacing:normal}
+.fv__head-title span{display:block;color:#fff;font-family:"Gen Interface JP Display",var(--jp);font-weight:800;font-size:clamp(2.3rem,5.6vw,5.2rem);line-height:1.32;letter-spacing:.04em}
 .fv__head-title .q{font-style:normal}
 .fv__head-sub{color:rgba(255,255,255,.92);font-family:var(--en);font-weight:500;font-size:clamp(12px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase}
 @media(max-width:900px){.fv__head{gap:16px}}
