@@ -192,12 +192,12 @@ body.menu-open{overflow:hidden}
   .gsec.phil.is-wide::before{width:56vw}
 }
 .phil .eyebrow{position:relative;grid-column:1 / -1;color:rgba(255,255,255,.88)}
-/* 各ブロック上端の段差（高さはバラバラ） */
-.svc::after{content:"";position:absolute;right:0;bottom:100%;width:29%;height:200px;background:var(--paper)}
+/* 各ブロック上端の段差（高さはバラバラ。製品は凹型＝右29%を切り欠いて映像が食い込む） */
+.svc{clip-path:polygon(0 0,71% 0,71% 130px,100% 130px,100% 100%,0 100%)}
+@media(max-width:900px){.svc{clip-path:polygon(0 0,60% 0,60% 64px,100% 64px,100% 100%,0 100%)}}
 .stats::after{content:"";position:absolute;left:0;bottom:100%;width:34%;height:150px;background:var(--ink)}
 .newsblock::after{content:"";position:absolute;right:0;bottom:100%;width:40%;height:70px;background:var(--paper)}
 @media(max-width:900px){
-  .svc::after{height:56px;width:48%}
   .stats::after{height:80px;width:40%}
   .newsblock::after{height:40px;width:44%}
 }
@@ -253,11 +253,11 @@ body.menu-open{overflow:hidden}
 }
 
 /* ============ 製品・技術：特大見出し＋矢印リスト（マス罫線） ============ */
-.svc{padding-bottom:110px}
+.svc{padding:120px 5vw 84px}
 /* スクロール連動の製品切替：pinが画面に貼り付き、runway分のスクロールで4製品を順送り（内容は上付け） */
 .svc__pin{position:sticky;top:0;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-start;padding-top:104px}
 .svc__runway{height:180vh}
-@media(max-width:900px){.svc{padding-bottom:90px}}
+@media(max-width:900px){.svc{padding:80px 5vw 70px}}
 .svc .disp-jp{font-size:clamp(1.6rem,2.95vw,2.8rem);margin-top:22px}
 .svc__grid{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4vw;margin-top:0;align-items:start}
 .svc__lead{font-size:14px;line-height:2.15;color:#444}
