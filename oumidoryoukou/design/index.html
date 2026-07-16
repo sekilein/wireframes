@@ -162,11 +162,15 @@ body.menu-open{overflow:hidden}
 .phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
 .gsec.phil::before{content:"";position:absolute;top:0;bottom:0;left:0;width:min(32vw,470px);height:auto;background:var(--red)}
 .phil .eyebrow{position:relative;grid-column:1 / -1;color:rgba(255,255,255,.88)}
-/* 製品セクション上端の段差（右側が持ち上がり、左に映像の帯が残る） */
+/* 各ブロック上端の段差（高さはバラバラ） */
 .svc::after{content:"";position:absolute;right:0;bottom:100%;width:46%;height:100px;background:var(--paper)}
+.stats::after{content:"";position:absolute;left:0;bottom:100%;width:34%;height:150px;background:var(--ink)}
+.newsblock::after{content:"";position:absolute;right:0;bottom:100%;width:40%;height:70px;background:var(--paper)}
 @media(max-width:900px){
   .gsec.phil::before{width:56vw}
   .svc::after{height:56px;width:48%}
+  .stats::after{height:80px;width:40%}
+  .newsblock::after{height:40px;width:44%}
 }
 .phil__box{position:relative;grid-column:1;width:fit-content;margin:0}
 /* 右側：滋賀・琵琶湖の線画マップ（想い表示中はsticky固定、スクロールで一度スッと出現） */
@@ -225,8 +229,7 @@ body.menu-open{overflow:hidden}
 .svc-stage{position:relative}
 .svc-stage__imgs{position:relative;aspect-ratio:16/10;overflow:hidden;background:#141614}
 .svc-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .45s;z-index:1}
-.svc-img.is-on{opacity:1;z-index:2;animation:svcDrop .8s cubic-bezier(.24,1.45,.4,1) both}
-@keyframes svcDrop{0%{opacity:0;transform:translateY(-32px) scale(1.02)}58%{opacity:1;transform:translateY(6px) scale(1)}100%{opacity:1;transform:none}}
+.svc-img.is-on{opacity:1;z-index:2}
 .svc-cell{position:relative;z-index:3;margin:-72px 24px 0;background:#fff;border:0.5px solid var(--line)}
 .svc-cell__ttl{padding:20px 24px 4px;font-family:var(--jp);font-weight:900;font-size:clamp(17px,1.7vw,23px);letter-spacing:.05em;transition:opacity .24s}
 .svc-cell__sub{padding:0 24px 16px;font-family:var(--en);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#777;transition:opacity .24s}
@@ -631,7 +634,7 @@ body.menu-open .nav{background:transparent;border:none}
 
 
 <!-- ============ 新着情報 ============ -->
-<section class="gsec">
+<section class="gsec newsblock">
   <div class="prods__head rv">
     <h2 style="font-family:var(--jp);font-weight:900;font-size:22px;letter-spacing:.08em">新着情報</h2>
     <a class="viewall" href="#"><i class="arrow-i">→</i> View All News</a>
