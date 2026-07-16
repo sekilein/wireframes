@@ -186,11 +186,13 @@ body.menu-open{overflow:hidden}
 .phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
 .gsec.phil::before{content:"";position:absolute;top:0;bottom:0;left:0;width:min(32vw,470px);height:auto;background:var(--red)}
 .phil .eyebrow{position:relative;grid-column:1 / -1;color:rgba(255,255,255,.88)}
-/* 各ブロック上端の段差（高さはバラバラ・製品は白が映像上に出ないよう段差なし） */
+/* 各ブロック上端の段差（高さはバラバラ） */
+.svc::after{content:"";position:absolute;right:0;bottom:100%;width:46%;height:100px;background:var(--paper)}
 .stats::after{content:"";position:absolute;left:0;bottom:100%;width:34%;height:150px;background:var(--ink)}
 .newsblock::after{content:"";position:absolute;right:0;bottom:100%;width:40%;height:70px;background:var(--paper)}
 @media(max-width:900px){
   .gsec.phil::before{width:56vw}
+  .svc::after{height:56px;width:48%}
   .stats::after{height:80px;width:40%}
   .newsblock::after{height:40px;width:44%}
 }
@@ -243,7 +245,7 @@ body.menu-open{overflow:hidden}
 .svc__runway{height:180vh}
 @media(max-width:900px){.svc{padding-bottom:170px}}
 .svc .disp-jp{font-size:clamp(1.9rem,4.6vw,3.9rem);margin-top:22px}
-.svc__grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:6vw;margin-top:44px;align-items:center}
+.svc__grid{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.4fr);gap:6vw;margin-top:56px;align-items:start}
 .svc__lead{font-size:14px;line-height:2.15;color:#444}
 .svc__lead .btn{margin-top:34px}
 .svc__list{display:grid;grid-template-columns:1fr 1fr;gap:0 44px}
