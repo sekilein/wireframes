@@ -430,9 +430,10 @@ body.menu-open{overflow:hidden}
 .fv .fv__cell--recruit:hover{mix-blend-mode:normal;}
 .fv .fv__cell--recruit .inner{background:transparent;padding:0;display:block;}
 .fv .fv__cell--recruit .rec-logo{display:block;width:min(160px,38vw);height:auto;margin:0 0 14px;filter:drop-shadow(0 2px 14px rgba(0,0,0,.25));}
-.fv .fv__cell--recruit h3{background:#fff;color:#000;margin:0;padding:13px 36px 16px 22px;font-size:13.5px;text-indent:-.5em;transition:background .25s,color .25s;}
-.fv .fv__cell--recruit:hover h3{background:var(--red);color:#fff;}
-.fv .fv__cell--recruit .fv__cell-link{position:static;align-self:flex-end;background:#fff;color:#000;padding:10px 22px;font-size:10px;transition:background .25s,color .25s;}
+.fv .fv__cell--recruit h3{background:#fff;color:#000;margin:0;padding:13px 22px 16px 22px;font-size:13.5px;font-weight:700;letter-spacing:.02em;transition:background .25s,color .25s;}
+.fv .fv__cell--recruit .fv__cell-link{position:static;align-self:flex-start;background:#fff;color:#000;padding:10px 22px;font-size:10px;letter-spacing:.12em;transition:background .25s,color .25s;}
+/* ホバーは白箱2つで1つ（どちらに乗っても両方赤に） */
+.fv .fv__cell--recruit:hover h3,.fv .fv__cell--recruit:hover .fv__cell-link{background:var(--red);color:#fff;}
 .fv .fv__cell--recruit .fv__cell-link:hover{background:var(--red);color:#fff;opacity:1;}
 .fv .fv__cell--recruit .fv__cell-link .arrow-i--w{color:inherit;}
 @media(max-width:700px){.fv .fv__cell--recruit{right:12px;bottom:12px;}.fv .fv__cell--recruit h3{padding:11px 22px 14px 16px;font-size:12px;}.fv .fv__cell--recruit .rec-logo{width:min(125px,34vw);}}
@@ -462,8 +463,8 @@ body.menu-open .nav{background:transparent;border:none}
 .nav .nav__logo{background:#fff;border:0.5px solid var(--line)}
 .nav .nav__logo img{filter:none}
 .nav .nav__menu{flex:0 1 auto;margin-left:auto;background:#fff;border:0.5px solid var(--line);border-right:0;padding:0 34px 0 34px}
-.nav .nav__menu .nlink{color:var(--ink)}
-.nav .nav__cta{background:var(--ink);color:#fff;border:0.5px solid var(--ink)}
+.nav .nav__menu .nlink{color:var(--ink);font-weight:600;letter-spacing:.05em}
+.nav .nav__cta{background:var(--ink);color:#fff;border:0.5px solid var(--ink);letter-spacing:.08em;font-weight:600}
 .nav .nav__cta:hover{background:var(--red);border-color:var(--red)}
 .nav .burger{background:#fff;border:0.5px solid var(--line);margin-left:auto}
 .nav .burger span,body.menu-open .burger span{background:var(--ink)}
@@ -597,7 +598,7 @@ body.menu-open .nav{background:transparent;border:none}
   <div class="fv__cell fv__cell--recruit rv is-in rv-d3">
     <div class="inner">
       <img class="rec-logo" src="rec2027_w.png" alt="Recruitment 2027">
-      <h3>「いきる」の単位とは、なんだろう。</h3>
+      <h3>いきるの単位とは、なんだろう。</h3>
     </div>
     <a class="fv__cell-link" href="#recruit">採用情報を見る <i class="arrow-i arrow-i--w">→</i></a>
   </div>
@@ -769,7 +770,7 @@ body.menu-open .nav{background:transparent;border:none}
   <a class="foot__recruit" id="recruit" href="#">
     <span class="rtxt">
       <span class="en">Recruitment 2027</span>
-      <h3>「いきる」の単位とは、なんだろう。</h3>
+      <h3>いきるの単位とは、なんだろう。</h3>
     </span>
     <span class="go">採用情報を見る <i class="arrow-i" style="color:inherit">→</i></span>
   </a>
