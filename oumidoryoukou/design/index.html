@@ -213,9 +213,12 @@ body.menu-open{overflow:hidden}
 .phil__box{position:relative;grid-column:1;width:fit-content;margin:0}
 /* 右側：滋賀・琵琶湖の線画マップ（想い表示中はsticky固定、スクロールで一度スッと出現） */
 .phil__map{position:relative;grid-column:2}
-.phil__map .mapwrap{position:sticky;top:16vh}
-.phil__map svg{width:100%;max-width:400px;height:auto;display:block}
-.phil__map .pin{animation:pinPulse 2.4s ease-out infinite}
+.phil__map .mapwrap{position:sticky;top:12vh;width:min(100%,340px);margin-left:auto}
+.phil__map .shiga{width:100%;height:auto;display:block}
+.phil__map .mappin{position:absolute;left:30%;top:69%;width:9px;height:9px;background:var(--red);border-radius:50%;box-shadow:0 0 0 3px rgba(255,255,255,.6)}
+.phil__map .mappin .ring{position:absolute;inset:-7px;border:2px solid var(--red);border-radius:50%;animation:pinPulse 2.4s ease-out infinite}
+.phil__map .maplabel{position:absolute;left:calc(30% + 18px);top:calc(69% - 4px);color:#fff;font-size:13px;font-weight:700;letter-spacing:.04em;white-space:nowrap;text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.phil__map .maplabel small{display:block;font-size:10.5px;color:rgba(255,255,255,.78);font-weight:500;margin-top:3px}
 @keyframes pinPulse{0%{transform:scale(1);opacity:.9}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
 @media(max-width:900px){
   .phil{grid-template-columns:1fr}
@@ -634,18 +637,9 @@ body.menu-open .nav{background:transparent;border:none}
   </div>
   <div class="phil__map" aria-hidden="true">
     <div class="mapwrap rv">
-      <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <!-- 滋賀県アウトライン（簡略線画） -->
-        <path d="M204,22 C266,10 318,52 340,108 C362,164 356,224 342,282 C330,332 306,388 264,428 C230,460 172,470 124,444 C80,420 52,368 46,308 C40,246 58,180 92,124 C124,72 156,32 204,22 Z" stroke="rgba(255,255,255,.85)" stroke-width="1.5" fill="rgba(255,255,255,.05)"/>
-        <!-- 琵琶湖 -->
-        <path d="M196,86 C232,92 252,130 250,178 C248,222 234,262 210,290 C194,308 172,308 162,286 C150,260 154,214 160,172 C166,128 168,82 196,86 Z" stroke="rgba(255,255,255,.85)" stroke-width="1.5" fill="rgba(255,255,255,.1)"/>
-        <!-- ピン：近江度量衡（滋賀県草津市） -->
-        <circle class="pin" cx="226" cy="330" r="10" fill="none" stroke="#ff0000" stroke-width="2" style="transform-box:fill-box;transform-origin:center"/>
-        <circle cx="226" cy="330" r="7" fill="#ff0000"/>
-        <line x1="226" y1="330" x2="288" y2="384" stroke="rgba(255,255,255,.6)" stroke-width="1"/>
-        <text x="294" y="380" fill="#ffffff" font-size="15" font-weight="700" font-family="'Noto Sans JP',sans-serif">近江度量衡</text>
-        <text x="294" y="400" fill="rgba(255,255,255,.75)" font-size="11" font-family="'Noto Sans JP',sans-serif">滋賀県草津市</text>
-      </svg>
+      <img class="shiga" src="shiga.webp" alt="滋賀県">
+      <span class="mappin"><i class="ring"></i></span>
+      <span class="maplabel">近江度量衡<small>滋賀県草津市</small></span>
     </div>
   </div>
 </section>
