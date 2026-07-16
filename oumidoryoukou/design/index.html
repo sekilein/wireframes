@@ -389,15 +389,18 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
 .fv__title .en-sub{font-size:clamp(14px,1.2vw,18px);margin-top:28px;color:rgba(255,255,255,.92);}
 /* ── SP：お問い合わせはハンバーガー内に格納（ヘッダーのボタンは非表示） ── */
 @media(max-width:900px){.nav__cta{display:none;}}
-/* ── グローバルナビ：上に余白の浮遊バー（kaonavi参考・常時白・お問い合わせは右端のまま） ── */
-.nav{top:18px;left:18px;right:18px;background:#fff;border:0.5px solid var(--line)}
+/* ── グローバルナビ：ロゴ=左付け・メニュー＋お問い合わせ=右付け、白地はコンテンツ幅のみ（間は背景が透ける） ── */
+.nav{top:18px;left:18px;right:18px;background:transparent;border:none}
+.nav.is-solid{background:transparent;border:none}
+body.menu-open .nav{background:transparent;border:none}
+.nav .nav__logo{background:#fff;border:0.5px solid var(--line)}
 .nav .nav__logo img{filter:none}
-.nav .nav__logo{border-right:0.5px solid var(--line)}
+.nav .nav__menu{flex:0 1 auto;margin-left:auto;background:#fff;border:0.5px solid var(--line);border-right:0;padding:0 34px 0 34px}
 .nav .nav__menu .nlink{color:var(--ink)}
-.nav .nav__lang{color:var(--ink);border-left-color:var(--line)}
-.nav .nav__cta{background:var(--ink);color:#fff;border-left-color:var(--ink)}
-.nav .nav__cta:hover{background:var(--red);border-left-color:var(--red)}
-.nav .burger span{background:var(--ink)}
+.nav .nav__cta{background:var(--ink);color:#fff;border:0.5px solid var(--ink)}
+.nav .nav__cta:hover{background:var(--red);border-color:var(--red)}
+.nav .burger{background:#fff;border:0.5px solid var(--line);margin-left:auto}
+.nav .burger span,body.menu-open .burger span{background:var(--ink)}
 .nav.is-hidden{transform:translateY(calc(-100% - 22px))}
 .mega{top:calc(18px + 64px);left:18px;right:18px}
 .drawer{top:calc(18px + 64px)}
