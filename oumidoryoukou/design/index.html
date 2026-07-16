@@ -225,9 +225,9 @@ body.menu-open{overflow:hidden}
 .svc__list a:hover{color:var(--red);padding-left:16px}
 .svc__list .arrow-i{font-size:16px}
 /* 製品ショーケース：計量皿に載せるドロップ＋針振れ目盛り */
-.svc-show{display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:20px;align-items:stretch}
-.svc-stage{position:relative}
-.svc-stage__imgs{position:relative;aspect-ratio:16/10;overflow:hidden;background:#141614}
+.svc-show{display:grid;grid-template-columns:minmax(0,1fr) 64px;gap:20px;align-items:stretch;margin-top:-550px}
+.svc-stage{position:relative;max-width:540px;width:100%;margin-left:auto}
+.svc-stage__imgs{position:relative;aspect-ratio:3/4;overflow:hidden;background:#141614}
 .svc-img{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;transition:opacity .45s;z-index:1}
 .svc-img.is-on{opacity:1;z-index:2}
 .svc-cell{position:relative;z-index:3;margin:-72px 24px 0;background:#fff;border:0.5px solid var(--line)}
@@ -246,7 +246,8 @@ body.menu-open{overflow:hidden}
 .svc-ruler__pointer{position:absolute;right:19px;width:24px;height:2px;background:var(--red);box-shadow:0 0 8px rgba(255,0,0,.55);transition:top .75s cubic-bezier(.2,1.7,.35,1)}
 @media(max-width:900px){
   .svc__grid{grid-template-columns:1fr;gap:44px}
-  .svc-show{grid-template-columns:minmax(0,1fr) 48px;gap:12px}
+  .svc-show{grid-template-columns:minmax(0,1fr) 48px;gap:12px;margin-top:0}
+  .svc-stage{margin-left:0}
   .svc-cell{margin:-56px 14px 0}
   .svc-ruler__no{right:30px}
   .svc-ruler::before,.svc-ruler__ticks{right:14px}
