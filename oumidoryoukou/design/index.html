@@ -153,32 +153,44 @@ body.menu-open{overflow:hidden}
 /* ============ FV下3割：コピーは映像の上に直乗せ（背景なし・白文字・帯なし／英字は日本語の下） ============ */
 .fv__head{position:relative;min-height:30vh;display:flex;flex-direction:column;justify-content:flex-end;align-items:flex-start;gap:26px;padding:0 7vw 9vh}
 .fv__head-title{display:flex;flex-direction:column;align-items:flex-start}
-.fv__head-title span{display:block;color:#fff;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2.6rem,6.4vw,6rem);line-height:1.32;letter-spacing:normal}
+.fv__head-title span{display:block;color:#fff;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2.3rem,5.6vw,5.2rem);line-height:1.32;letter-spacing:normal}
 .fv__head-title .q{font-style:normal}
 .fv__head-sub{color:rgba(255,255,255,.92);font-family:var(--en);font-weight:500;font-size:clamp(12px,1.1vw,16px);letter-spacing:.32em;text-transform:uppercase}
 @media(max-width:900px){.fv__head{min-height:26vh;gap:16px;padding:0 6vw 7vh}}
 
-/* 想い：左3割の赤ブロック＋メッセージは左寄せで行頭が赤に載り右へはみ出す */
-.phil{background:transparent;margin:26px var(--frame) 0}
+/* 想い：左3割の赤ブロック（段差なし・下は余白たっぷり）＋メッセージ左寄せで行頭が赤に載る */
+.phil{background:transparent;margin:56px var(--frame) 140px;display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,30%);column-gap:3vw}
 .gsec.phil::before{content:"";position:absolute;top:0;bottom:0;left:0;width:min(32vw,470px);height:auto;background:var(--red)}
-/* 段差：赤ブロックの左肩が一段持ち上がる */
-.gsec.phil::after{content:"";position:absolute;left:0;bottom:100%;width:min(19vw,280px);height:100px;background:var(--red)}
-.phil .eyebrow{position:relative;color:rgba(255,255,255,.88)}
+.phil .eyebrow{position:relative;grid-column:1 / -1;color:rgba(255,255,255,.88)}
 /* 製品セクション上端の段差（右側が持ち上がり、左に映像の帯が残る） */
 .svc::after{content:"";position:absolute;right:0;bottom:100%;width:46%;height:100px;background:var(--paper)}
 @media(max-width:900px){
   .gsec.phil::before{width:56vw}
-  .gsec.phil::after{width:30vw;height:56px}
   .svc::after{height:56px;width:48%}
 }
-.phil__box{position:relative;width:fit-content;margin:0}
+.phil__box{position:relative;grid-column:1;width:fit-content;margin:0}
+/* 右側：滋賀・琵琶湖の線画マップ（想い表示中はsticky固定、スクロールで一度スッと出現） */
+.phil__map{position:relative;grid-column:2}
+.phil__map .mapwrap{position:sticky;top:16vh}
+.phil__map svg{width:100%;max-width:400px;height:auto;display:block}
+.phil__map .pin{animation:pinPulse 2.4s ease-out infinite}
+@keyframes pinPulse{0%{transform:scale(1);opacity:.9}70%{transform:scale(2.6);opacity:0}100%{opacity:0}}
+@media(max-width:900px){
+  .phil{grid-template-columns:1fr}
+  .phil__map{grid-column:1;margin-top:56px}
+  .phil__map .mapwrap{position:static}
+}
 .phil .btn{background:var(--ink)}
 .phil .btn::after{background:var(--ink);box-shadow:-34px 34px 0 var(--ink)}
 .phil .btn::before{background:var(--ink)}
 .phil .btn:hover{background:#fff;color:var(--ink)}
 .phil__st{margin-top:90px;font-weight:900;font-size:clamp(15px,1.8vw,23px);letter-spacing:.14em}
-.phil__st .ln{position:relative;display:block;width:fit-content;color:#fff;line-height:1.6;padding:.3em .7em .34em .55em}
+.phil__st .ln{position:relative;display:block;width:fit-content;color:#fff;line-height:1.6;padding:.3em .7em .34em .55em;overflow:hidden}
 .phil__st .ln::before{content:"";position:absolute;inset:0;background:var(--ink);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .5s ease}
+/* 黒帯が出たら白文字が下線マスクからすっと上がる（文字の1字フェードは使わない） */
+.phil__st .lt{display:inline-block;transform:translateY(135%);transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.phil__st .ln.is-txt .lt{transform:none}
+.phil__st .ch{opacity:1;transition:none}
 .phil__st .ln+.ln{margin-top:.55em}
 .phil__st p+p{margin-top:2.6em}
 .js-chars .ch{position:relative;opacity:0;transition:opacity .5s ease}
@@ -186,7 +198,8 @@ body.menu-open{overflow:hidden}
 @media(prefers-reduced-motion:reduce){.js-chars .ch{opacity:1;transition:none}.phil__st .ln::before{transform:none;transition:none}}
 .phil__close{margin-top:220px}
 .phil__close > span{position:relative;display:block;width:fit-content;font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2rem,4.8vw,4.4rem);line-height:1.42;letter-spacing:normal;color:#fff;padding:0 .24em 0 .16em}
-.phil__close > span::before{content:"";position:absolute;inset:0;background:var(--red);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .5s ease}
+.phil__close > span::before{content:"";position:absolute;inset:0;background:var(--red);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.phil__close > span:nth-child(2)::before{transition-delay:.15s}
 .phil__close > span + span{margin-top:.18em}
 @media(prefers-reduced-motion:reduce){.phil__close > span::before{transform:none;transition:none}}
 .phil__cta{margin-top:130px}
@@ -360,7 +373,7 @@ body.menu-open{overflow:hidden}
 .nav .nav__logo img{height:28px;}
 @media(max-width:900px){.nav .nav__logo{padding:0 20px;}.nav .nav__logo img{height:26px;}}
 /* ── FV採用バナー：四角形の組み合わせ（ラベル小箱＋右端まで伸びる帯）・FV下端ベタ付け・リンクだけはみ出し ── */
-.fv .fv__cell--recruit{position:absolute;right:7vw;bottom:9vh;z-index:6;background:transparent;width:auto;max-width:min(780px,94%);display:flex;flex-direction:column;align-items:flex-start;mix-blend-mode:screen;}
+.fv .fv__cell--recruit{position:absolute;right:7vw;bottom:13vh;z-index:6;background:transparent;width:auto;max-width:min(780px,94%);display:flex;flex-direction:column;align-items:flex-start;mix-blend-mode:screen;}
 .fv .fv__cell--recruit:hover{mix-blend-mode:normal;}
 .fv .fv__cell--recruit .inner{background:transparent;padding:0;display:block;}
 .fv .fv__cell--recruit .rec-logo{display:block;width:min(160px,38vw);height:auto;margin:0 0 14px;filter:drop-shadow(0 2px 14px rgba(0,0,0,.25));}
@@ -540,13 +553,29 @@ body.menu-open .nav{background:transparent;border:none}
   <p class="eyebrow rv">OUR PHILOSOPHY — 企業理念</p>
   <div class="phil__box">
   <div class="phil__st js-chars">
-    <p><span class="ln">私たちの暮らしは、</span><span class="ln">数えきれない「はかる」で、できている。</span></p>
-    <p><span class="ln">一粒の米も、一滴の水も、</span><span class="ln">正しくはかられて、はじめて価値になる。</span><span class="ln">公正な取引も、たしかな品質も、安心できる毎日も、</span><span class="ln">すべては、正確にはかることから始まる。</span></p>
-    <p><span class="ln">1900年の創業から126年。</span><span class="ln">近江度量衡は、あらゆる現場の「はかる」に、</span><span class="ln">一品一様のものづくりで応えつづけてきた。</span></p>
-    <p><span class="ln">暮らしを、産業を、その先の未来を。</span><span class="ln">私たちは、これからもはかりつづける。</span></p>
+    <p><span class="ln"><span class="lt">私たちの暮らしは、</span></span><span class="ln"><span class="lt">数えきれない「はかる」で、できている。</span></span></p>
+    <p><span class="ln"><span class="lt">一粒の米も、一滴の水も、</span></span><span class="ln"><span class="lt">正しくはかられて、はじめて価値になる。</span></span><span class="ln"><span class="lt">公正な取引も、たしかな品質も、安心できる毎日も、</span></span><span class="ln"><span class="lt">すべては、正確にはかることから始まる。</span></span></p>
+    <p><span class="ln"><span class="lt">1900年の創業から126年。</span></span><span class="ln"><span class="lt">近江度量衡は、あらゆる現場の「はかる」に、</span></span><span class="ln"><span class="lt">一品一様のものづくりで応えつづけてきた。</span></span></p>
+    <p><span class="ln"><span class="lt">暮らしを、産業を、その先の未来を。</span></span><span class="ln"><span class="lt">私たちは、これからもはかりつづける。</span></span></p>
   </div>
-  <h2 class="phil__close js-chars"><span>“いきる”をはかり</span><span>豊かな世界へ</span></h2>
+  <h2 class="phil__close js-chars" data-once><span>“いきる”をはかり</span><span>豊かな世界へ</span></h2>
   <div class="phil__cta rv"><a class="btn" href="#">会社案内を見る <span>→</span></a></div>
+  </div>
+  <div class="phil__map" aria-hidden="true">
+    <div class="mapwrap rv">
+      <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- 滋賀県アウトライン（簡略線画） -->
+        <path d="M204,22 C266,10 318,52 340,108 C362,164 356,224 342,282 C330,332 306,388 264,428 C230,460 172,470 124,444 C80,420 52,368 46,308 C40,246 58,180 92,124 C124,72 156,32 204,22 Z" stroke="rgba(255,255,255,.85)" stroke-width="1.5" fill="rgba(255,255,255,.05)"/>
+        <!-- 琵琶湖 -->
+        <path d="M196,86 C232,92 252,130 250,178 C248,222 234,262 210,290 C194,308 172,308 162,286 C150,260 154,214 160,172 C166,128 168,82 196,86 Z" stroke="rgba(255,255,255,.85)" stroke-width="1.5" fill="rgba(255,255,255,.1)"/>
+        <!-- ピン：近江度量衡（滋賀県草津市） -->
+        <circle class="pin" cx="226" cy="330" r="10" fill="none" stroke="#ff0000" stroke-width="2" style="transform-box:fill-box;transform-origin:center"/>
+        <circle cx="226" cy="330" r="7" fill="#ff0000"/>
+        <line x1="226" y1="330" x2="288" y2="384" stroke="rgba(255,255,255,.6)" stroke-width="1"/>
+        <text x="294" y="380" fill="#ffffff" font-size="15" font-weight="700" font-family="'Noto Sans JP',sans-serif">近江度量衡</text>
+        <text x="294" y="400" fill="rgba(255,255,255,.75)" font-size="11" font-family="'Noto Sans JP',sans-serif">滋賀県草津市</text>
+      </svg>
+    </div>
   </div>
 </section>
 
@@ -765,6 +794,15 @@ body.menu-open .nav{background:transparent;border:none}
       var start = vh * .88, end = vh * .42;
       var p = (start - r.top) / ((start - end) + r.height);
       p = Math.max(0, Math.min(1, p));
+      /* data-once：出現場所に来たらスクロールにかかわらず最後までスッと出る */
+      if(el.hasAttribute('data-once')){
+        if(p > 0.02){
+          el._done = true;
+          el._chs.forEach(function(s, i){ s.style.transitionDelay = (i * 36) + 'ms'; s.classList.add('is-on'); });
+          el._lines.forEach(function(L){ L.ln.style.setProperty('--lp', 1); });
+        }
+        return;
+      }
       /* スクロール連動スクラブ。進んだ分は定着（スクロールを戻しても消えない） */
       p = Math.max(p, el._max || 0);
       el._max = p;
@@ -774,6 +812,7 @@ body.menu-open .nav{background:transparent;border:none}
       el._lines.forEach(function(L){
         var f = Math.max(0, Math.min(1, (n - L.start) / L.count));
         L.ln.style.setProperty('--lp', f);
+        if(f >= 0.999) L.ln.classList.add('is-txt');
       });
     });
   }
