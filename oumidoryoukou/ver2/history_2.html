@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<script src="_auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="_firebase_comments.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>[WF ver2 / history_2] 126年ヒストリー｜近江度量衡</title>
+<link href="style.css" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --red:#c8102e; --red-deep:#8a0a20; --red-soft:#fde8ec; --red-line:#f3cfd5;
+    --green:#1f7a4a; --green-soft:#e2efe7;
+    --ink:#0b0b0b; --body:#222; --mute:#8a8a8a; --line:#e7e7e7; --paper:#ffffff;
+  }
+  body{background:var(--paper);color:var(--body);font-family:"Noto Serif JP","Hiragino Kaku Gothic Pro",sans-serif;}
+
+  /* ====== スクロール舞台 ====== */
+  .h2-stage{position:relative;background:var(--paper);}
+  .h2-stage__viewport{position:sticky;top:0;height:100vh;overflow:hidden;perspective:1600px;perspective-origin:50% 45%;transform-style:preserve-3d;}
+  .h2-layer{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;transform-origin:50% 50%;will-change:transform,opacity,filter;backface-visibility:hidden;}
+  .h2-layer__inner{width:min(1180px,92vw);height:100%;padding:80px 0 calc(36vh + 40px);display:flex;flex-direction:column;justify-content:center;position:relative;}
+
+  /* 背景巨大タイポ（レイヤー視差） */
+  .bg-year{position:absolute;left:50%;top:50%;transform:translate(-50%,-55%);font-family:'Inter','Noto Serif JP',serif;font-weight:900;font-size:clamp(260px,40vw,680px);line-height:.78;color:var(--red-soft);letter-spacing:-.045em;pointer-events:none;z-index:0;white-space:nowrap;user-select:none;}
+  .bg-year.ghost{color:transparent;-webkit-text-stroke:1px var(--red-line);}
+
+  /* 共通タグ */
+  .layer-tag{display:inline-flex;align-items:center;gap:12px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.3em;color:var(--red);text-transform:uppercase;font-weight:700;}
+  .layer-tag::before{content:'';width:32px;height:1px;background:var(--red);}
+
+  /* ====== HERO ====== */
+  .hero-layer{background:var(--paper);}
+  .hero-stack{position:relative;z-index:1;}
+  .hero-era{font-family:'Inter',sans-serif;font-size:12px;letter-spacing:.4em;color:var(--mute);margin-bottom:28px;font-weight:700;}
+  .hero-main{font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(64px,10vw,168px);line-height:.95;letter-spacing:-.02em;}
+  .hero-main .red{color:var(--red);}
+  .hero-main .ink{color:var(--ink);}
+  .hero-sub{display:flex;align-items:flex-end;gap:48px;margin-top:52px;flex-wrap:wrap;}
+  .hero-sub p{font-size:14px;color:#333;line-height:2.1;max-width:460px;}
+  .hero-years{display:flex;gap:20px;align-items:baseline;font-family:'Inter',sans-serif;}
+  .hero-years .from,.hero-years .to{font-size:42px;font-weight:900;color:var(--ink);letter-spacing:-.02em;}
+  .hero-years .bar{width:88px;height:2px;background:var(--red);margin-bottom:16px;}
+  .hero-years .to{color:var(--red);}
+  .hero-hint{position:absolute;bottom:40px;left:0;right:0;text-align:center;font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.4em;color:var(--mute);z-index:2;font-weight:700;}
+  .hero-hint::after{content:'';display:block;width:1px;height:40px;background:var(--ink);margin:14px auto 0;animation:drip 2.4s ease-in-out infinite;}
+  @keyframes drip{0%,100%{transform:scaleY(.2);transform-origin:top;opacity:.3;}50%{transform:scaleY(1);transform-origin:top;opacity:1;}}
+
+  /* ====== 数字バンド ====== */
+  .num-layer{background:#fff;}
+  .num-caption{font-family:'Noto Serif JP',serif;text-align:center;font-size:clamp(24px,3.2vw,34px);font-weight:700;margin:0 0 52px;letter-spacing:.02em;position:relative;z-index:1;}
+  .num-caption small{display:block;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.4em;color:var(--red);font-weight:700;margin-bottom:14px;}
+  .num-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;z-index:1;border-top:1px solid var(--line);border-bottom:1px solid var(--line);}
+  .num-cell{padding:48px 30px;border-right:1px solid var(--line);text-align:center;position:relative;}
+  .num-cell::before{content:'';position:absolute;top:0;left:0;width:0;height:2px;background:var(--red);transition:width .8s;}
+  .h2-layer.is-active .num-cell::before{width:100%;}
+  .num-cell:last-child{border-right:none;}
+  .num-cell .v{font-family:'Inter',sans-serif;font-weight:900;font-size:clamp(56px,7.5vw,100px);line-height:1;color:var(--ink);letter-spacing:-.03em;}
+  .num-cell .v .unit{font-size:.38em;color:var(--red);margin-left:4px;font-weight:700;}
+  .num-cell .l{font-size:11px;letter-spacing:.15em;color:var(--mute);margin-top:18px;line-height:1.8;}
+
+  /* ====== ERA パネル ====== */
+  .era-layer{background:#fff;}
+  .era-grid{display:grid;grid-template-columns:1.05fr 1fr;gap:72px;align-items:center;position:relative;z-index:1;}
+  .era-col-left h2{font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(64px,8vw,132px);line-height:.95;margin:22px 0 24px;letter-spacing:.01em;color:var(--ink);}
+  .era-col-left h2 .accent{color:var(--red);}
+  .era-range{font-family:'Inter',sans-serif;font-weight:700;font-size:18px;letter-spacing:.1em;color:var(--ink);display:inline-flex;align-items:center;gap:14px;}
+  .era-range .dot{width:8px;height:8px;background:var(--red);border-radius:50%;}
+  .era-lead{font-size:15px;line-height:2.1;color:#333;margin-top:28px;max-width:460px;}
+
+  .era-col-right{display:flex;flex-direction:column;gap:14px;}
+  .era-card{border-left:2px solid var(--red);padding:16px 20px 16px 22px;background:#fff;box-shadow:0 0 0 1px var(--line) inset;transform:translateX(20px);opacity:0;transition:transform .8s cubic-bezier(.2,.8,.2,1),opacity .8s;}
+  .h2-layer.is-active .era-card{transform:translateX(0);opacity:1;}
+  .h2-layer.is-active .era-card:nth-child(1){transition-delay:.05s;}
+  .h2-layer.is-active .era-card:nth-child(2){transition-delay:.15s;}
+  .h2-layer.is-active .era-card:nth-child(3){transition-delay:.25s;}
+  .h2-layer.is-active .era-card:nth-child(4){transition-delay:.35s;}
+  .h2-layer.is-active .era-card:nth-child(5){transition-delay:.45s;}
+  .era-card .y{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.2em;color:var(--red);font-weight:700;}
+  .era-card .t{font-weight:700;font-size:14px;margin-top:5px;color:var(--ink);line-height:1.55;}
+  .era-card .b{font-size:12px;line-height:1.95;color:#666;margin-top:7px;}
+  .era-card.pin{border-left-color:var(--ink);background:var(--ink);box-shadow:none;}
+  .era-card.pin .y{color:var(--red);}
+  .era-card.pin .t{color:#fff;}
+  .era-card.pin .b{color:#b6b6b6;}
+  .era-card.green{border-left-color:var(--green);}
+  .era-card.green .y{color:var(--green);}
+
+  /* ====== QUOTE ====== */
+  .quote-layer{background:var(--paper);}
+  .quote-inner{position:relative;z-index:1;text-align:center;padding:0 20px;}
+  .quote-mark{font-family:'Inter',serif;font-size:clamp(140px,18vw,240px);line-height:.7;color:var(--red);font-weight:900;letter-spacing:-.05em;}
+  .quote-text{font-family:'Noto Serif JP',serif;font-weight:700;font-size:clamp(26px,3.4vw,44px);line-height:1.75;color:var(--ink);max-width:980px;margin:28px auto 0;letter-spacing:.02em;}
+  .quote-text em{color:var(--red);font-style:normal;}
+  .quote-attr{display:inline-flex;align-items:center;gap:16px;margin-top:44px;font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.3em;color:var(--mute);font-weight:700;}
+  .quote-attr::before{content:'';width:40px;height:1px;background:var(--ink);}
+
+  /* ====== CTA ====== */
+  .cta-layer{background:#fff;}
+  .cta-inner{position:relative;z-index:1;text-align:center;padding:0 20px;}
+  .cta-sup{font-family:'Inter',sans-serif;font-size:11px;letter-spacing:.4em;color:var(--red);font-weight:700;}
+  .cta-h{font-family:'Noto Serif JP',serif;font-weight:900;font-size:clamp(48px,7vw,120px);line-height:1.15;margin:26px 0 22px;letter-spacing:.01em;color:var(--ink);}
+  .cta-h .green{color:var(--green);}
+  .cta-h .red{color:var(--red);}
+  .cta-p{font-size:14px;color:#333;line-height:2.1;max-width:620px;margin:0 auto 48px;}
+  .cta-btns{display:inline-flex;gap:16px;flex-wrap:wrap;justify-content:center;}
+  .btn-a{display:inline-flex;align-items:center;gap:12px;padding:18px 36px;font-size:13px;font-weight:700;letter-spacing:.12em;background:var(--ink);color:#fff;text-decoration:none;transition:background .2s,transform .2s;}
+  .btn-a:hover{background:var(--red);transform:translateY(-2px);}
+  .btn-a.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink);}
+  .btn-a.ghost:hover{background:var(--ink);color:#fff;}
+
+  /* ====== 進行インジケーター ====== */
+  .progress{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:200;display:flex;flex-direction:column;gap:14px;}
+  .progress a{display:block;width:8px;height:8px;border-radius:50%;background:#ddd;transition:all .3s;position:relative;cursor:pointer;}
+  .progress a::after{content:attr(data-l);position:absolute;right:calc(100% + 14px);top:50%;transform:translateY(-50%);font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.2em;color:var(--mute);opacity:0;transition:opacity .2s;white-space:nowrap;pointer-events:none;}
+  .progress a:hover::after,.progress a.active::after{opacity:1;}
+  .progress a.active{background:var(--red);width:10px;height:10px;}
+  .progress a.active::after{color:var(--red);font-weight:700;}
+  .progress a.past{background:var(--ink);}
+
+  /* ====== ブレッドクラム（fixed） ====== */
+  .h2-breadcrumb{position:fixed;top:72px;left:0;right:0;z-index:50;background:rgba(255,255,255,.88);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:10px 0;}
+  .h2-breadcrumb .inner{max-width:1180px;margin:0 auto;padding:0 40px;font-size:11px;color:var(--mute);letter-spacing:.06em;}
+  .h2-breadcrumb a{color:var(--mute);text-decoration:none;}
+  .h2-breadcrumb a:hover{color:var(--red);}
+  .h2-breadcrumb span{margin:0 8px;}
+
+  /* ====== 左上 ERA固定バッジ ====== */
+  .era-badge{position:fixed;left:40px;top:130px;z-index:16;pointer-events:none;}
+  .era-badge__eyebrow{font-family:'Inter',sans-serif;font-size:10px;letter-spacing:.35em;color:var(--red);font-weight:700;display:flex;align-items:center;gap:10px;}
+  .era-badge__eyebrow::before{content:'';width:28px;height:1px;background:var(--red);}
+  .era-badge__num{font-family:'Noto Serif JP',serif;font-size:56px;font-weight:900;color:var(--ink);letter-spacing:-.02em;margin-top:8px;line-height:1;}
+  .era-badge__range{font-family:'Inter',sans-serif;font-size:11px;color:var(--mute);letter-spacing:.16em;margin-top:6px;font-weight:700;}
+
+  /* ====== 時代ライン（奥 → 手前・時代が迫ってくる） ====== */
+  .time-rail{position:fixed;left:0;right:0;bottom:0;height:36vh;min-height:240px;max-height:360px;pointer-events:none;z-index:14;overflow:hidden;}
+  /* 上端をフェードさせてコンテンツとの境界を和らげる */
+  .time-rail::before{content:'';position:absolute;left:0;right:0;top:0;height:26%;background:linear-gradient(to bottom,rgba(255,255,255,.95) 0%,rgba(255,255,255,0) 100%);z-index:3;pointer-events:none;}
+  .time-rail__svg{position:absolute;inset:0;width:100%;height:100%;}
+  .time-rail__nodes{position:absolute;inset:0;}
+  .tl-node{position:absolute;display:flex;flex-direction:column;align-items:center;transform-origin:50% 100%;transition:left .9s cubic-bezier(.2,.8,.2,1),top .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1),opacity .7s ease-out;will-change:transform,opacity,left,top;}
+  .tl-node__flag{background:var(--ink);color:#fff;padding:6px 14px;white-space:nowrap;font-family:'Noto Serif JP',serif;font-size:12px;font-weight:700;letter-spacing:.03em;line-height:1.3;border-left:2px solid var(--red);text-align:left;}
+  .tl-node__year{display:block;font-family:'Inter',sans-serif;font-size:9px;letter-spacing:.18em;color:rgba(255,255,255,.7);margin-top:3px;font-weight:700;}
+  .tl-node__stem{width:1px;height:26px;background:linear-gradient(to top,var(--red) 0%,rgba(200,16,46,.2) 100%);}
+  .tl-node__dot{width:10px;height:10px;border-radius:50%;background:#fff;border:2px solid var(--red);box-shadow:0 2px 6px rgba(200,16,46,.25);}
+  .tl-node.is-current .tl-node__dot{background:var(--red);width:14px;height:14px;box-shadow:0 0 0 5px rgba(200,16,46,.18),0 4px 10px rgba(200,16,46,.4);}
+  .tl-node.is-current .tl-node__flag{background:var(--red);border-left-color:var(--ink);font-size:14px;padding:8px 18px;}
+  .tl-node.is-current .tl-node__year{color:rgba(255,255,255,.85);}
+  .tl-node.is-current .tl-node__stem{height:36px;}
+
+  /* スクロールジャック中 */
+  body.locking{overscroll-behavior:none;}
+
+  /* 制作メモ */
+  .dev-note{position:fixed;top:120px;right:20px;z-index:200;background:rgba(11,11,11,.85);color:#fff;font-size:10px;font-family:'Inter',sans-serif;letter-spacing:.1em;padding:8px 14px;border-radius:3px;border-left:2px solid var(--red);}
+
+  /* Responsive */
+  @media (max-width:880px){
+    .era-grid{grid-template-columns:1fr;gap:32px;}
+    .hero-sub{flex-direction:column;gap:24px;align-items:flex-start;}
+    .num-grid{grid-template-columns:repeat(2,1fr);}
+    .num-cell:nth-child(2){border-right:none;}
+    .num-cell:nth-child(1),.num-cell:nth-child(2){border-bottom:1px solid var(--line);}
+    .progress{display:none;}
+    .h2-layer__inner{padding:120px 0 90px;}
+    .dev-note{display:none;}
+    .era-badge{left:20px;top:110px;}
+    .era-badge__num{font-size:36px;}
+    .time-rail{height:30vh;min-height:200px;}
+    .tl-node__flag{font-size:11px;padding:4px 10px;}
+    .tl-node.is-current .tl-node__flag{font-size:12px;padding:6px 14px;}
+    .h2-layer__inner{padding:110px 0 calc(30vh + 30px);}
+  }
+</style>
+</head>
+<body>
+<!-- ヘッダー（ステージ外・通常スクロール） -->
+<header class="site-header">
+  <div class="inner">
+    <div class="logo">近江度量衡株式会社<span>OMISCALE CO.,LTD. — Founded 1900</span></div>
+    <nav class="site-nav">
+      <a href="company.html">会社案内</a>
+      <a href="history.html" class="active">126年ヒストリー</a>
+      <a href="products.html">製品・技術</a>
+      <a href="service.html">サービス案内</a>
+      <a href="delivery.html">納入実績</a>
+      <a class="--recruit" href="recruit.html">採用情報</a>
+    </nav>
+    <a class="btn btn--white btn--sm" href="contact.html">お問い合わせ</a>
+  </div>
+</header>
+
+<nav class="h2-breadcrumb"><div class="inner"><a href="top.html">HOME</a><span>›</span><a href="history.html">126年ヒストリー</a><span>›</span>スクロール演出サンプル</div></nav>
+
+<div class="progress" id="progress"></div>
+
+<!-- 左上 現在地バッジ -->
+<div class="era-badge" id="eraBadge" aria-hidden="true">
+  <div class="era-badge__eyebrow">LAYER <span id="eraStep">01</span></div>
+  <div class="era-badge__num" id="eraNum">00</div>
+  <div class="era-badge__range" id="eraRange">Introduction</div>
+</div>
+
+<!-- 時代ライン（奥の消失点から手前に時代が流れてくる） -->
+<div class="time-rail" aria-hidden="true" id="timeRail">
+  <svg class="time-rail__svg" viewBox="0 0 100 100" preserveAspectRatio="none">
+    <defs>
+      <linearGradient id="tlgrad" x1="12%" y1="88%" x2="90%" y2="12%">
+        <stop offset="0%"   stop-color="rgb(200,16,46)" stop-opacity=".9"/>
+        <stop offset="55%"  stop-color="rgb(200,16,46)" stop-opacity=".35"/>
+        <stop offset="100%" stop-color="rgb(200,16,46)" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <line x1="12" y1="88" x2="90" y2="12" stroke="url(#tlgrad)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+  </svg>
+  <div class="time-rail__nodes" id="timeNodes"></div>
+</div>
+
+<div class="dev-note">HISTORY 2 / スクロールジャック + 奥行き軸サンプル</div>
+
+<main class="h2-stage" id="stage">
+  <div class="h2-stage__viewport">
+
+    <!-- ===== 00 HERO ===== -->
+    <section class="h2-layer hero-layer" data-label="INTRO">
+      <div class="h2-layer__inner">
+        <div class="bg-year ghost">1900</div>
+        <div class="hero-stack">
+          <div class="hero-era">126 YEARS HISTORY ／ 創業1900年</div>
+          <h1 class="hero-main">
+            <span class="ink">明治から、</span><br/>
+            <span class="red">令和へ。</span>
+          </h1>
+          <div class="hero-sub">
+            <p>1900年（明治33年）、滋賀・草津の小さな計量器工房から始まった物語は、いま国内外2,000施設以上に「正確に測る」を届ける企業へと成長した。時代が変わっても、"はかる"という仕事への誠実さだけは変わらない。</p>
+            <div class="hero-years">
+              <span class="from">1900</span><span class="bar"></span><span class="to">2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-hint">SCROLL TO TRAVERSE TIME</div>
+      </div>
+    </section>
+
+    <!-- ===== 01 数字バンド ===== -->
+    <section class="h2-layer num-layer" data-label="SCALE">
+      <div class="h2-layer__inner">
+        <h3 class="num-caption"><small>OMI BY THE NUMBERS</small>126年が積み重ねたもの</h3>
+        <div class="num-grid">
+          <div class="num-cell"><div class="v">126<span class="unit">年</span></div><div class="l">創業からの歴史<br>1900 — 2026</div></div>
+          <div class="num-cell"><div class="v">2,000<span class="unit">＋</span></div><div class="l">累計納入施設数<br>国内・海外含む</div></div>
+          <div class="num-cell"><div class="v">9<span class="unit">拠点</span></div><div class="l">国内営業・サービス網<br>全国をカバー</div></div>
+          <div class="num-cell"><div class="v">3<span class="unit">カ国</span></div><div class="l">海外展開<br>上海・バンコク・韓国</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 02 明治・大正 ===== -->
+    <section class="h2-layer era-layer" data-label="1900-1925" data-era="01">
+      <div class="h2-layer__inner">
+        <div class="bg-year">1900</div>
+        <div class="era-grid">
+          <div class="era-col-left">
+            <span class="layer-tag">ERA 01</span>
+            <h2><span class="accent">明治</span>・大正</h2>
+            <span class="era-range"><span class="dot"></span>1900 — 1925</span>
+            <p class="era-lead">農産物取引を支える計量器工房として草津に誕生。職人の手仕事から始まった"精度への執念"が、近江度量衡の原点となった時代。</p>
+          </div>
+          <div class="era-col-right">
+            <div class="era-card pin">
+              <div class="y">1900 / 明治33年</div>
+              <div class="t">創業 — 草津に計量器工房を開設</div>
+              <div class="b">棒秤・台秤を主力に、地域農家・商店へ供給。農産物取引の公正な計量を使命として出発。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">1910 / 明治43年</div>
+              <div class="t">法人化 — 近江度量衡株式会社を設立</div>
+              <div class="b">職人工房から組織的な会社経営へ移行。従業員数は約15名。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">1920 / 大正9年</div>
+              <div class="t">近畿・東海エリアへ販路拡大</div>
+              <div class="b">大阪・名古屋の穀物取引所向けに高精度台秤を納入。滋賀県外へ本格展開。</div>
+            </div>
+            <div class="era-card green">
+              <div class="y">1923 / 大正12年</div>
+              <div class="t">関東大震災後の復興需要に対応</div>
+              <div class="b">震災後の物資流通正常化へ計量器を緊急供給。信頼性の高さが全国に知られるきっかけに。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 03 昭和前期 ===== -->
+    <section class="h2-layer era-layer" data-label="1926-1944" data-era="02">
+      <div class="h2-layer__inner">
+        <div class="bg-year">1926</div>
+        <div class="era-grid">
+          <div class="era-col-left">
+            <span class="layer-tag">ERA 02</span>
+            <h2><span class="accent">昭和</span>前期</h2>
+            <span class="era-range"><span class="dot"></span>1926 — 1944</span>
+            <p class="era-lead">農業計量で培った精度技術を工業分野へ応用する準備が進む時代。時代の要請を敏感に察知し、事業の基盤を広げた。</p>
+          </div>
+          <div class="era-col-right">
+            <div class="era-card">
+              <div class="y">1930 / 昭和5年</div>
+              <div class="t">二代目に経営承継 — 製品ラインナップ拡充</div>
+              <div class="b">台秤に加え、吊り秤・分銅・検定器具の製造を開始。中小工場・卸業者への供給基盤を固める。</div>
+            </div>
+            <div class="era-card pin">
+              <div class="y">1935 / 昭和10年</div>
+              <div class="t">工業用計量器の試作開始</div>
+              <div class="b">鉄鋼・繊維産業向け大型計量器の試作を開始。農業計量のノウハウを産業へ転用する端緒。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">1940 / 昭和15年</div>
+              <div class="t">軍需・食料供給計量への対応</div>
+              <div class="b">戦時体制下、食料配給・軍需物資管理のための計量器を国内流通機関へ供給。品質と精度を絶対的使命とする企業文化が根付く。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 04 昭和中期 ===== -->
+    <section class="h2-layer era-layer" data-label="1945-1969" data-era="03">
+      <div class="h2-layer__inner">
+        <div class="bg-year">1955</div>
+        <div class="era-grid">
+          <div class="era-col-left">
+            <span class="layer-tag">ERA 03</span>
+            <h2><span class="accent">昭和</span>中期</h2>
+            <span class="era-range"><span class="dot"></span>1945 — 1969</span>
+            <p class="era-lead">戦後復興から高度経済成長へ。食料増産・農業機械化の波に乗り、"計量の近代化"を主導した20年。</p>
+          </div>
+          <div class="era-col-right">
+            <div class="era-card pin">
+              <div class="y">1947 / 昭和22年</div>
+              <div class="t">戦後復興期 — 農業計量の需要が急増</div>
+              <div class="b">食料増産・農地改革とともに農協向け計量器の需要が爆発的に拡大。全国農協連合会との取引が本格化。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">1950 / 昭和25年</div>
+              <div class="t">計量法制定 — 国家検定対応機器の製造開始</div>
+              <div class="b">いち早く検定合格ラインを確立し、業界標準の設定に関与。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">1955 / 昭和30年</div>
+              <div class="t">選果機・計量コンベア事業参入</div>
+              <div class="b">農協の大型施設に初のシステム納入。農産物計量システム事業の誕生。</div>
+            </div>
+            <div class="era-card green">
+              <div class="y">1965 / 昭和40年</div>
+              <div class="t">コンピューター計量制御の研究開始</div>
+              <div class="b">大学機関と共同研究。計量×IT融合の先駆的取り組みとして業界で注目。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 05 QUOTE ① ===== -->
+    <section class="h2-layer quote-layer" data-label="VOICE">
+      <div class="h2-layer__inner">
+        <div class="bg-year ghost">VOICE</div>
+        <div class="quote-inner">
+          <div class="quote-mark">"</div>
+          <p class="quote-text">計量とは、<em>人と人の信頼を結ぶ仕事</em>だ。<br/>一グラムのずれも、嘘をつくことと同じだと教わった。</p>
+          <span class="quote-attr">元社員 — 昭和40年代入社</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 06 昭和後期 ===== -->
+    <section class="h2-layer era-layer" data-label="1970-1988" data-era="04">
+      <div class="h2-layer__inner">
+        <div class="bg-year">1975</div>
+        <div class="era-grid">
+          <div class="era-col-left">
+            <span class="layer-tag">ERA 04</span>
+            <h2><span class="accent">昭和</span>後期</h2>
+            <span class="era-range"><span class="dot"></span>1970 — 1988</span>
+            <p class="era-lead">農業から工業・物流へ事業領域を拡張。穀類・工業の二本柱が確立された、ビジネスモデル転換の時代。</p>
+          </div>
+          <div class="era-col-right">
+            <div class="era-card pin">
+              <div class="y">1970 / 昭和45年</div>
+              <div class="t">工業計量システム事業部を新設</div>
+              <div class="b">鉄鋼・化学・食品産業向けに、設計・製造・据付を一貫提供する体制を整備。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">1975 / 昭和50年</div>
+              <div class="t">カントリーエレベーター向け計量システムを本格展開</div>
+              <div class="b">食糧庁管轄の穀物備蓄施設への計量システム納入が本格化。累計100施設を突破し業界シェアトップクラスに。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">1980 / 昭和55年</div>
+              <div class="t">マイコン制御計量システムを製品化</div>
+              <div class="b">マイクロプロセッサ搭載。自動計量・データ記録・印字まで一体化した次世代機として普及。</div>
+            </div>
+            <div class="era-card green">
+              <div class="y">1987 / 昭和62年</div>
+              <div class="t">北海道・九州に営業所を開設</div>
+              <div class="b">日本有数の農業産地（帯広・福岡）に産地密着のサービス体制を広げる。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 07 平成 ===== -->
+    <section class="h2-layer era-layer" data-label="1989-2018" data-era="05">
+      <div class="h2-layer__inner">
+        <div class="bg-year">2000</div>
+        <div class="era-grid">
+          <div class="era-col-left">
+            <span class="layer-tag">ERA 05</span>
+            <h2>平<span class="accent">成</span></h2>
+            <span class="era-range"><span class="dot"></span>1989 — 2018</span>
+            <p class="era-lead">創業100周年、ISO取得、アジア3カ国進出。国内トップシェア確立から、グローバル・DX時代への助走期。</p>
+          </div>
+          <div class="era-col-right">
+            <div class="era-card pin">
+              <div class="y">2000 / 平成12年</div>
+              <div class="t">創業100周年 — ISO 9001 認証取得</div>
+              <div class="b">全数検査・精度管理の仕組みを標準化。「検定合格率100%」を誓約。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">2007 / 平成19年</div>
+              <div class="t">カントリーエレベーター累計1,000施設突破</div>
+              <div class="b">国内穀類計量分野でのトップシェアを確立。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">2010 / 平成22年</div>
+              <div class="t">アジア展開開始 — 上海拠点設立</div>
+              <div class="b">「一品一様」ノウハウをアジアへ。海外進出の第一歩。</div>
+            </div>
+            <div class="era-card green">
+              <div class="y">2015 / 平成27年</div>
+              <div class="t">海外3拠点体制が完成 — バンコク設立</div>
+              <div class="b">上海・ソウル・バンコクでアジア全域をカバー。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">2018 / 平成30年</div>
+              <div class="t">IoT・クラウド計量管理の開発着手</div>
+              <div class="b">AI異常検知・リモートメンテ対応の次世代プラットフォーム開発を開始。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 08 QUOTE ② ===== -->
+    <section class="h2-layer quote-layer" data-label="PHILOSOPHY">
+      <div class="h2-layer__inner">
+        <div class="bg-year ghost">CRAFT</div>
+        <div class="quote-inner">
+          <div class="quote-mark">"</div>
+          <p class="quote-text">一品一様というのは、ただ特注を作ることではない。<br/><em>お客様の現場を理解し、最適な精度で答える</em>ことだ。</p>
+          <span class="quote-attr">現役エンジニア — 開発部</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 09 令和 ===== -->
+    <section class="h2-layer era-layer" data-label="2019-" data-era="06">
+      <div class="h2-layer__inner">
+        <div class="bg-year">2025</div>
+        <div class="era-grid">
+          <div class="era-col-left">
+            <span class="layer-tag">ERA 06</span>
+            <h2><span class="accent">令</span>和</h2>
+            <span class="era-range"><span class="dot"></span>2019 — present</span>
+            <p class="era-lead">126年の蓄積を土台に、次の時代の「はかる」を再定義する。スマート農業、カーボンニュートラル、ブランドリニューアル。</p>
+          </div>
+          <div class="era-col-right">
+            <div class="era-card">
+              <div class="y">2020 / 令和2年</div>
+              <div class="t">リモートメンテナンス体制を整備</div>
+              <div class="b">パンデミック下、遠隔診断・オンラインサポートを急速整備。「動かし続ける」メンテナンスへの信頼をさらに高めた。</div>
+            </div>
+            <div class="era-card green">
+              <div class="y">2022 / 令和4年</div>
+              <div class="t">スマート農業連携計量システムを発売</div>
+              <div class="b">農業IoT・ドローンデータと連携した計量管理クラウドを商品化。産地の生産・出荷DXをサポート。</div>
+            </div>
+            <div class="era-card">
+              <div class="y">2023 / 令和5年</div>
+              <div class="t">累計納入施設2,000突破</div>
+              <div class="b">農産物・穀類・工業の三分野の実績が積み重なった歴史的節目。</div>
+            </div>
+            <div class="era-card pin">
+              <div class="y">2025 / 令和7年</div>
+              <div class="t">創業126周年 — 北海道営業所を拡充移転</div>
+              <div class="b">Webリニューアルプロジェクト始動。次の100年に向けた起点。</div>
+            </div>
+            <div class="era-card pin">
+              <div class="y">2026 / 令和8年</div>
+              <div class="t">新ブランドビジョン発表 — Webリニューアル</div>
+              <div class="b">「いきる」をはかり、豊かな世界へ。採用・広報体制を強化。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 10 CTA ===== -->
+    <section class="h2-layer cta-layer" data-label="NEXT100">
+      <div class="h2-layer__inner">
+        <div class="bg-year ghost">2126</div>
+        <div class="cta-inner">
+          <span class="cta-sup">TOWARDS THE NEXT 100 YEARS</span>
+          <h2 class="cta-h">次の<span class="red">100年</span>へ。<br/>ともに歩む<span class="green">人</span>を。</h2>
+          <p class="cta-p">126年の技術と誇りを受け継ぎ、さらに進化させる仲間を求めています。<br/>"はかる"の先にある豊かな世界を、あなたと共に。</p>
+          <div class="cta-btns">
+            <a href="company.html" class="btn-a">会社案内を見る →</a>
+            <a href="recruit.html" class="btn-a ghost">採用情報 →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<!-- フッター（ステージ外） -->
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="name">近江度量衡株式会社</div>
+        <div class="tagline">「いきる」をはかり、豊かな世界へ。<br/>Founded 1900</div>
+      </div>
+      <div class="footer-nav"><h4>COMPANY</h4><ul>
+        <li><a href="company.html">会社案内</a></li>
+        <li><a href="history.html">126年ヒストリー</a></li>
+        <li><a href="news.html">新着情報</a></li>
+      </ul></div>
+      <div class="footer-nav"><h4>PRODUCTS</h4><ul>
+        <li><a href="products.html">製品・技術紹介</a></li>
+        <li><a href="service.html">サービス案内</a></li>
+        <li><a href="delivery.html">納入実績</a></li>
+      </ul></div>
+      <div class="footer-nav"><h4>RECRUITMENT</h4><ul>
+        <li><a href="recruit.html">採用TOP</a></li>
+        <li><a href="recruit-jobs-graduate.html">新卒採用</a></li>
+        <li><a href="recruit-jobs-career.html">中途採用</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 近江度量衡株式会社 All Rights Reserved.</span>
+      <a href="privacy.html" style="color:#555;">プライバシーポリシー</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const stage    = document.getElementById('stage');
+  const layers   = Array.from(stage.querySelectorAll('.h2-layer'));
+  const progress = document.getElementById('progress');
+  const eraStep  = document.getElementById('eraStep');
+  const eraNum   = document.getElementById('eraNum');
+  const eraRange = document.getElementById('eraRange');
+
+  stage.style.height = (layers.length * 100) + 'vh';
+
+  // ---- レイヤー定義（title, range, 時代軸上の%位置, 英略） ----
+  // pos は 1900 を 0%, 2026 を 100% とする線形マップ
+  const META = {
+    'INTRO':      {title:'Introduction',    range:'1900 — 2026',      pos:0,    en:'INTRO'},
+    'SCALE':      {title:'126 years',       range:'by the numbers',   pos:0,    en:'SCALE'},
+    '1900-1925':  {title:'明治・大正',       range:'1900 — 1925',      pos:0,    en:'ERA 01'},
+    '1926-1944':  {title:'昭和前期',         range:'1926 — 1944',      pos:20,   en:'ERA 02'},
+    '1945-1969':  {title:'昭和中期',         range:'1945 — 1969',      pos:36,   en:'ERA 03'},
+    'VOICE':      {title:'Voice I',         range:'alumni',           pos:44,   en:'VOICE'},
+    '1970-1988':  {title:'昭和後期',         range:'1970 — 1988',      pos:56,   en:'ERA 04'},
+    '1989-2018':  {title:'平成',            range:'1989 — 2018',      pos:72,   en:'ERA 05'},
+    'PHILOSOPHY': {title:'Voice II',        range:'craftsmanship',    pos:80,   en:'VOICE'},
+    '2019-':      {title:'令和',            range:'2019 — present',   pos:94,   en:'ERA 06'},
+    'NEXT100':    {title:'Next 100 Years',  range:'and beyond',       pos:100,  en:'NEXT'}
+  };
+
+  // ---- 時代ノード生成（各レイヤー1つのフラッグ） ----
+  const timeNodes = document.getElementById('timeNodes');
+  const NODES = layers.map((el) => {
+    const m = META[el.dataset.label] || {title: el.dataset.label || '', range: ''};
+    const n = document.createElement('div');
+    n.className = 'tl-node';
+    n.innerHTML = '<div class="tl-node__flag">'
+      + (m.title || '')
+      + '<span class="tl-node__year">' + (m.range || '') + '</span>'
+      + '</div>'
+      + '<div class="tl-node__stem"></div>'
+      + '<div class="tl-node__dot"></div>';
+    timeNodes.appendChild(n);
+    return n;
+  });
+
+  // 斜めパス：手前（左下）→ 奥（右上）
+  const PATH_S  = {x: 12, y: 88};
+  const PATH_E  = {x: 90, y: 12};
+  const MAX_VIS = 6;
+
+  function updateNodes(active){
+    NODES.forEach((n, i) => {
+      const off = i - active;
+      if (off < 0 || off > MAX_VIS){
+        n.style.opacity = 0;
+        n.classList.remove('is-current');
+        return;
+      }
+      const t    = off / MAX_VIS;
+      const ease = 1 - Math.pow(1 - t, 1.6);
+      const x    = PATH_S.x + (PATH_E.x - PATH_S.x) * ease;
+      const y    = PATH_S.y + (PATH_E.y - PATH_S.y) * ease;
+      const s    = 1 - ease * 0.74;
+      const o    = 1 - ease * 0.80;
+      n.style.left = x + '%';
+      n.style.top  = y + '%';
+      n.style.transform = 'translate(-50%, -100%) scale(' + s.toFixed(3) + ')';
+      n.style.opacity = o.toFixed(3);
+      n.classList.toggle('is-current', off === 0);
+    });
+  }
+
+  // ---- Progress dots ----
+  layers.forEach((el, i) => {
+    const a = document.createElement('a');
+    a.href = '#';
+    a.dataset.l = el.dataset.label || String(i+1);
+    a.addEventListener('click', (e)=>{ e.preventDefault(); gotoLayer(i); });
+    progress.appendChild(a);
+  });
+  const dots = Array.from(progress.children);
+
+  // ==========================================================
+  //   スクロールジャック
+  // ==========================================================
+  let currentIdx = 0;
+  let isLocked   = false;
+  let unlockTimer = null;
+
+  function inStage(){
+    const sTop = stage.offsetTop;
+    const sBot = sTop + (layers.length - 1) * window.innerHeight;
+    const y    = window.scrollY;
+    return y >= sTop - 8 && y <= sBot + 8;
+  }
+
+  function gotoLayer(i){
+    const clamped = Math.max(0, Math.min(layers.length - 1, i));
+    if (clamped === currentIdx && !isLocked) return;
+    currentIdx = clamped;
+    isLocked   = true;
+    document.body.classList.add('locking');
+    const targetY = stage.offsetTop + clamped * window.innerHeight;
+    window.scrollTo({top: targetY, behavior: 'smooth'});
+    clearTimeout(unlockTimer);
+    unlockTimer = setTimeout(() => {
+      isLocked = false;
+      document.body.classList.remove('locking');
+    }, 820);
+  }
+
+  // Wheel（デスクトップ / トラックパッド）
+  let wheelAccum = 0;
+  let wheelResetTimer;
+  window.addEventListener('wheel', (e) => {
+    if (!inStage()) return;
+    // ステージ上端で上スクロール、下端で下スクロールは通常スクロールを許す
+    const scrolled = window.scrollY - stage.offsetTop;
+    const atTop = scrolled <= 0 && e.deltaY < 0;
+    const atBot = scrolled >= (layers.length - 1) * window.innerHeight - 2 && e.deltaY > 0;
+    if (atTop || atBot) return;
+
+    e.preventDefault();
+    if (isLocked) return;
+
+    wheelAccum += e.deltaY;
+    clearTimeout(wheelResetTimer);
+    wheelResetTimer = setTimeout(() => { wheelAccum = 0; }, 160);
+
+    if (Math.abs(wheelAccum) > 45){
+      gotoLayer(currentIdx + (wheelAccum > 0 ? 1 : -1));
+      wheelAccum = 0;
+    }
+  }, {passive: false});
+
+  // Touch（スマホ）
+  let touchStartY = null;
+  window.addEventListener('touchstart', (e) => {
+    if (!inStage()) { touchStartY = null; return; }
+    touchStartY = e.touches[0].clientY;
+  }, {passive: true});
+  window.addEventListener('touchmove', (e) => {
+    if (touchStartY === null || !inStage() || isLocked) return;
+    const scrolled = window.scrollY - stage.offsetTop;
+    const dy = touchStartY - e.touches[0].clientY;
+    const atTop = scrolled <= 0 && dy < 0;
+    const atBot = scrolled >= (layers.length - 1) * window.innerHeight - 2 && dy > 0;
+    if (atTop || atBot) return;
+    e.preventDefault();
+  }, {passive: false});
+  window.addEventListener('touchend', (e) => {
+    if (touchStartY === null || !inStage() || isLocked) { touchStartY = null; return; }
+    const dy = touchStartY - e.changedTouches[0].clientY;
+    touchStartY = null;
+    if (Math.abs(dy) > 40){
+      gotoLayer(currentIdx + (dy > 0 ? 1 : -1));
+    }
+  }, {passive: true});
+
+  // Keyboard
+  window.addEventListener('keydown', (e) => {
+    if (!inStage() || isLocked) return;
+    if (['ArrowDown','PageDown',' '].includes(e.key)){ e.preventDefault(); gotoLayer(currentIdx + 1); }
+    else if (['ArrowUp','PageUp'].includes(e.key))  { e.preventDefault(); gotoLayer(currentIdx - 1); }
+    else if (e.key === 'Home')                      { e.preventDefault(); gotoLayer(0); }
+    else if (e.key === 'End')                       { e.preventDefault(); gotoLayer(layers.length - 1); }
+  });
+
+  // ==========================================================
+  //   視差 & 奥行きリグ更新
+  // ==========================================================
+  let ticking = false;
+  function update(){
+    const stageTop = stage.offsetTop;
+    const vh       = window.innerHeight;
+    const scrolled = window.scrollY - stageTop;
+
+    let activeIdx = 0;
+    let minAbs    = Infinity;
+
+    layers.forEach((el, i) => {
+      const rel = (scrolled - i * vh) / vh;
+      const absRel = Math.abs(rel);
+      if (absRel < minAbs){ minAbs = absRel; activeIdx = i; }
+
+      if (rel <= -1.05 || rel >= 1.05){
+        el.style.opacity = 0;
+        el.style.pointerEvents = 'none';
+        el.classList.remove('is-active');
+        return;
+      }
+
+      let opacity, scale, y, blur, z;
+      if (rel >= 0){
+        const p = rel;
+        opacity = Math.max(0, 1 - p * 1.35);
+        scale   = 1 + p * 0.12;
+        y       = p * 26;
+        blur    = p * 1.6;
+        z       = -p * 200;
+      } else {
+        const p = -rel;
+        opacity = Math.max(0, 1 - p * 1.3);
+        scale   = 1 - p * 0.13;
+        y       = -p * 54;
+        blur    = p * 4;
+        z       = -p * 380;
+      }
+      el.style.opacity = opacity.toFixed(3);
+      el.style.filter  = `blur(${blur.toFixed(2)}px)`;
+      el.style.transform = `translate3d(0, ${y.toFixed(1)}px, ${z.toFixed(1)}px) scale(${scale.toFixed(3)})`;
+      el.style.pointerEvents = (absRel < 0.4) ? 'auto' : 'none';
+
+      const bg = el.querySelector('.bg-year');
+      if (bg){
+        const shift = (-rel * 80).toFixed(1);
+        const s = (1 - Math.abs(rel) * 0.12).toFixed(3);
+        bg.style.transform = `translate(-50%, calc(-55% + ${shift}px)) scale(${s})`;
+      }
+    });
+
+    layers.forEach((el, i) => el.classList.toggle('is-active', i === activeIdx && minAbs < 0.55));
+
+    dots.forEach((d, i) => {
+      d.classList.toggle('active', i === activeIdx);
+      d.classList.toggle('past',   i <  activeIdx);
+    });
+
+    if (!isLocked) currentIdx = activeIdx;
+
+    // ----- バッジ -----
+    const label = layers[activeIdx].dataset.label || '';
+    const meta  = META[label] || {title: label, range: '', en: ''};
+    if (eraStep)  eraStep.textContent  = String(activeIdx + 1).padStart(2,'0');
+    if (eraNum)   eraNum.textContent   = String(activeIdx + 1).padStart(2,'0');
+    if (eraRange) eraRange.textContent = meta.range;
+
+    // ----- 時代ライン（ノード群を奥→手前に流す） -----
+    updateNodes(activeIdx);
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking){ requestAnimationFrame(update); ticking = true; }
+  }, {passive:true});
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+</body>
+</html>
