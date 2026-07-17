@@ -226,8 +226,8 @@ body.menu-open{overflow:hidden}
 /* ============ 採用動線（見出し＋新卒/中途の大窓・左右で上下ずらし） ============ */
 .recjoin{background:#000;color:#fff;padding:150px 7vw 170px}
 .recjoin::after{content:"";position:absolute;left:0;bottom:100%;width:60%;height:26px;background:#000}
-/* FVと同じ6分割の薄い点線罫線をセクション全面に */
-.recjoin::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
+/* FVと同じ6分割の薄い点線罫線をセクション全面に（採用・納入実績） */
+.recjoin::before,.stats::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;
   background-image:
     repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
     repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
@@ -312,6 +312,10 @@ body.menu-open{overflow:hidden}
 .phil__close > span::before{content:"";position:absolute;inset:0;background:var(--red);transform:scaleX(var(--lp,0));transform-origin:left center;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
 .phil__close > span:nth-child(2)::before{transition-delay:.15s}
 .phil__close > span + span{margin-top:.18em}
+/* FVメインコピーと同じルール：キーワード大・接続詞小 */
+.phil__close > span b{font-weight:inherit}
+.phil__close > span .lg{font-size:1.16em}
+.phil__close > span .sm{font-size:.64em}
 @media(prefers-reduced-motion:reduce){.phil__close > span::before{transform:none;transition:none}}
 .phil__cta{margin-top:130px}
 @media(max-width:900px){
@@ -389,6 +393,8 @@ body.menu-open{overflow:hidden}
 .stats__top .disp-jp{font-size:clamp(1.5rem,3.2vw,2.7rem);line-height:1.55}
 .stats__cells{display:grid;grid-template-columns:repeat(2,1fr);margin-top:96px}
 .stat{position:relative;padding:26px 26px 34px;text-align:center}
+/* 各数字の上に代表写真を大きく */
+.stat__ph{width:100%;aspect-ratio:16/9;background-size:cover;background-position:center;margin-bottom:38px}
 .stat+.stat{border-left:0.5px solid var(--line)}
 .stat b{display:block;font-family:var(--en);font-weight:600;font-size:clamp(2.6rem,4.6vw,4.4rem);line-height:1;letter-spacing:.01em;transition:transform .55s cubic-bezier(.2,1.9,.35,1),color .35s;transform-origin:center bottom}
 .stat b.is-pop{transform:scale(1.3)}
@@ -398,11 +404,10 @@ body.menu-open{overflow:hidden}
 .clients-marquee{overflow:hidden;margin-top:32px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
 .clients-track{display:flex;width:max-content;animation:clientsScroll 46s linear infinite}
 .clients-set{display:flex;align-items:center;gap:76px;padding-right:76px}
-.clogo{flex:none;font-family:var(--jp);font-weight:700;font-size:18px;letter-spacing:.1em;color:rgba(255,255,255,.5);white-space:nowrap}
-.clogo.en{font-family:var(--en);font-weight:600;font-size:19px;letter-spacing:.16em}
+.clogo{flex:none;display:block;height:30px;width:auto;opacity:.55}
 @keyframes clientsScroll{to{transform:translateX(-50%)}}
 @media(prefers-reduced-motion:reduce){.clients-track{animation:none}}
-@media(max-width:900px){.stats__clients{margin-top:60px}.clients-set{gap:46px;padding-right:46px}.clogo{font-size:15px}.clogo.en{font-size:16px}}
+@media(max-width:900px){.stats__clients{margin-top:60px}.clients-set{gap:46px;padding-right:46px}.clogo{height:23px}}
 .stat b i{font-style:normal;font-family:var(--jp);font-weight:900;font-size:.38em;margin-left:4px}
 .stat .lbl{display:block;font-size:12.5px;color:#555;margin-top:16px;line-height:1.8}
 @media(max-width:900px){
@@ -721,7 +726,7 @@ body.menu-open .nav{background:transparent;border:none}
     <p><span class="ln"><span class="lt">1900年の創業から126年。</span></span><span class="ln"><span class="lt">近江度量衡は、あらゆる現場の「はかる」に、</span></span><span class="ln"><span class="lt">一品一様のものづくりで応えつづけてきた。</span></span></p>
     <p><span class="ln"><span class="lt">暮らしを、産業を、その先の未来を。</span></span><span class="ln"><span class="lt">私たちは、これからもはかりつづける。</span></span></p>
   </div>
-  <h2 class="phil__close js-chars" data-once><span>近江から、</span><span>世界をはかる</span></h2>
+  <h2 class="phil__close js-chars" data-once><span><b class="lg">近江</b><b class="sm">から、</b></span><span><b class="lg">世界</b><b class="sm">を</b><b class="lg">はかる</b></span></h2>
   <div class="phil__cta rv"><a class="btn" href="#">会社案内を見る <span>→</span></a></div>
   </div>
   <div class="phil__map" aria-hidden="true">
@@ -784,18 +789,18 @@ body.menu-open .nav{background:transparent;border:none}
     <h2 class="disp-jp rv rv-d1">創業126年。全国約2,000施設へ、<br>一品一様の計量システムを<br>届けてきました。</h2>
   </div>
   <div class="stats__cells">
-    <div class="stat rv"><b><span class="cnt" data-to="2000" data-fmt="comma">0</span><i>＋</i></b><span class="lbl">累計納入施設数<br>全国のJA・工場・プラント</span></div>
-    <div class="stat rv rv-d1"><b><span class="cnt" data-to="9">0</span><i>拠点</i></b><span class="lbl">サービス網<br>国内6＋海外3</span></div>
+    <div class="stat rv"><div class="stat__ph" style="background-image:url(stat-facilities.jpg)"></div><b><span class="cnt" data-to="2000" data-fmt="comma">0</span><i>＋</i></b><span class="lbl">累計納入施設数<br>全国のJA・工場・プラント</span></div>
+    <div class="stat rv rv-d1"><div class="stat__ph" style="background-image:url(stat-service.jpg)"></div><b><span class="cnt" data-to="9">0</span><i>拠点</i></b><span class="lbl">サービス網<br>国内6＋海外3</span></div>
   </div>
   <div class="stats__clients rv">
     <p class="cl-lbl">CLIENTS — 主な納入先</p>
     <div class="clients-marquee">
       <div class="clients-track">
         <div class="clients-set">
-          <span class="clogo">近江食品工業</span><span class="clogo en">SETA MILLING</span><span class="clogo">JAレイクセントラル</span><span class="clogo">琵琶湖青果</span><span class="clogo en">HIRA GLASS</span><span class="clogo">甲賀精機</span><span class="clogo en">NAGAHAMA CHEMICAL</span><span class="clogo">湖東ファーム</span><span class="clogo en">OTSU LOGISTICS</span><span class="clogo">湖南製薬</span><span class="clogo en">ECHIGAWA RICE</span><span class="clogo">安曇川アグリ</span><span class="clogo en">MORIYAMA FOODS</span><span class="clogo">米原倉庫運輸</span><span class="clogo en">KONAN STEEL</span><span class="clogo">八幡罐詰</span><span class="clogo en">RITTO MACHINERY</span><span class="clogo">高島種苗</span><span class="clogo en">AZUCHI FARM</span><span class="clogo">坂本製茶</span>
+          <img class="clogo" src="clogos/c01.svg" alt=""><img class="clogo" src="clogos/c02.svg" alt=""><img class="clogo" src="clogos/c03.svg" alt=""><img class="clogo" src="clogos/c04.svg" alt=""><img class="clogo" src="clogos/c05.svg" alt=""><img class="clogo" src="clogos/c06.svg" alt=""><img class="clogo" src="clogos/c07.svg" alt=""><img class="clogo" src="clogos/c08.svg" alt=""><img class="clogo" src="clogos/c09.svg" alt=""><img class="clogo" src="clogos/c10.svg" alt=""><img class="clogo" src="clogos/c11.svg" alt=""><img class="clogo" src="clogos/c12.svg" alt=""><img class="clogo" src="clogos/c13.svg" alt=""><img class="clogo" src="clogos/c14.svg" alt=""><img class="clogo" src="clogos/c15.svg" alt=""><img class="clogo" src="clogos/c16.svg" alt=""><img class="clogo" src="clogos/c17.svg" alt=""><img class="clogo" src="clogos/c18.svg" alt=""><img class="clogo" src="clogos/c19.svg" alt=""><img class="clogo" src="clogos/c20.svg" alt="">
         </div>
         <div class="clients-set" aria-hidden="true">
-          <span class="clogo">近江食品工業</span><span class="clogo en">SETA MILLING</span><span class="clogo">JAレイクセントラル</span><span class="clogo">琵琶湖青果</span><span class="clogo en">HIRA GLASS</span><span class="clogo">甲賀精機</span><span class="clogo en">NAGAHAMA CHEMICAL</span><span class="clogo">湖東ファーム</span><span class="clogo en">OTSU LOGISTICS</span><span class="clogo">湖南製薬</span><span class="clogo en">ECHIGAWA RICE</span><span class="clogo">安曇川アグリ</span><span class="clogo en">MORIYAMA FOODS</span><span class="clogo">米原倉庫運輸</span><span class="clogo en">KONAN STEEL</span><span class="clogo">八幡罐詰</span><span class="clogo en">RITTO MACHINERY</span><span class="clogo">高島種苗</span><span class="clogo en">AZUCHI FARM</span><span class="clogo">坂本製茶</span>
+          <img class="clogo" src="clogos/c01.svg" alt=""><img class="clogo" src="clogos/c02.svg" alt=""><img class="clogo" src="clogos/c03.svg" alt=""><img class="clogo" src="clogos/c04.svg" alt=""><img class="clogo" src="clogos/c05.svg" alt=""><img class="clogo" src="clogos/c06.svg" alt=""><img class="clogo" src="clogos/c07.svg" alt=""><img class="clogo" src="clogos/c08.svg" alt=""><img class="clogo" src="clogos/c09.svg" alt=""><img class="clogo" src="clogos/c10.svg" alt=""><img class="clogo" src="clogos/c11.svg" alt=""><img class="clogo" src="clogos/c12.svg" alt=""><img class="clogo" src="clogos/c13.svg" alt=""><img class="clogo" src="clogos/c14.svg" alt=""><img class="clogo" src="clogos/c15.svg" alt=""><img class="clogo" src="clogos/c16.svg" alt=""><img class="clogo" src="clogos/c17.svg" alt=""><img class="clogo" src="clogos/c18.svg" alt=""><img class="clogo" src="clogos/c19.svg" alt=""><img class="clogo" src="clogos/c20.svg" alt="">
         </div>
       </div>
     </div>
