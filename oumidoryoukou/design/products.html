@@ -7,7 +7,7 @@
 <title>製品・技術｜近江度量衡株式会社</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700;900&family=Shippori+Mincho:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gen-interface-jp@latest/cdn/all.css">
 <style>
@@ -18,7 +18,7 @@
   --red:#ff0000;
   --line:#000;
   --frame:28px;
-  --en:"Oswald",sans-serif;
+  --en:"Albert Sans",sans-serif;
   --jp:"Gen Interface JP","Noto Sans JP","Hiragino Sans",system-ui,sans-serif;
 }
 @media(max-width:900px){:root{--frame:16px}}
@@ -49,11 +49,11 @@ img{max-width:100%;display:block}
 /* PC：ホバーで下層メガメニュー */
 .mega{position:fixed;left:0;right:0;top:64px;background:#fff;border-bottom:0.5px solid var(--line);opacity:0;visibility:hidden;transform:translateY(-10px);transition:opacity .25s,transform .25s,visibility .25s;z-index:29}
 .nitem:hover .mega{opacity:1;visibility:visible;transform:none}
-.mega__inner{display:grid;grid-template-columns:240px minmax(0,1fr);gap:6vw;padding:44px 7vw 48px}
-.mega__lead .men{display:block;font-family:var(--en);font-size:26px;font-weight:600;text-transform:uppercase;color:var(--ink);line-height:1}
+.mega__inner{display:grid;grid-template-columns:150px minmax(0,1fr);gap:30px;padding:28px 34px 32px}
+.mega__lead .men{display:block;font-family:var(--en);font-size:21px;font-weight:600;text-transform:uppercase;color:var(--ink);line-height:1}
 .mega__lead .mjp{display:block;font-size:12.5px;font-weight:700;letter-spacing:.14em;color:#000000;margin-top:12px}
-.mega__links{display:grid;grid-template-columns:1fr 1fr;gap:0 48px;align-content:start}
-.mega__links a{display:flex;align-items:center;gap:12px;padding:15px 4px;border-bottom:0.5px solid var(--line);font-size:13.5px;font-weight:700;color:var(--ink);transition:color .2s,padding .2s}
+.mega__links{display:grid;grid-template-columns:1fr 1fr;gap:0 26px;align-content:start}
+.mega__links a{display:flex;align-items:center;gap:10px;padding:13px 4px;border-bottom:0.5px solid var(--line);font-size:13px;font-weight:700;color:var(--ink);transition:color .2s,padding .2s}
 .mega__links a:nth-child(1),.mega__links a:nth-child(2){border-top:0.5px solid var(--line)}
 .mega__links a:hover{color:var(--red);padding-left:14px}
 /* タブレット（〜1100px）：ハンバーガー格納 */
@@ -140,7 +140,7 @@ body.menu-open{overflow:hidden}
 .fv__inner{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:0 7vw}
 .fv__title{color:var(--paper)}
 .fv__title span{display:block}
-.fv__title .jp-main{font-family:"Noto Serif JP","Yu Mincho",serif;font-weight:900;font-size:clamp(2.6rem,6.6vw,6.2rem);letter-spacing:normal;line-height:1.38}
+.fv__title .jp-main{font-family:"Shippori Mincho","Yu Mincho",serif;font-weight:900;font-size:clamp(2.6rem,6.6vw,6.2rem);letter-spacing:normal;line-height:1.38}
 .fv__title .q{font-style:normal}
 .fv__title .en-sub{display:block;font-family:var(--en);font-weight:500;font-size:clamp(12px,1vw,15px);letter-spacing:.34em;text-transform:uppercase;color:rgba(255,255,255,.85);margin-top:30px}
 .fv__lead{color:rgba(244,241,234,.86);font-size:14px;line-height:2;margin-top:20px;max-width:460px}
@@ -578,16 +578,16 @@ body.menu-open .nav .nav__cta{background:var(--ink);color:#fff;border-left-color
 body.menu-open .nav{background:transparent;border:none}
 /* ロゴ：座布団なし・FV〜想いは白ロゴ／製品エリア以下で赤ロゴ（.is-logo-redで切替） */
 .nav .nav__logo{background:transparent;border:0}
-.nav .nav__logo img,.nav.is-solid .nav__logo img{filter:brightness(0) invert(1)}
+.nav .nav__logo img,.nav.is-solid .nav__logo img{filter:none}
 .nav.is-logo-red .nav__logo img,.nav.is-solid.is-logo-red .nav__logo img,body.menu-open .nav .nav__logo img{filter:none}
-.nav .nav__menu{flex:0 1 auto;margin-left:auto;background:#fff;border:0.5px solid var(--line);border-right:0;padding:0 34px 0 34px}
+.nav .nav__menu{position:relative;flex:0 1 auto;margin-left:auto;background:#fff;border:0.5px solid var(--line);border-right:0;padding:0 34px 0 34px}
 .nav .nav__menu .nlink{color:var(--ink);font-weight:600;letter-spacing:.05em}
 .nav .nav__cta{background:var(--ink);color:#fff;border:0.5px solid var(--ink);letter-spacing:.08em;font-weight:600}
 .nav .nav__cta:hover{background:var(--red);border-color:var(--red)}
 .nav .burger{background:#fff;border:0.5px solid var(--line);margin-left:auto}
 .nav .burger span,body.menu-open .burger span{background:var(--ink)}
 .nav.is-hidden{transform:translateY(calc(-100% - 22px))}
-.mega{top:calc(18px + 64px);left:18px;right:18px}
+.mega{position:absolute;top:100%;left:0;right:0;border:0.5px solid var(--line)}
 .drawer{top:calc(18px + 64px)}
 @media(max-width:900px){
   .nav{top:12px;left:12px;right:12px}
@@ -615,65 +615,90 @@ body.menu-open .nav{background:transparent;border:none}
 .stats .stat+.stat{border-left-color:rgba(255,255,255,.35)}
 @media(max-width:900px){.stats .stat:nth-child(n+3){border-top-color:rgba(255,255,255,.35)}}
 </style>
+<style id="obtn-css">
+/* ── 共通ボタン仕様：罫線＋周囲になじむ背景色／ホバーで罫線色が左→右へ塗り替わる／矢印なし ── */
+.btn,.pcta__btns .cbtn,.foot__contact .cbtn,.strip__contact .cbtn,.foot__recruit .go{
+  --bc:var(--ink);--bg:#fff;
+  position:relative;overflow:hidden;z-index:0;
+  background:var(--bg);color:var(--bc);border:1px solid var(--bc);
+  transition:color .3s}
+.btn::before,.pcta__btns .cbtn::before,.foot__contact .cbtn::before,.strip__contact .cbtn::before,.foot__recruit .go::before{content:"";position:absolute;inset:0;z-index:-1;background:var(--bc);
+  transform:scaleX(0);transform-origin:left center;transition:transform .38s cubic-bezier(.2,.7,.2,1)}
+.btn:hover,.pcta__btns .cbtn:hover,.foot__contact .cbtn:hover,.strip__contact .cbtn:hover,.foot__recruit .go:hover{color:var(--bg)}
+.btn:hover::before,.pcta__btns .cbtn:hover::before,.foot__contact .cbtn:hover::before,.strip__contact .cbtn:hover::before,.foot__recruit .go:hover::before{transform:none}
+.btn::after{content:none !important}
+.pcta__btns .cbtn,.foot__contact .cbtn,.strip__contact .cbtn{--bc:#fff;--bg:#000}
+.foot__recruit .go{--bc:#fff;--bg:var(--red)}
+.foot__recruit:hover .go{color:var(--bg)}
+.foot__recruit:hover .go::before{transform:none}
+/* 矢印なし */
+.btn>span,.btn .arrow-i,.pcta__btns .cbtn .arrow-i,.foot__contact .cbtn .arrow-i,.strip__contact .cbtn .arrow-i,.foot__recruit .go .arrow-i{display:none}
+/* ── 明朝の長体（scaleX 0.8・字間詰め） ── */
+.phero__catch{transform:scaleX(.8);transform-origin:left center;letter-spacing:-.05em}
+
+/* rv出現アニメと長体scaleXの共存（.rv.is-inのtransform:none対策） */
+.phero-en2.rv,.phero__catch.rv{transform:translateY(34px) scaleX(.8)}
+.phero-en2.rv.is-in,.phero__catch.rv.is-in{transform:scaleX(.8)}
+</style>
 </head>
 <body>
 
 <header class="nav">
-  <a class="nav__logo" href="#"><img src="logo_r.png" alt="近江度量衡株式会社"></a>
+  <a class="nav__logo" href="index.html"><img src="logo_r.png" alt="近江度量衡株式会社"></a>
   <nav class="nav__menu">
     <div class="nitem">
-      <a class="nlink" href="products.html">製品・技術<sup>04</sup></a>
+      <a class="nlink" href="products.html">製品・技術</a>
       <div class="mega"><div class="mega__inner">
         <div class="mega__lead"><span class="men">Products</span><span class="mjp">製品・技術</span></div>
         <div class="mega__links">
           <a href="product-agri.html"><i class="arrow-i">→</i>農産物用計量システム</a>
-          <a href="products.html"><i class="arrow-i">→</i>工業用計量システム</a>
-          <a href="products.html"><i class="arrow-i">→</i>穀類用計量システム</a>
-          <a href="products.html"><i class="arrow-i">→</i>その他・特殊用途</a>
+          <a href="products-industry.html"><i class="arrow-i">→</i>工業用計量システム</a>
+          <a href="products-grain.html"><i class="arrow-i">→</i>穀類用計量システム</a>
+          <a href="products-other.html"><i class="arrow-i">→</i>その他・特殊用途</a>
         </div>
       </div></div>
     </div>
     <div class="nitem">
-      <a class="nlink" href="#">サービス案内</a>
+      <a class="nlink" href="service.html">サービス案内</a>
       <div class="mega"><div class="mega__inner">
         <div class="mega__lead"><span class="men">Service</span><span class="mjp">サービス案内</span></div>
         <div class="mega__links">
-          <a href="#"><i class="arrow-i">→</i>保守・定期点検</a>
-          <a href="#"><i class="arrow-i">→</i>導入・設置サポート</a>
-          <a href="#"><i class="arrow-i">→</i>校正・検査</a>
-          <a href="#"><i class="arrow-i">→</i>修理・オーバーホール</a>
+          <a href="service.html"><i class="arrow-i">→</i>保守・定期点検</a>
+          <a href="service.html"><i class="arrow-i">→</i>導入・設置サポート</a>
+          <a href="service.html"><i class="arrow-i">→</i>校正・検査</a>
+          <a href="service.html"><i class="arrow-i">→</i>修理・オーバーホール</a>
         </div>
       </div></div>
     </div>
-    <div class="nitem"><a class="nlink" href="dummy.html">納入実績</a></div>
+    <div class="nitem"><a class="nlink" href="delivery.html">納入実績</a></div>
     <div class="nitem">
-      <a class="nlink" href="#">会社案内</a>
+      <a class="nlink" href="company.html">会社案内</a>
       <div class="mega"><div class="mega__inner">
         <div class="mega__lead"><span class="men">Company</span><span class="mjp">会社案内</span></div>
         <div class="mega__links">
-          <a href="#"><i class="arrow-i">→</i>企業理念</a>
-          <a href="#"><i class="arrow-i">→</i>サービス拠点</a>
-          <a href="#"><i class="arrow-i">→</i>代表挨拶</a>
-          <a href="#"><i class="arrow-i">→</i>会社概要</a>
+          <a href="company.html#concept"><i class="arrow-i">→</i>企業理念</a>
+          <a href="company.html#base"><i class="arrow-i">→</i>サービス拠点</a>
+          <a href="company.html#message"><i class="arrow-i">→</i>代表挨拶</a>
+          <a href="company.html#profile"><i class="arrow-i">→</i>会社概要</a>
         </div>
       </div></div>
     </div>
-    <div class="nitem"><a class="nlink" href="#">126年ヒストリー</a></div>
+    <div class="nitem"><a class="nlink" href="history.html">126年ヒストリー</a></div>
     <div class="nitem">
       <a class="nlink" href="#recruit">採用情報</a>
       <div class="mega"><div class="mega__inner">
         <div class="mega__lead"><span class="men">Recruit</span><span class="mjp">採用情報</span></div>
         <div class="mega__links">
-          <a href="#"><i class="arrow-i">→</i>新卒採用</a>
-          <a href="#"><i class="arrow-i">→</i>社員インタビュー</a>
-          <a href="#"><i class="arrow-i">→</i>キャリア採用</a>
-          <a href="#"><i class="arrow-i">→</i>募集要項</a>
+          <a href="recruit.html#new"><i class="arrow-i">→</i>新卒採用</a>
+          <a href="recruit.html#people"><i class="arrow-i">→</i>社員インタビュー</a>
+          <a href="recruit.html#mid"><i class="arrow-i">→</i>キャリア採用</a>
+          <a href="recruit.html"><i class="arrow-i">→</i>募集要項</a>
         </div>
       </div></div>
     </div>
   </nav>
   <button class="burger" aria-label="メニュー" aria-expanded="false"><span></span><span></span><span></span></button>
-  <a class="nav__cta" href="#">お問い合わせ</a>
+  <a class="nav__cta" href="contact.html">お問い合わせ</a>
 </header>
 
 <!-- タブレット/SP：格納メニュー -->
@@ -681,23 +706,23 @@ body.menu-open .nav{background:transparent;border:none}
   <nav>
     <div class="drawer__group">
       <button class="drawer__top">製品・技術</button>
-      <div class="drawer__sub"><a href="product-agri.html">農産物用計量システム</a><a href="products.html">穀類用計量システム</a><a href="products.html">工業用計量システム</a><a href="products.html">その他・特殊用途</a></div>
+      <div class="drawer__sub"><a href="product-agri.html">農産物用計量システム</a><a href="products-grain.html">穀類用計量システム</a><a href="products-industry.html">工業用計量システム</a><a href="products-other.html">その他・特殊用途</a></div>
     </div>
     <div class="drawer__group">
       <button class="drawer__top">サービス案内</button>
-      <div class="drawer__sub"><a href="#">保守・定期点検</a><a href="#">校正・検査</a><a href="#">導入・設置サポート</a><a href="#">修理・オーバーホール</a></div>
+      <div class="drawer__sub"><a href="service.html">保守・定期点検</a><a href="service.html">校正・検査</a><a href="service.html">導入・設置サポート</a><a href="service.html">修理・オーバーホール</a></div>
     </div>
-    <a class="drawer__single" href="dummy.html">納入実績</a>
+    <a class="drawer__single" href="delivery.html">納入実績</a>
     <div class="drawer__group">
       <button class="drawer__top">会社案内</button>
-      <div class="drawer__sub"><a href="#">企業理念</a><a href="#">代表挨拶</a><a href="#">サービス拠点</a><a href="#">会社概要</a></div>
+      <div class="drawer__sub"><a href="company.html#concept">企業理念</a><a href="company.html#message">代表挨拶</a><a href="company.html#base">サービス拠点</a><a href="company.html#profile">会社概要</a></div>
     </div>
-    <a class="drawer__single" href="#">126年ヒストリー</a>
+    <a class="drawer__single" href="history.html">126年ヒストリー</a>
     <div class="drawer__group">
       <button class="drawer__top">採用情報</button>
-      <div class="drawer__sub"><a href="#">新卒採用</a><a href="#">キャリア採用</a><a href="#">社員インタビュー</a><a href="#">募集要項</a></div>
+      <div class="drawer__sub"><a href="recruit.html#new">新卒採用</a><a href="recruit.html#mid">キャリア採用</a><a href="recruit.html#people">社員インタビュー</a><a href="recruit.html">募集要項</a></div>
     </div>
-    <a class="drawer__single" href="#">お問い合わせ</a>
+    <a class="drawer__single" href="contact.html">お問い合わせ</a>
   </nav>
 </div>
 
@@ -706,28 +731,21 @@ body.menu-open .nav{background:transparent;border:none}
 /* ── 製品ページ共通（TOPデザインルール準拠） ── */
 .pmain .btn::before,.pmain .btn::after{content:none}
 .nav.is-solid .nav__logo img{filter:none}
-.phero{position:relative;background:#000;color:#fff;padding:210px 7vw 110px}
-.phero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:
-    repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to right,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to right,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to right,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to right,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
-    repeating-linear-gradient(to right,rgba(255,255,255,.22) 0 2px,transparent 2px 6px);
-  background-size:0.5px 100%,0.5px 100%,0.5px 100%,0.5px 100%,0.5px 100%,100% 0.5px,100% 0.5px,100% 0.5px,100% 0.5px,100% 0.5px;
-  background-repeat:no-repeat;
-  background-position:calc(100%*1/6) 0,calc(100%*2/6) 0,calc(100%*3/6) 0,calc(100%*4/6) 0,calc(100%*5/6) 0,0 calc(100%*1/6),0 calc(100%*2/6),0 calc(100%*3/6),0 calc(100%*4/6),0 calc(100%*5/6)}
-.phero .sec-ttl,.phero .sec-jp{color:#fff;position:relative}
-.phero__lead{position:relative;font-size:14px;line-height:2.1;color:rgba(255,255,255,.8);margin-top:26px;max-width:640px}
-.phero .tab-down{position:absolute;left:0;top:100%;width:24%;height:54px;background:#000;z-index:2}
-.pcrumb{position:relative;display:flex;gap:10px;align-items:center;font-family:var(--en);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:34px}
+/* ── ヘッダー：白基調・特大英字＋和文小ラベル＋細罫線（kanazawa-c/sustainability参考） ── */
+.phero{position:relative;background:var(--paper);color:var(--ink);padding:168px 5vw 0}
+.phero__bar{display:flex;align-items:flex-end;justify-content:space-between;gap:4vw;border-bottom:0.5px solid var(--line);padding-bottom:26px}
+.phero-en2{font-family:"Shippori Mincho","Hiragino Mincho ProN",serif;font-weight:600;font-size:clamp(38px,5.6vw,80px);line-height:1.15;letter-spacing:-.05em;transform:scaleX(.8);transform-origin:left bottom}
+.phero-jp2{font-family:var(--en);font-weight:500;font-size:clamp(9px,.75vw,11px);letter-spacing:.24em;text-transform:uppercase;opacity:.6;white-space:nowrap;padding-bottom:14px}
+.phero-jp2::before{content:"( "}
+.phero-jp2::after{content:" )"}
+.phero__intro{display:grid;grid-template-columns:minmax(0,.5fr) minmax(0,.5fr);gap:6vw;align-items:start;padding:64px 0 96px}
+.phero__catch{font-family:"Shippori Mincho","Hiragino Mincho ProN",serif;font-weight:600;font-size:clamp(22px,2.5vw,34px);line-height:1.7;letter-spacing:.05em}
+.phero__lead{font-size:14px;line-height:2.15;color:#000}
+.phero .tab-down{display:none}
+.pcrumb{position:relative;display:flex;gap:10px;align-items:center;font-family:var(--jp);font-size:11.5px;letter-spacing:.08em;color:rgba(0,0,0,.45);margin-bottom:40px}
 .pcrumb a:hover{color:var(--red)}
 .olno{font-family:var(--en);font-weight:700;color:transparent;-webkit-text-stroke:1.6px var(--red);line-height:1;letter-spacing:.02em}
-.pcta{position:relative;background:#000;color:#fff;padding:130px 7vw 140px}
+.pcta{position:relative;background:#000;color:#fff;padding:130px 5vw 140px}
 .pcta::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:
     repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
     repeating-linear-gradient(to bottom,rgba(255,255,255,.22) 0 2px,transparent 2px 6px),
@@ -744,7 +762,7 @@ body.menu-open .nav{background:transparent;border:none}
   background-position:calc(100%*1/6) 0,calc(100%*2/6) 0,calc(100%*3/6) 0,calc(100%*4/6) 0,calc(100%*5/6) 0,0 calc(100%*1/6),0 calc(100%*2/6),0 calc(100%*3/6),0 calc(100%*4/6),0 calc(100%*5/6)}
 .pcta .tab-up{position:absolute;left:0;bottom:100%;width:24%;height:48px;background:#000}
 .pcta__in{position:relative;display:grid;grid-template-columns:minmax(0,.6fr) minmax(0,.4fr);gap:5vw;align-items:center}
-.pcta h2{font-family:var(--jp);font-weight:900;font-size:clamp(1.6rem,3vw,2.6rem);letter-spacing:.06em}
+.pcta h2{font-family:"Shippori Mincho","Hiragino Mincho ProN",serif;font-weight:600;font-size:clamp(1.6rem,3vw,2.6rem);letter-spacing:-.05em;transform:scaleX(.8);transform-origin:left center}
 .pcta p{font-size:14px;line-height:2.1;color:rgba(255,255,255,.78);margin-top:20px;max-width:560px}
 .pcta__btns{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
 .pcta__btns .cbtn{display:inline-flex;align-items:center;gap:14px;background:#fff;color:#000;font-size:13.5px;font-weight:700;letter-spacing:.12em;padding:20px 42px;transition:background .25s,color .25s}
@@ -752,83 +770,104 @@ body.menu-open .nav{background:transparent;border:none}
 .pcta__btns .lbtn{display:inline-flex;align-items:center;gap:10px;color:rgba(255,255,255,.75);font-size:12.5px;letter-spacing:.1em;margin-top:6px}
 .pcta__btns .lbtn:hover{color:var(--red)}
 @media(max-width:900px){
-  .phero{padding:150px 6vw 70px}
-  .pcta{padding:90px 6vw 100px}
+  .phero{padding:120px 5vw 0}
+  .phero__intro{grid-template-columns:1fr;gap:20px;padding:36px 0 60px}
+  .pcta{padding:90px 5vw 100px}
   .pcta__in{grid-template-columns:1fr;gap:36px}
 }
 </style>
 
 <style id="plist-css">
-.plist{background:var(--paper);padding:150px 7vw 170px}
-.prow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:5vw;align-items:center}
-.prow + .prow{margin-top:130px}
-.prow__ph{position:relative;width:100%;aspect-ratio:16/10;background-size:cover;background-position:center}
-.prow__ph .olno{position:absolute;top:0;right:0;transform:translate(50%,-50%);font-size:clamp(70px,8vw,120px)}
-.prow--rev .prow__ph{order:2}
-.prow--rev .prow__ph .olno{right:auto;left:0;transform:translate(-50%,-50%)}
-.prow__ttl{font-family:var(--jp);font-weight:900;font-size:clamp(22px,2.4vw,32px);letter-spacing:.05em;color:var(--red)}
-.prow__sub{font-family:var(--en);font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:#000000;margin-top:10px}
-.prow__txt{font-size:13.5px;line-height:2.05;color:#000000;margin-top:20px;max-width:520px}
+/* 4製品：スクロールでカードが重なるスタック表現（motoya-united/business参考）
+   横位置ブロック＝左テキスト/右写真（縦幅いっぱい）、白地＋外枠1px#000罫線 */
+.plist{background:transparent;padding:0 5vw}
+.pkard{position:sticky;top:104px;background:#fff;border-top:1px solid #000;border-bottom:1px solid #000;min-height:min(calc(100vh - 245px),700px);display:grid}
+.pkard:nth-of-type(1){z-index:1}
+.pkard:nth-of-type(2){z-index:2}
+.pkard:nth-of-type(3){z-index:3}
+.pkard:nth-of-type(4){z-index:4}
+.pkard + .pkard{margin-top:-1px}
+.pkard__grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,45%);align-items:stretch}
+.pkard__txt{display:flex;flex-direction:column;justify-content:flex-start;padding:48px 4vw 90px 0}
+.prow__ph{margin:48px 0;background-size:cover;background-position:center}
+.prow__ttl{font-family:"Shippori Mincho","Hiragino Mincho ProN",serif;font-weight:500;font-size:clamp(28px,3.4vw,48px);letter-spacing:-.05em;transform:scaleX(.8);transform-origin:left center;color:var(--red);line-height:1.3}
+.prow__sub{font-family:var(--en);font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:#000000;margin-top:12px}
+.prow__txt{font-size:15px;line-height:2.1;color:#000000;margin-top:22px;max-width:580px}
 .prow__meta{font-size:13px;color:#000000;margin-top:14px}
 .prow__meta .dot{width:8px;height:8px;background:var(--red);display:inline-block;margin-right:8px}
-.prow .btn{margin-top:34px}
+.pkard .btn{margin-top:34px;align-self:flex-start}
 @media(max-width:900px){
-  .plist{padding:90px 6vw 110px}
-  .prow{grid-template-columns:1fr;gap:24px}
-  .prow + .prow{margin-top:70px}
-  .prow--rev .prow__ph{order:0}
+  .plist{padding:0 5vw}
+  .pkard{min-height:0;top:80px}
+  .pkard + .pkard{margin-top:-1px}
+  .pkard__grid{display:flex;flex-direction:column}
+  .pkard__grid .prow__ph{order:-1;height:auto;aspect-ratio:16/10;margin:12px 0 0}
+  .pkard__txt{padding:26px 0 40px}
+  .prow__ttl{font-size:clamp(26px,7.2vw,34px)}
 }
 </style>
 
 <main class="pmain">
 <section class="phero">
-  <p class="pcrumb"><a href="index.html">TOP</a><span>/</span><span>Products</span></p>
-  <h1 class="sec-ttl rv">Products</h1>
-  <p class="sec-jp rv"><i class="dot"></i>製品・技術</p>
-  <p class="phero__lead rv rv-d1">農産物から穀類、工業まで。計画・設計から制御・製造・施工・保守までを一貫して自社で担い、現場ごとに最適な計量システムをつくり上げます。同じものはひとつとしてありません。</p>
-  <i class="tab-down" aria-hidden="true"></i>
+  <p class="pcrumb"><a href="index.html">TOP</a><span>/</span><span>製品・技術</span></p>
+  <div class="phero__bar">
+    <h1 class="phero-en2 rv">製品・技術</h1>
+    <p class="phero-jp2 rv rv-d1">Products</p>
+  </div>
+  <div class="phero__intro">
+    <h2 class="phero__catch rv">現場の「はかる」に、<br>一品一様で応える。</h2>
+    <p class="phero__lead rv rv-d1">農産物から穀類、工業まで。計画・設計から制御・製造・施工・保守までを一貫して自社で担い、現場ごとに最適な計量システムをつくり上げます。同じものはひとつとしてありません。</p>
+  </div>
 </section>
 <section class="plist">
-    <div class="prow">
-      <div class="prow__ph rv" style="background-image:url(photo-agri.jpg)"><span class="olno">01</span></div>
-      <div class="rv rv-d1">
-        <h2 class="prow__ttl">農産物用計量システム</h2>
-        <p class="prow__sub">Agricultural Weighing System</p>
-        <p class="prow__txt">選果場や集出荷施設で使われる、青果物の計量・選別システム。品目や処理量、施設のレイアウトに合わせて、搬送から計量・箱詰めまでのライン全体を一品一様で設計します。</p>
-        <p class="prow__meta"><i class="dot"></i>Made-to-order — Calistar / Millistar / Rollerstar</p>
-        <a class="btn" href="product-agri.html">詳しく見る <span>→</span></a>
+    <article class="pkard">
+      <div class="pkard__grid">
+        <div class="pkard__txt rv rv-d1">
+          <h2 class="prow__ttl">農産物用計量システム</h2>
+          <p class="prow__sub">Agricultural Weighing System</p>
+          <p class="prow__txt">選果場や集出荷施設で使われる、青果物の計量・選別システム。品目や処理量、施設のレイアウトに合わせて、搬送から計量・箱詰めまでのライン全体を一品一様で設計します。</p>
+          <p class="prow__meta"><i class="dot"></i>Made-to-order — Calistar / Millistar / Rollerstar</p>
+          <a class="btn" href="product-agri.html">詳しく見る <span>→</span></a>
+        </div>
+        <div class="prow__ph rv" style="background-image:url(photo-agri.jpg)"></div>
       </div>
-    </div>
-    <div class="prow prow--rev">
-      <div class="prow__ph rv" style="background-image:url(photo-grain.jpg)"><span class="olno">02</span></div>
-      <div class="rv rv-d1">
-        <h2 class="prow__ttl">穀類用計量システム</h2>
-        <p class="prow__sub">Grain Weighing System</p>
-        <p class="prow__txt">カントリーエレベーターやライスセンターなど、穀類施設の計量設備。荷受から乾燥・調製・出荷までの各工程に、正確な「はかる」を組み込みます。</p>
-        <p class="prow__meta"><i class="dot"></i>全国約2,000施設に納入</p>
-        <a class="btn" href="#">詳しく見る <span>→</span></a>
+    </article>
+    <article class="pkard">
+      <div class="pkard__grid">
+        <div class="pkard__txt rv rv-d1">
+          <h2 class="prow__ttl">穀類用計量システム</h2>
+          <p class="prow__sub">Grain Weighing System</p>
+          <p class="prow__txt">カントリーエレベーターやライスセンターなど、穀類施設の計量設備。荷受から乾燥・調製・出荷までの各工程に、正確な「はかる」を組み込みます。</p>
+          <p class="prow__meta"><i class="dot"></i>全国約2,000施設に納入</p>
+          <a class="btn" href="products-grain.html">詳しく見る <span>→</span></a>
+        </div>
+        <div class="prow__ph rv" style="background-image:url(photo-grain.jpg)"></div>
       </div>
-    </div>
-    <div class="prow">
-      <div class="prow__ph rv" style="background-image:url(photo-industry.jpg)"><span class="olno">03</span></div>
-      <div class="rv rv-d1">
-        <h2 class="prow__ttl">工業用計量システム</h2>
-        <p class="prow__sub">Industrial Weighing System</p>
-        <p class="prow__txt">ガラス・鉄鋼・化学をはじめとする産業プラント向けの計量制御システム。原料の配合計量から搬送・データ管理まで、製造プロセスに合わせて設計します。</p>
-        <p class="prow__meta"><i class="dot"></i>ガラス・鉄鋼・化学 ほか</p>
-        <a class="btn" href="#">詳しく見る <span>→</span></a>
+    </article>
+    <article class="pkard">
+      <div class="pkard__grid">
+        <div class="pkard__txt rv rv-d1">
+          <h2 class="prow__ttl">工業用計量システム</h2>
+          <p class="prow__sub">Industrial Weighing System</p>
+          <p class="prow__txt">ガラス・鉄鋼・化学をはじめとする産業プラント向けの計量制御システム。原料の配合計量から搬送・データ管理まで、製造プロセスに合わせて設計します。</p>
+          <p class="prow__meta"><i class="dot"></i>ガラス・鉄鋼・化学 ほか</p>
+          <a class="btn" href="products-industry.html">詳しく見る <span>→</span></a>
+        </div>
+        <div class="prow__ph rv" style="background-image:url(photo-industry.jpg)"></div>
       </div>
-    </div>
-    <div class="prow prow--rev">
-      <div class="prow__ph rv" style="background-image:url(photo-others.jpg)"><span class="olno">04</span></div>
-      <div class="rv rv-d1">
-        <h2 class="prow__ttl">その他・特殊用途</h2>
-        <p class="prow__sub">Special Applications</p>
-        <p class="prow__txt">動物用の体重計、研究機関向けの特殊計量装置など、規格品では応えられない「はかりたい」にも対応します。設計から製造・据付・保守までを自社一貫で。</p>
-        <p class="prow__meta"><i class="dot"></i>動物計量・研究用途 ほか</p>
-        <a class="btn" href="#">詳しく見る <span>→</span></a>
+    </article>
+    <article class="pkard">
+      <div class="pkard__grid">
+        <div class="pkard__txt rv rv-d1">
+          <h2 class="prow__ttl">その他・特殊用途</h2>
+          <p class="prow__sub">Special Applications</p>
+          <p class="prow__txt">動物用の体重計、研究機関向けの特殊計量装置など、規格品では応えられない「はかりたい」にも対応します。設計から製造・据付・保守までを自社一貫で。</p>
+          <p class="prow__meta"><i class="dot"></i>動物計量・研究用途 ほか</p>
+          <a class="btn" href="products-other.html">詳しく見る <span>→</span></a>
+        </div>
+        <div class="prow__ph rv" style="background-image:url(photo-others.jpg)"></div>
       </div>
-    </div>
+    </article>
 </section>
 <section class="pcta">
   <i class="tab-up" aria-hidden="true"></i>
@@ -838,48 +877,62 @@ body.menu-open .nav{background:transparent;border:none}
       <p>現場の状況、品目、処理量をお聞かせください。計画段階からエンジニアが伺い、最適なラインをご提案します。</p>
     </div>
     <div class="pcta__btns rv rv-d1">
-      <a class="cbtn" href="#">お問い合わせ <i class="arrow-i" style="color:inherit">→</i></a>
+      <a class="cbtn" href="contact.html">お問い合わせ <i class="arrow-i" style="color:inherit">→</i></a>
       <a class="lbtn" href="index.html"><i class="arrow-i">→</i> TOPへ戻る</a>
     </div>
   </div>
 </section>
 </main>
 
+<section class="strip">
+  <div class="strip__bg"></div>
+  <div class="strip__marquee">
+    <div class="strip__track"><span>We Measure the Future</span><span>We Measure the Future</span></div>
+    <div class="strip__track" aria-hidden="true"><span>We Measure the Future</span><span>We Measure the Future</span></div>
+  </div>
+  <div class="strip__contact">
+    <span class="en">( Contact )</span>
+    <h3>お問い合わせ・ご相談</h3>
+    <p>お気軽にご相談ください。<br>お見積もり依頼も可能です。</p>
+    <a class="cbtn" href="contact.html">Contact Form <i class="arrow-i" style="color:inherit">→</i></a>
+  </div>
+</section>
+
 <footer class="foot">
   <div class="foot__grid">
     <div class="foot__brand">
       <img src="logo_r.png" alt="近江度量衡株式会社">
       <p class="name">近江度量衡株式会社</p>
-      <p>〒525-0054<br>滋賀県草津市東矢倉三丁目11番70号<br>TEL 077-562-7111 ／ FAX 077-562-7116<br><a href="#">Google map</a></p>
+      <p>〒525-0054<br>滋賀県草津市東矢倉三丁目11番70号<br>TEL 077-562-7111 ／ FAX 077-562-7116<br><a href="https://maps.google.com/?q=%E6%BB%8B%E8%B3%80%E7%9C%8C%E8%8D%89%E6%B4%A5%E5%B8%82%E6%9D%B1%E7%9F%A2%E5%80%893%E4%B8%81%E7%9B%AE11%E7%95%AA70%E5%8F%B7" target="_blank" rel="noopener">Google map</a></p>
     </div>
     <nav class="foot__nav">
       <div>
-        <a href="#">トップページ</a>
+        <a href="index.html">トップページ</a>
         <a href="#products">製品・技術</a>
-        <a class="sub" href="#">農産物用計量システム</a>
-        <a class="sub" href="#">穀類用計量システム</a>
-        <a class="sub" href="#">工業用計量システム</a>
-        <a class="sub" href="#">その他・特殊用途</a>
-        <a href="#">サービス案内</a>
-        <a href="dummy.html">納入実績</a>
+        <a class="sub" href="product-agri.html">農産物用計量システム</a>
+        <a class="sub" href="products-grain.html">穀類用計量システム</a>
+        <a class="sub" href="products-industry.html">工業用計量システム</a>
+        <a class="sub" href="products-other.html">その他・特殊用途</a>
+        <a href="service.html">サービス案内</a>
+        <a href="delivery.html">納入実績</a>
       </div>
       <div>
-        <a href="#">会社案内</a>
-        <a href="#">126年ヒストリー</a>
-        <a href="#">新着情報</a>
+        <a href="company.html">会社案内</a>
+        <a href="history.html">126年ヒストリー</a>
+        <a href="news.html">新着情報</a>
         <a href="#recruit">採用情報</a>
-        <a href="#">お問い合わせ</a>
-        <a href="#">プライバシーポリシー</a>
+        <a href="contact.html">お問い合わせ</a>
+        <a href="privacy.html">プライバシーポリシー</a>
       </div>
     </nav>
     <div class="foot__contact">
       <span class="en">( Contact )</span>
       <h3>お問い合わせ・ご相談</h3>
       <p>お気軽にご相談ください。<br>お見積もり依頼も可能です。</p>
-      <a class="cbtn" href="#">Contact Form <i class="arrow-i" style="color:inherit">→</i></a>
+      <a class="cbtn" href="contact.html">Contact Form <i class="arrow-i" style="color:inherit">→</i></a>
     </div>
   </div>
-  <a class="foot__recruit" href="#">
+  <a class="foot__recruit" href="recruit.html">
     <span class="rtxt">
       <span class="en">Recruitment 2027</span>
       <h3>いきるの単位とは、なんだろう。</h3>
@@ -1103,7 +1156,26 @@ body.menu-open .nav{background:transparent;border:none}
   },{threshold:.6});
   document.querySelectorAll('.cnt').forEach(function(el){ io.observe(el); });
 })();
+/* 製品カードスタック：タブクリックでそのカードの定位置へ戻る */
+(function(){
+  var plist = document.querySelector('.plist');
+  var cards = [].slice.call(document.querySelectorAll('.pkard'));
+  if(!plist || !cards.length) return;
+  cards.forEach(function(card, i){
+    var tab = card.querySelector('.pkard__tab');
+    if(!tab) return;
+    tab.addEventListener('click', function(){
+      /* フロー上の位置 = plist上端 + padding-top + 前カードの高さ合計（-1pxマージン考慮） */
+      var flowTop = plist.getBoundingClientRect().top + window.scrollY
+                  + parseFloat(getComputedStyle(plist).paddingTop);
+      for(var j = 0; j < i; j++) flowTop += cards[j].offsetHeight - 1;
+      var stickyTop = parseFloat(getComputedStyle(card).top) || 0;
+      window.scrollTo({top: Math.round(flowTop - stickyTop), behavior: 'smooth'});
+    });
+  });
+})();
 </script>
 <script src="_pt.js"></script>
+<script src="_simg.js"></script>
 </body>
 </html>
